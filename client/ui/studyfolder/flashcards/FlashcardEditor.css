@@ -1,0 +1,2214 @@
+/* ==========================================================================
+   AURA FLASHCARD EDITOR - CYBER STUDY WORKSPACE STYLING
+   ========================================================================== */
+
+.flashcard-editor-workspace {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  background: radial-gradient(circle at 50% 0%, rgba(255, 42, 68, 0.04) 0%, transparent 60%),
+              radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+              #07090e;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 28px 32px;
+  box-sizing: border-box;
+  animation: editorFadeIn 0.25s ease-out;
+}
+
+@keyframes editorFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.editor-top-glow {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff2a44, #ff5268, #3b82f6, transparent);
+  box-shadow: 0 0 16px rgba(255, 42, 68, 0.7);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   HEADER ROW
+   ========================================================================== */
+.flashcard-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 20px;
+  background: rgba(13, 17, 28, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.header-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editor-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-editor-back {
+  background: transparent;
+  border: none;
+  color: #9aa1b2;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-editor-back:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.editor-separator {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 12px;
+}
+
+.editor-badge-tag {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #ff2a44;
+}
+
+.header-folder-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-meta-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.meta-folder-label {
+  font-size: 12px;
+  color: #9aa1b2;
+}
+
+.meta-folder-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.meta-dot {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.meta-method-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 42, 68, 0.12);
+  border: 1px solid rgba(255, 42, 68, 0.3);
+  color: #ff5268;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.pill-chevron {
+  font-size: 10px;
+  opacity: 0.8;
+  margin-left: 2px;
+}
+
+.btn-clock-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Center Progress Pill */
+.header-center-col {
+  display: flex;
+  align-items: center;
+}
+
+.editor-progress-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.progress-label {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #9aa1b2;
+}
+
+.progress-count {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff2a44, #ff5268);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Right Header Buttons */
+.header-right-col {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.save-toast-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 5px 10px;
+  border-radius: 8px;
+  animation: fadeIn 0.2s ease;
+}
+
+.btn-editor-save-progress {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-editor-save-progress:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-editor-finish {
+  background: linear-gradient(135deg, #ff2a44 0%, #d8142f 100%);
+  border: 1px solid #ff5268;
+  color: #ffffff;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 18px rgba(255, 42, 68, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-editor-finish:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(255, 42, 68, 0.6);
+  border-color: #ffffff;
+}
+
+/* ==========================================================================
+   WORKSPACE BODY (TWO COLUMNS 50% / 50%)
+   ========================================================================== */
+.flashcard-editor-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+  min-height: 520px;
+}
+
+.editor-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.column-panel-card {
+  position: relative;
+  background: linear-gradient(150deg, rgba(14, 19, 32, 0.88) 0%, rgba(8, 11, 18, 0.94) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 16px;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   SOURCE OPTIONS SELECTOR (Toggle between Upload Lesson vs Add Lesson Text)
+   ========================================================================== */
+.flashcard-source-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.source-selector-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.source-eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.source-material-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9aa1b2;
+}
+
+.source-material-chip .info-icon {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.source-step-prefix {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ff2a44;
+}
+
+.source-instruction {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.source-toggle-group {
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 10px;
+  gap: 4px;
+}
+
+.source-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #9aa1b2;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.source-toggle-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.source-toggle-btn.is-active {
+  background: linear-gradient(135deg, rgba(255, 42, 68, 0.25) 0%, rgba(255, 42, 68, 0.15) 100%);
+  border: 1px solid rgba(255, 42, 68, 0.45);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 42, 68, 0.25);
+}
+
+.source-content-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ==========================================================================
+   LESSON UPLOADER COMPONENT STYLES
+   ========================================================================== */
+.lesson-uploader-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.uploader-dropzone-large {
+  position: relative;
+  flex: 1;
+  min-height: 340px;
+  border: 2px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  padding: 24px;
+}
+
+.uploader-dropzone-large:hover,
+.uploader-dropzone-large.drag-active {
+  border-color: #ff2a44;
+  background: rgba(255, 42, 68, 0.04);
+  box-shadow: inset 0 0 25px rgba(255, 42, 68, 0.08);
+}
+
+.dropzone-laser-notch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: #ff2a44;
+  box-shadow: 0 0 10px #ff2a44;
+}
+
+.dropzone-center-elements {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.uploader-icon-halo {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 42, 68, 0.1);
+  border: 1px solid rgba(255, 42, 68, 0.35);
+  color: #ff2a44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(255, 42, 68, 0.2);
+}
+
+.uploader-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.uploader-subtext {
+  font-size: 12.5px;
+  color: #9aa1b2;
+  margin: 0;
+}
+
+.btn-browse-file {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.btn-browse-file:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+.supported-formats-pills {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.format-pill {
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  color: #cbd5e1;
+}
+
+/* Uploaded file display card */
+.uploader-file-display-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.file-display-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-type-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 42, 68, 0.14);
+  border: 1px solid rgba(255, 42, 68, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.file-badge-text {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  color: #ff2a44;
+}
+
+.file-text-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 3px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-size-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #9aa1b2;
+}
+
+.file-size-pill {
+  color: #cbd5e1;
+}
+
+.file-status-pill {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.btn-remove-uploaded-file {
+  background: transparent;
+  border: 1px solid rgba(255, 42, 68, 0.3);
+  color: #ff5268;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-remove-uploaded-file:hover {
+  background: rgba(255, 42, 68, 0.15);
+  border-color: #ff2a44;
+}
+
+.file-preview-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+.preview-label {
+  font-weight: 800;
+  color: #9aa1b2;
+}
+
+.preview-status {
+  color: #60a5fa;
+}
+
+.file-quick-action-box {
+  background: linear-gradient(135deg, rgba(255, 42, 68, 0.08) 0%, rgba(59, 130, 246, 0.06) 100%);
+  border: 1px solid rgba(255, 42, 68, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quick-action-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quick-action-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.quick-action-desc {
+  font-size: 11px;
+  color: #9aa1b2;
+}
+
+.btn-convert-text {
+  background: #ff2a44;
+  border: none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-convert-text:hover {
+  background: #ff5268;
+}
+
+/* ==========================================================================
+   LESSON TEXT EDITOR (Highlightable)
+   ========================================================================== */
+.lesson-text-editor-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.lesson-editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lesson-editor-field.flex-fill {
+  flex: 1;
+  min-height: 0;
+}
+
+.lesson-field-label {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selection-badge {
+  font-family: monospace;
+  font-size: 9.5px;
+  font-weight: 800;
+  background: rgba(255, 42, 68, 0.15);
+  color: #ff5268;
+  border: 1px solid rgba(255, 42, 68, 0.35);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.lesson-title-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.lesson-title-input:focus {
+  border-color: #ff2a44;
+  box-shadow: 0 0 12px rgba(255, 42, 68, 0.25);
+}
+
+.lesson-content-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lesson-label-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selection-mode-pill {
+  font-family: monospace;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.selection-mode-pill.is-word {
+  background: rgba(255, 42, 68, 0.15);
+  color: #ff5268;
+  border: 1px solid rgba(255, 42, 68, 0.35);
+}
+
+.selection-mode-pill.is-pen {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.editor-tools-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 1. Selection Mode Segmented Switch */
+.selection-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  padding: 2px;
+  gap: 2px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.mode-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 7px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.mode-toggle-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.mode-toggle-btn.is-active {
+  background: linear-gradient(135deg, rgba(255, 42, 68, 0.22) 0%, rgba(220, 38, 38, 0.15) 100%);
+  border-color: rgba(255, 42, 68, 0.55);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 42, 68, 0.25);
+}
+
+.mode-btn-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.mode-btn-label {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.mode-active-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff2a44;
+  box-shadow: 0 0 6px #ff2a44;
+  margin-left: 2px;
+}
+
+.editor-action-buttons-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 2. Header Create Flashcard Button */
+.btn-header-create-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  min-height: 28px;
+  border-radius: 8px;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn-header-create-card.has-selection {
+  background: linear-gradient(135deg, #ff2a44 0%, #dc2626 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  box-shadow: 0 2px 12px rgba(255, 42, 68, 0.45);
+}
+
+.btn-header-create-card.has-selection:hover {
+  background: linear-gradient(135deg, #ff3e57 0%, #ef4444 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 42, 68, 0.7);
+}
+
+.btn-header-create-card.is-disabled {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #64748b;
+  cursor: pointer;
+}
+
+.btn-header-create-card.is-disabled:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #94a3b8;
+}
+
+.header-card-preview-chip {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  color: #fed7aa;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-tool-sample {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #9aa1b2;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  min-height: 28px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-tool-sample:hover {
+  color: #ffffff;
+  border-color: #ff2a44;
+}
+
+/* Editable content stage */
+.lesson-editable-content {
+  flex: 1;
+  min-height: 220px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+  color: #f1f5f9;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  outline: none;
+  overflow-y: auto;
+  user-select: text;
+  white-space: pre-wrap;
+  transition: border-color 0.2s ease;
+}
+
+.lesson-editable-content:focus {
+  border-color: rgba(255, 42, 68, 0.5);
+  box-shadow: inset 0 0 18px rgba(255, 42, 68, 0.05);
+}
+
+/* Native selection styling in lesson text */
+.lesson-editable-content::selection,
+.lesson-editable-content *::selection {
+  background: rgba(255, 42, 68, 0.45);
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 42, 68, 0.8);
+}
+
+/* 3. Editor Cursor & Mode States */
+.lesson-editable-content.is-word-mode {
+  cursor: pointer;
+}
+
+.lesson-editable-content.is-pen-mode {
+  cursor: text;
+}
+
+/* 4. Active Highlight Marker Overlay */
+.active-word-highlight-marker {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 4px;
+  background: rgba(255, 42, 68, 0.24);
+  border: 1px solid rgba(255, 42, 68, 0.7);
+  box-shadow: 0 0 10px rgba(255, 42, 68, 0.45);
+  animation: markerGlowPulse 1.8s infinite alternate ease-in-out;
+  z-index: 5;
+}
+
+@keyframes markerGlowPulse {
+  from {
+    box-shadow: 0 0 6px rgba(255, 42, 68, 0.35);
+    border-color: rgba(255, 42, 68, 0.55);
+  }
+  to {
+    box-shadow: 0 0 14px rgba(255, 42, 68, 0.8);
+    border-color: rgba(255, 42, 68, 0.95);
+  }
+}
+
+/* 5. Warning Toast Notification */
+.flashcard-warning-toast {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(24, 18, 12, 0.95);
+  color: #fed7aa;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  padding: 8px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 158, 11, 0.2);
+  animation: fadeIn 0.2s ease;
+  z-index: 60;
+}
+
+.warning-toast-icon {
+  font-size: 14px;
+  color: #f59e0b;
+}
+
+.btn-primary-line-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.selection-type-pill {
+  font-size: 8.5px;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.editor-highlight-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #9aa1b2;
+  margin-top: 4px;
+}
+
+.tip-sparkle {
+  color: #ff2a44;
+}
+
+/* ==========================================================================
+   TEXT SELECTION FLOATING TOOLBAR (Contextual Action)
+   ========================================================================== */
+.text-selection-toolbar {
+  animation: toolbarPop 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes toolbarPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -85%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
+.btn-create-selection-card {
+  position: relative;
+  background: linear-gradient(135deg, #1b0e14 0%, #2a0b14 100%);
+  border: 1px solid #ff2a44;
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 42, 68, 0.55);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-create-selection-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.85), 0 0 28px rgba(255, 42, 68, 0.8);
+  border-color: #ff5268;
+}
+
+.btn-lightning-icon {
+  font-size: 16px;
+  color: #ff2a44;
+  animation: pulseLight 1s infinite alternate;
+}
+
+@keyframes pulseLight {
+  from { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+.btn-text-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.btn-primary-line {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+}
+
+.btn-secondary-line {
+  font-size: 10px;
+  color: #fca5a5;
+}
+
+.btn-pointer-arrow {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #2a0b14;
+}
+
+/* Toast feedback */
+.flashcard-created-toast {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(16, 185, 129, 0.95);
+  color: #042f2e;
+  padding: 8px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ==========================================================================
+   FLASHCARD LIST CONTAINER (RIGHT COLUMN)
+   ========================================================================== */
+.flashcard-list-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.flashcard-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.list-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list-icon {
+  font-size: 16px;
+}
+
+.list-title-text {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.card-count-pill {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 42, 68, 0.15);
+  color: #ff5268;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.btn-open-add-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-open-add-card:hover {
+  background: rgba(255, 42, 68, 0.15);
+  border-color: #ff2a44;
+}
+
+.flashcard-scroll-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 4px;
+}
+
+/* ==========================================================================
+   FLASHCARD ITEM BOX (Clean reusable card)
+   ========================================================================== */
+.flashcard-item-box {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.flashcard-item-box:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 42, 68, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 42, 68, 0.1);
+}
+
+.card-laser-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: #ff2a44;
+}
+
+.card-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-index-label {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #9aa1b2;
+}
+
+.card-source-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.card-source-badge.is-highlight {
+  background: rgba(255, 42, 68, 0.12);
+  color: #ff5268;
+}
+
+.card-source-badge.is-manual {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+.card-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-btn-action {
+  background: transparent;
+  border: none;
+  color: #9aa1b2;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.card-btn-action:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card-btn-action.is-delete:hover {
+  color: #ff5268;
+  background: rgba(255, 42, 68, 0.15);
+}
+
+.card-front-display {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.card-prompt-text {
+  margin: 0;
+  font-size: 13.5px;
+  color: #f8fafc;
+  line-height: 1.5;
+}
+
+.card-back-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.answer-prefix {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #9aa1b2;
+}
+
+.answer-value-badge {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ff5268;
+  background: rgba(255, 42, 68, 0.12);
+  border: 1px solid rgba(255, 42, 68, 0.3);
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+
+/* Editing Mode in Card */
+.flashcard-item-box.is-editing-mode {
+  border-color: #ff2a44;
+  background: rgba(255, 42, 68, 0.04);
+}
+
+.card-inline-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-field-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-input-sublabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9aa1b2;
+}
+
+.card-edit-textarea,
+.card-edit-input {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.card-edit-textarea:focus,
+.card-edit-input:focus {
+  border-color: #ff2a44;
+}
+
+.card-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-card-cancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-card-save {
+  background: #ff2a44;
+  border: none;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   MANUAL FORM CARD
+   ========================================================================== */
+.manual-flashcard-form-card {
+  background: rgba(255, 42, 68, 0.06);
+  border: 1px solid rgba(255, 42, 68, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  animation: fadeIn 0.2s ease;
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-title-badge {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ff5268;
+}
+
+.form-close-x {
+  background: transparent;
+  border: none;
+  color: #9aa1b2;
+  cursor: pointer;
+}
+
+.manual-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-field-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.field-hint {
+  font-weight: 400;
+  color: #9aa1b2;
+  font-size: 10.5px;
+}
+
+.form-textarea-input,
+.form-text-input {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.form-textarea-input:focus,
+.form-text-input:focus {
+  border-color: #ff2a44;
+}
+
+.form-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-cancel-manual {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 11.5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-save-manual {
+  background: #ff2a44;
+  border: none;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-save-manual:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Empty State Card */
+.flashcards-empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  flex: 1;
+}
+
+.empty-pulse-orb {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 42, 68, 0.08);
+  border: 1px solid rgba(255, 42, 68, 0.25);
+  color: #ff2a44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.empty-state-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.empty-state-guide {
+  font-size: 12.5px;
+  color: #9aa1b2;
+  max-width: 320px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ==========================================================================
+   FINISH MODAL STYLES
+   ========================================================================== */
+.finish-modal-dialog {
+  max-width: 460px;
+}
+
+.finish-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.finish-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 42, 68, 0.12);
+  border: 1px solid rgba(255, 42, 68, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 25px rgba(255, 42, 68, 0.25);
+}
+
+.finish-modal-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.finish-modal-subtext {
+  font-size: 12.5px;
+  color: #9aa1b2;
+  margin: 0;
+}
+
+.finish-summary-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+  text-align: left;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.summary-label {
+  color: #9aa1b2;
+}
+
+.summary-value {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.summary-value.folder-name {
+  color: #60a5fa;
+}
+
+.summary-value.study-method {
+  color: #ff5268;
+}
+
+.summary-value.card-count {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.summary-value.status-ready {
+  color: #10b981;
+}
+
+.finish-actions-row {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.btn-finish-save {
+  flex: 1;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Desktop 50/50, Tablet & Mobile stacked)
+   ========================================================================== */
+@media (max-width: 960px) {
+  .flashcard-editor-body {
+    grid-template-columns: 1fr;
+  }
+
+  .flashcard-editor-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .header-right-col {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Workspace container: reduce outer padding, prevent horizontal overflow */
+  .flashcard-editor-workspace {
+    padding: 12px 12px 32px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* 1. Header Card */
+  .flashcard-editor-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    border-radius: 14px;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .header-left-col {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .editor-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-editor-back {
+    padding: 4px 8px;
+    font-size: 11.5px;
+    min-height: 32px;
+  }
+
+  .editor-separator {
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  .editor-badge-tag {
+    font-size: 10.5px;
+    letter-spacing: 1px;
+  }
+
+  /* Folder Info Row: Folder title on left, Flashcards pill on right */
+  .header-folder-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .folder-meta-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .meta-folder-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9aa1b2;
+    text-transform: capitalize;
+  }
+
+  .meta-folder-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+  }
+
+  .meta-dot {
+    display: none;
+  }
+
+  .meta-method-pill {
+    margin-left: auto;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border-radius: 20px;
+    background: rgba(255, 42, 68, 0.12);
+    border: 1px solid rgba(255, 42, 68, 0.35);
+    color: #ff5268;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .pill-chevron {
+    font-size: 10px;
+    opacity: 0.85;
+    margin-left: 2px;
+  }
+
+  /* Center Progress Pill: Full width centered banner */
+  .header-center-col {
+    width: 100%;
+    margin: 2px 0;
+  }
+
+  .editor-progress-pill {
+    width: 100%;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+  }
+
+  .progress-label {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: #9aa1b2;
+  }
+
+  .progress-count {
+    font-size: 12px;
+    font-weight: 800;
+    color: #ff5268;
+    background: none;
+    -webkit-text-fill-color: #ff5268;
+  }
+
+  /* Right Action Buttons: 2 Equal-Width Columns side-by-side */
+  .header-right-col {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .save-toast-pill {
+    grid-column: 1 / -1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .btn-editor-save-progress {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+  }
+
+  .btn-editor-save-progress .btn-clock-icon {
+    font-size: 14px;
+  }
+
+  .btn-editor-finish {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #ff2a44 0%, #d8142f 100%);
+    border: 1px solid #ff5268;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(255, 42, 68, 0.35);
+  }
+
+  /* 2. Workspace Body & Column Panels */
+  .flashcard-editor-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: auto;
+  }
+
+  .column-panel-card {
+    padding: 16px;
+    border-radius: 14px;
+    gap: 14px;
+    height: auto;
+    min-height: auto;
+    box-sizing: border-box;
+  }
+
+  /* 3. Source Selector (Upload Lesson vs Add Lesson Text) */
+  .flashcard-source-selector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+
+  .source-selector-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .source-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .source-step-prefix {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ff2a44;
+  }
+
+  .source-material-chip {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9aa1b2;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .source-instruction {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .source-toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .source-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #9aa1b2;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+  }
+
+  .source-toggle-btn .toggle-icon {
+    font-size: 16px;
+  }
+
+  .source-toggle-btn.is-active {
+    background: rgba(255, 42, 68, 0.12);
+    border: 1px solid #ff2a44;
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(255, 42, 68, 0.2);
+  }
+
+  /* 4. Lesson Text Editor */
+  .lesson-text-editor-container {
+    gap: 14px;
+    width: 100%;
+  }
+
+  .lesson-editor-field {
+    gap: 6px;
+    width: 100%;
+  }
+
+  .lesson-title-input {
+    min-height: 44px;
+    font-size: 13.5px;
+    padding: 10px 14px;
+    border-radius: 9px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .lesson-content-label-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .lesson-label-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .editor-tools-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 8px;
+  }
+
+  /* Segmented Toggle Control: Word Select / Pen Mode (Full Width, 2 Columns) */
+  .selection-mode-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    padding: 3px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .mode-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 6px 10px;
+    font-size: 11.5px;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  /* Action Buttons: Create Flashcard & Sample Text (Full Width, 2 Columns) */
+  .editor-action-buttons-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .btn-header-create-card {
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    border-radius: 9px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+  }
+
+  .btn-tool-sample {
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    border-radius: 9px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    box-sizing: border-box;
+  }
+
+  /* Content Block */
+  .lesson-editable-content {
+    min-height: 190px;
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+
+  .editor-highlight-tip {
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 4px;
+    align-items: flex-start;
+  }
+
+  .tip-sparkle {
+    margin-top: 2px;
+  }
+
+  /* 5. Flashcards List (Collection Section) */
+  .flashcard-list-container {
+    width: 100%;
+  }
+
+  .flashcard-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .list-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .list-title-text {
+    font-size: 13.5px;
+    letter-spacing: 0.6px;
+  }
+
+  .card-count-pill {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .btn-open-add-card {
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 11.5px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .flashcards-empty-card {
+    padding: 36px 16px;
+    border-radius: 12px;
+    min-height: 200px;
+    box-sizing: border-box;
+  }
+
+  .empty-pulse-orb {
+    width: 48px;
+    height: 48px;
+    font-size: 19px;
+    margin-bottom: 12px;
+  }
+
+  .empty-state-title {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .empty-state-guide {
+    font-size: 12px;
+    max-width: 290px;
+    line-height: 1.55;
+  }
+
+  /* Flashcard Items and Forms on Mobile */
+  .flashcard-item-box {
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .card-btn-action {
+    min-height: 36px;
+    padding: 6px 10px;
+  }
+
+  .btn-card-save,
+  .btn-card-cancel {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+
+  .btn-save-manual,
+  .btn-cancel-manual {
+    min-height: 44px;
+    padding: 8px 16px;
+  }
+
+  /* Uploader Mobile Adjustments */
+  .uploader-dropzone-large {
+    min-height: 240px;
+    padding: 18px 14px;
+  }
+
+  .uploader-icon-halo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .btn-browse-file {
+    min-height: 44px;
+    padding: 10px 18px;
+  }
+
+  .file-quick-action-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .btn-convert-text {
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Extra small devices (<= 360px: e.g. iPhone SE / Galaxy Mini at 320px) */
+@media (max-width: 360px) {
+  .flashcard-editor-workspace {
+    padding: 10px 8px 24px;
+  }
+
+  .column-panel-card {
+    padding: 12px;
+  }
+
+  .flashcard-editor-header {
+    padding: 12px;
+  }
+
+  .mode-btn-label {
+    font-size: 10.5px;
+  }
+
+  .btn-header-create-card {
+    font-size: 10.5px;
+  }
+
+  .meta-folder-title {
+    font-size: 16px;
+  }
+}

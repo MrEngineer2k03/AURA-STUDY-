@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ascent — Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14171f; --ink-soft:#5b6270; --line:#e6e8ee;
+  --bg:#f6f7fa; --card:#ffffff;
+  --eng:#e0432b; --eng-soft:#fdece8;
+  --edu:#3b6bda; --tech:#7a4de0; --entre:#1f9d6b;
+  --gold:#c8932a; --gold-soft:#fbf2df;
+  --radius:20px; --radius-sm:14px;
+  font-size:16px;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#f0f1f4; --ink-soft:#a7acba; --line:#2a2e3a;
+    --bg:#0f1117; --card:#171a22;
+    --eng-soft:#2a1815; --gold-soft:#2a2214;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#f0f1f4; --ink-soft:#a7acba; --line:#2a2e3a;
+  --bg:#0f1117; --card:#171a22;
+  --eng-soft:#2a1815; --gold-soft:#2a2214;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
+button{font-family:inherit;cursor:pointer;border:none;}
+img,svg{max-width:100%;display:block;}
+.app{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{
+  width:262px;flex:none;background:var(--card);border-right:1px solid var(--line);
+  padding:28px 18px;display:flex;flex-direction:column;gap:26px;
+  position:sticky;top:0;height:100vh;
+}
+.logo{display:flex;align-items:center;gap:10px;padding:0 8px;}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--eng),#ff8a65);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Space Grotesk';font-weight:700;font-size:16px;}
+.logo-word{font-family:'Space Grotesk';font-weight:700;font-size:19px;}
+nav{display:flex;flex-direction:column;gap:2px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;color:var(--ink-soft);font-size:14.5px;font-weight:500;text-decoration:none;transition:background .15s,color .15s;}
+.nav-item:hover{background:var(--bg);color:var(--ink);}
+.nav-item.active{background:var(--eng-soft);color:var(--eng);font-weight:600;}
+.nav-icon{width:18px;text-align:center;font-size:16px;}
+.divider{height:1px;background:var(--line);margin:2px 0;}
+.sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;gap:2px;}
+
+/* MAIN */
+.main{flex:1;min-width:0;padding:26px 40px 64px;max-width:1240px;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;}
+.greeting-small{color:var(--ink-soft);font-size:13.5px;}
+.topbar-right{display:flex;align-items:center;gap:18px;}
+.coin-pill{display:flex;align-items:center;gap:7px;background:var(--gold-soft);color:var(--gold);padding:7px 14px;border-radius:100px;font-weight:600;font-size:14px;}
+.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-soft);}
+.avatar-chip{display:flex;align-items:center;gap:8px;}
+.avatar-mini{width:32px;height:32px;border-radius:9px;background:var(--eng);}
+
+/* HERO */
+.hero{background:linear-gradient(180deg,var(--card),var(--bg));border:1px solid var(--line);border-radius:var(--radius);padding:0;margin-bottom:32px;overflow:hidden;position:relative;min-height:340px;display:flex;align-items:stretch;}
+.hero-arc{position:absolute;inset:0;pointer-events:none;opacity:.5;}
+.hero-inner{position:relative;flex:1;display:flex;justify-content:space-between;padding:34px 40px;z-index:2;}
+.hero-left{max-width:400px;display:flex;flex-direction:column;justify-content:center;}
+.eyebrow{color:var(--eng);font-size:12px;font-weight:700;letter-spacing:.14em;margin:0 0 10px;text-transform:uppercase;}
+.hero h1{font-size:34px;margin:0 0 12px;font-weight:700;line-height:1.12;text-transform:uppercase;letter-spacing:.01em;}
+.hero p{color:var(--ink-soft);font-size:14.5px;margin:0 0 20px;line-height:1.5;max-width:320px;}
+.hero-panel{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-width:190px;box-shadow:0 14px 30px -18px rgba(20,23,31,.25);}
+.hero-panel .hp-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.hero-panel .hp-row{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-top:1px solid var(--line);}
+.hero-panel .hp-row:first-of-type{border-top:none;}
+.hero-panel .hp-row span:last-child{color:var(--eng);font-weight:700;}
+.character-wrap{position:absolute;right:26px;bottom:-6px;display:flex;align-items:flex-end;gap:22px;z-index:1;}
+.char-stage{width:230px;height:300px;position:relative;}
+@keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.char-stage svg{animation:idle 4.5s ease-in-out infinite;}
+.char-info{min-width:150px;margin-bottom:26px;}
+.char-dept{color:var(--eng);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
+.char-level{font-family:'Space Grotesk';font-weight:700;font-size:21px;margin:2px 0 12px;}
+.xp-row{font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+.xp-bar{width:150px;height:8px;border-radius:100px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin-bottom:14px;}
+.xp-fill{height:100%;border-radius:100px;background:var(--eng);width:0%;transition:width 1.1s cubic-bezier(.2,.8,.2,1);}
+.btn{padding:10px 18px;border-radius:12px;font-weight:600;font-size:13.5px;}
+.btn-primary{background:var(--eng);color:#fff;}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
+.btn-outline-small{background:transparent;border:1px solid var(--line);color:var(--ink-soft);font-size:13px;padding:9px 15px;border-radius:11px;}
+
+/* SECTIONS */
+section{margin-bottom:34px;}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;}
+.section-head h2{font-size:15px;font-weight:700;margin:0;letter-spacing:.02em;color:var(--ink);}
+.section-link{font-size:13px;color:var(--eng);font-weight:600;text-decoration:none;}
+
+/* CONTINUE STUDYING */
+.continue-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:36px;}
+.cc-badge{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);margin-bottom:8px;}
+.continue-card h3{font-size:24px;margin:0 0 4px;}
+.continue-card .sub{color:var(--ink-soft);font-size:14px;margin:0 0 18px;}
+.stat-row{display:flex;gap:24px;margin-bottom:14px;}
+.stat-row .num{font-family:'Space Grotesk';font-weight:700;font-size:20px;}
+.stat-row .lbl{color:var(--ink-soft);font-size:12px;}
+.progress-lg{height:10px;border-radius:100px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin-bottom:20px;}
+.progress-lg .fill{height:100%;background:var(--eng);border-radius:100px;width:0%;transition:width 1.2s cubic-bezier(.2,.8,.2,1);}
+.cc-actions{display:flex;gap:12px;align-items:center;}
+.lesson-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+.lesson-list li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft);}
+.lesson-list li.done{color:var(--ink);}
+.tick{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex:none;}
+.tick.on{background:var(--eng);color:#fff;}
+.tick.off{border:1.5px solid var(--line);}
+
+/* FOLDERS */
+.folder-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+.folder-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:20px;transition:transform .18s,box-shadow .18s;}
+.folder-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px -14px rgba(20,23,31,.28);}
+.folder-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px;}
+.fc-eng{background:var(--eng-soft);}
+.fc-edu{background:#eaf0ff;}
+.fc-tech{background:#f1eafd;}
+.folder-card h4{margin:0 0 3px;font-size:15.5px;}
+.folder-card .fc-sub{color:var(--ink-soft);font-size:12.5px;margin:0 0 14px;}
+.progress-sm{height:6px;border-radius:100px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin-bottom:8px;}
+.progress-sm .fill{height:100%;border-radius:100px;width:0%;transition:width 1s ease;}
+.fc-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);}
+.folder-new{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--line);border-radius:var(--radius-sm);color:var(--ink-soft);font-weight:600;font-size:14px;min-height:150px;background:transparent;}
+.folder-new:hover{border-color:var(--eng);color:var(--eng);}
+
+/* AI */
+.ai-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+.ai-left{display:flex;gap:16px;align-items:flex-start;}
+.ai-icon{width:42px;height:42px;border-radius:12px;background:var(--gold-soft);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;}
+.ai-left h3{margin:0 0 4px;font-size:16px;}
+.ai-left p{margin:0;color:var(--ink-soft);font-size:13.5px;max-width:460px;line-height:1.5;}
+.ai-actions{display:flex;gap:10px;flex:none;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;}
+.friend-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px;}
+.friend-row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);}
+.friend-row:last-child{border-bottom:none;}
+.f-avatar{width:38px;height:38px;border-radius:50%;flex:none;}
+.f-info{flex:1;min-width:0;}
+.f-info .name{font-weight:600;font-size:14px;}
+.f-info .status{font-size:12.5px;color:var(--ink-soft);}
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--entre);display:inline-block;margin-right:5px;}
+.battle-card{background:linear-gradient(160deg,var(--card),var(--eng-soft));border:1px solid var(--line);border-radius:var(--radius-sm);padding:22px;}
+.battle-card h3{margin:0 0 3px;font-size:16px;}
+.battle-card .sub{color:var(--ink-soft);font-size:13px;margin:0 0 18px;}
+.vs-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.vs-side{text-align:center;flex:1;}
+.vs-side .who-avatar{width:44px;height:44px;border-radius:50%;margin:0 auto 8px;}
+.vs-side .who-name{font-weight:700;font-size:13.5px;}
+.vs-side .who-meta{font-size:11.5px;color:var(--ink-soft);}
+.vs-mid{font-family:'Space Grotesk';font-weight:700;color:var(--ink-soft);font-size:13px;padding:0 10px;}
+
+/* DAILY + RECENT ROW */
+.stack-gap{display:flex;flex-direction:column;gap:20px;}
+.daily-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:20px;}
+.daily-card h3{margin:0 0 4px;font-size:15px;}
+.daily-card .task{color:var(--ink-soft);font-size:13px;margin:0 0 12px;}
+.daily-count{font-family:'Space Grotesk';font-weight:700;font-size:15px;margin-bottom:8px;}
+.reward-row{display:flex;gap:10px;margin:14px 0;}
+.reward-chip{background:var(--gold-soft);color:var(--gold);font-size:12px;font-weight:600;padding:5px 10px;border-radius:100px;}
+.recent-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.recent-row:last-child{border-bottom:none;}
+.result-tag{margin-left:auto;font-weight:700;font-size:11.5px;padding:4px 9px;border-radius:100px;}
+.result-tag.win{background:#e6f6ee;color:var(--entre);}
+.result-tag.loss{background:var(--eng-soft);color:var(--eng);}
+
+/* EVENTS */
+.event-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+.event-card h3{margin:0 0 4px;font-size:17px;}
+.event-card .dates{color:var(--ink-soft);font-size:13.5px;margin:0 0 10px;}
+.event-rewards{display:flex;gap:8px;flex-wrap:wrap;}
+.tag-soft{background:var(--bg);border:1px solid var(--line);font-size:12px;color:var(--ink-soft);padding:5px 10px;border-radius:100px;}
+
+@media (max-width:1000px){
+  .sidebar{display:none;}
+  .main{padding:20px;max-width:100%;}
+  .hero{min-height:0;}
+  .hero-inner{flex-direction:column;gap:20px;padding:26px;}
+  .character-wrap{position:static;padding:0 26px 26px;justify-content:center;}
+  .hero-arc{display:none;}
+  .continue-card,.two-col{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">A</div>
+      <div class="logo-word">Ascent</div>
+    </div>
+    <nav>
+      <a class="nav-item active" href="#"><span class="nav-icon">🏠</span>Home</a>
+      <a class="nav-item" href="#"><span class="nav-icon">📁</span>My Folders</a>
+      <a class="nav-item" href="#"><span class="nav-icon">👥</span>Friends</a>
+      <a class="nav-item" href="#"><span class="nav-icon">⚔️</span>Battles</a>
+      <a class="nav-item" href="#"><span class="nav-icon">🎉</span>Events</a>
+      <div class="divider"></div>
+      <a class="nav-item" href="#"><span class="nav-icon">🎓</span>Character</a>
+      <a class="nav-item" href="#"><span class="nav-icon">🎒</span>Inventory</a>
+      <a class="nav-item" href="#"><span class="nav-icon">🏆</span>Achievements</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="divider" style="margin-bottom:10px;"></div>
+      <a class="nav-item" href="#"><span class="nav-icon">⚙️</span>Settings</a>
+      <a class="nav-item" href="#"><span class="nav-icon">❓</span>Help</a>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="greeting-small">Monday, September 28</div>
+      <div class="topbar-right">
+        <div class="coin-pill">🪙 2,450</div>
+        <div class="icon-btn">🔔</div>
+        <div class="avatar-chip"><div class="avatar-mini"></div><span style="font-size:13px;">▾</span></div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <svg class="hero-arc" viewBox="0 0 1160 340" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60,260 Q420,40 1100,120" stroke="var(--line)" stroke-width="1.4" fill="none" stroke-dasharray="2 7"/>
+        <g fill="var(--eng)">
+          <circle cx="118" cy="196" r="2.4"/>
+          <circle cx="132" cy="188" r="1.6"/>
+          <circle cx="1040" cy="96" r="2.2"/>
+        </g>
+      </svg>
+      <div class="hero-inner">
+        <div class="hero-left">
+          <p class="eyebrow">Home · Engineering</p>
+          <h1>Ready to continue your journey?</h1>
+          <p>Study, learn, and level up with your friends.</p>
+          <button class="btn btn-primary" style="width:fit-content;">Continue Studying →</button>
+        </div>
+        <div class="hero-panel">
+          <div class="hp-label">⚔️ Carl · Lv. 12</div>
+          <div class="hp-row"><span>XP progress</span><span>820/1000</span></div>
+          <div class="hp-row"><span>Active folders</span><span>3</span></div>
+          <div class="hp-row"><span>Win streak</span><span>4</span></div>
+        </div>
+      </div>
+      <div class="character-wrap">
+        <div class="char-info">
+          <div class="char-dept">Engineering</div>
+          <div class="char-level">Level 12</div>
+          <div class="xp-row">820 / 1000 XP</div>
+          <div class="xp-bar"><div class="xp-fill" style="width:82%"></div></div>
+          <button class="btn btn-ghost">Customize Character</button>
+        </div>
+        <div class="char-stage">
+          <svg viewBox="0 0 230 300" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="115" cy="288" rx="66" ry="9" fill="#000" opacity="0.07"/>
+            <rect x="78" y="148" width="74" height="106" rx="20" fill="#e0432b"/>
+            <rect x="58" y="158" width="26" height="74" rx="13" fill="#e0432b"/>
+            <rect x="146" y="158" width="26" height="74" rx="13" fill="#e0432b"/>
+            <circle cx="71" cy="236" r="11" fill="#f2c9a0"/>
+            <circle cx="159" cy="236" r="11" fill="#f2c9a0"/>
+            <rect x="92" y="236" width="26" height="52" rx="11" fill="#2b2f3a"/>
+            <rect x="120" y="236" width="26" height="52" rx="11" fill="#2b2f3a"/>
+            <rect x="86" y="278" width="32" height="12" rx="6" fill="#14171f"/>
+            <rect x="118" y="278" width="32" height="12" rx="6" fill="#14171f"/>
+            <circle cx="115" cy="98" r="46" fill="#f2c9a0"/>
+            <path d="M64 88 a46 40 0 0 1 92 0 v6 h-92 z" fill="#3a2a20"/>
+            <circle cx="97" cy="104" r="4.5" fill="#2b2f3a"/>
+            <circle cx="133" cy="104" r="4.5" fill="#2b2f3a"/>
+            <path d="M98 122 q17 12 34 0" stroke="#2b2f3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>CONTINUE STUDYING</h2></div>
+      <div class="continue-card">
+        <div>
+          <div class="cc-badge">📁 Physics Midterms</div>
+          <h3>Forces &amp; Motion</h3>
+          <p class="sub">Pick up right where you left off.</p>
+          <div class="stat-row">
+            <div><div class="num">82%</div><div class="lbl">Complete</div></div>
+            <div><div class="num">4/5</div><div class="lbl">Lessons</div></div>
+          </div>
+          <div class="progress-lg"><div class="fill" style="width:82%"></div></div>
+          <div class="cc-actions">
+            <button class="btn btn-primary">Continue Studying →</button>
+            <button class="btn-outline-small">View Folder</button>
+          </div>
+        </div>
+        <ul class="lesson-list">
+          <li class="done"><span class="tick on">✓</span>Motion</li>
+          <li class="done"><span class="tick on">✓</span>Forces</li>
+          <li class="done"><span class="tick on">✓</span>Energy</li>
+          <li><span class="tick off"></span>Momentum</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>MY STUDY FOLDERS</h2><a class="section-link" href="#">+ Create Folder</a></div>
+      <div class="folder-grid">
+        <div class="folder-card">
+          <div class="folder-icon fc-eng">📁</div>
+          <h4>Physics Midterms</h4>
+          <p class="fc-sub">Forces &amp; Motion</p>
+          <div class="progress-sm"><div class="fill" style="width:82%;background:var(--eng)"></div></div>
+          <div class="fc-meta"><span>5 lessons</span><span>3 members</span></div>
+        </div>
+        <div class="folder-card">
+          <div class="folder-icon fc-edu">📁</div>
+          <h4>Calculus Finals</h4>
+          <p class="fc-sub">Limits &amp; Derivatives</p>
+          <div class="progress-sm"><div class="fill" style="width:43%;background:var(--edu)"></div></div>
+          <div class="fc-meta"><span>8 lessons</span><span>1 member</span></div>
+        </div>
+        <div class="folder-card">
+          <div class="folder-icon fc-tech">📁</div>
+          <h4>Programming Exam</h4>
+          <p class="fc-sub">Data Structures</p>
+          <div class="progress-sm"><div class="fill" style="width:67%;background:var(--tech)"></div></div>
+          <div class="fc-meta"><span>6 lessons</span><span>4 members</span></div>
+        </div>
+        <button class="folder-new">+ Create New Folder</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="ai-card">
+        <div class="ai-left">
+          <div class="ai-icon">✨</div>
+          <div>
+            <h3>Turn your lessons into a reviewer</h3>
+            <p>Upload your lessons and let AI organize the important concepts, summaries, and practice questions — or highlight key terms yourself as you go.</p>
+          </div>
+        </div>
+        <div class="ai-actions">
+          <button class="btn-outline-small">Add Lesson</button>
+          <button class="btn btn-primary">Generate AI Reviewer</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <div>
+        <div class="section-head"><h2>STUDY WITH FRIENDS</h2></div>
+        <div class="friend-card">
+          <div class="friend-row">
+            <div class="f-avatar" style="background:var(--edu)"></div>
+            <div class="f-info">
+              <div class="name">Alyssa</div>
+              <div class="status"><span class="dot-live"></span>Studying Physics Midterms</div>
+            </div>
+            <button class="btn-outline-small">Join Session</button>
+          </div>
+          <div class="friend-row">
+            <div class="f-avatar" style="background:var(--tech)"></div>
+            <div class="f-info">
+              <div class="name">Mark</div>
+              <div class="status">Invited you to Calculus Finals</div>
+            </div>
+            <button class="btn-outline-small">View Invite</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-head"><h2>READY TO TEST YOUR KNOWLEDGE?</h2></div>
+        <div class="battle-card">
+          <h3>⚔️ Physics Midterms</h3>
+          <p class="sub">Battle friends using questions from the lessons you've studied.</p>
+          <div class="vs-row">
+            <div class="vs-side"><div class="who-avatar" style="background:var(--eng)"></div><div class="who-name">You</div><div class="who-meta">Engineering · Lv.12</div></div>
+            <div class="vs-mid">VS</div>
+            <div class="vs-side"><div class="who-avatar" style="background:var(--edu)"></div><div class="who-name">Alyssa</div><div class="who-meta">Education · Lv.11</div></div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;">Start Battle</button>
+          <p style="text-align:center;font-size:11.5px;color:var(--ink-soft);margin:10px 0 0;">Questions are generated from this folder.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <div class="stack-gap">
+        <div>
+          <div class="section-head"><h2>RECENT BATTLES</h2></div>
+          <div class="friend-card">
+            <div class="recent-row"><div class="f-avatar" style="width:28px;height:28px;background:var(--eng)"></div>Physics Midterms · Carl vs Alyssa<span class="result-tag win">Victory</span></div>
+            <div class="recent-row"><div class="f-avatar" style="width:28px;height:28px;background:var(--edu)"></div>Calculus Finals · Carl vs Mark<span class="result-tag loss">Defeat</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="daily-card">
+        <h3>Daily Challenge</h3>
+        <p class="task">Answer 10 questions</p>
+        <div class="daily-count">6 / 10 completed</div>
+        <div class="progress-sm"><div class="fill" style="width:60%;background:var(--gold)"></div></div>
+        <div class="reward-row"><span class="reward-chip">+50 XP</span><span class="reward-chip">+25 Coins</span></div>
+        <button class="btn btn-primary" style="width:100%;">Continue</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>UPCOMING EVENTS</h2></div>
+      <div class="event-card">
+        <div>
+          <h3>Engineering Week</h3>
+          <p class="dates">September 30 – October 7</p>
+          <div class="event-rewards">
+            <span class="tag-soft">Exclusive outfit</span>
+            <span class="tag-soft">XP boost</span>
+            <span class="tag-soft">Coins</span>
+          </div>
+        </div>
+        <button class="btn btn-primary">View Event</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+window.addEventListener('load',()=>{
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.fill,.xp-fill').forEach(el=>{
+      const w = el.style.width; el.style.width='0%';
+      requestAnimationFrame(()=>{ el.style.width = w; });
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,596 @@
+/* ==========================================================================
+   AURA STUDY CARD - DARK FUTURISTIC RPG GAME UI
+   ========================================================================== */
+
+.study-card-container {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(145deg, rgba(13, 17, 28, 0.88) 0%, rgba(8, 11, 19, 0.94) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.12),
+              0 0 28px rgba(255, 42, 68, 0.06);
+  overflow: hidden;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease;
+  user-select: none;
+}
+
+.study-card-container:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.65), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.18),
+              0 0 35px rgba(255, 42, 68, 0.12);
+}
+
+/* Optional background image support with dark translucent overlay */
+.study-card-container.has-bg-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Red Laser Notch Accent at top-left */
+.study-card-top-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 85px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff2a44 0%, #ff5268 100%);
+  border-radius: 16px 0 4px 0;
+  box-shadow: 0 0 12px rgba(255, 42, 68, 0.85);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Subtle Tech Grid / Circuit Overlay */
+.study-card-tech-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   1. HEADER
+   -------------------------------------------------------------------------- */
+.study-card-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.study-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;
+}
+
+.study-card-book-icon {
+  color: #ffffff;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.35));
+}
+
+.study-card-header-label {
+  font-family: var(--font-heading, "Space Grotesk", sans-serif);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #e2e8f0;
+}
+
+.study-card-dots-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  line-height: 1;
+}
+
+.study-card-dots-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.08);
+}
+
+.study-card-dots-btn:active {
+  transform: scale(0.96);
+}
+
+/* --------------------------------------------------------------------------
+   2. COURSE INFORMATION
+   -------------------------------------------------------------------------- */
+.study-card-course-info {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.study-card-folder-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff2a44 0%, #b91c1c 100%);
+  border: 1px solid rgba(255, 90, 110, 0.5);
+  box-shadow: 0 4px 16px rgba(255, 42, 68, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.study-card-container:hover .study-card-folder-badge {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(255, 42, 68, 0.55);
+}
+
+.study-card-title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.study-card-course-title {
+  margin: 0 0 2px 0;
+  font-family: var(--font-heading, "Space Grotesk", sans-serif);
+  font-size: 17.5px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: #ffffff;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.study-card-course-subtitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-course-dots {
+  opacity: 0.6;
+}
+
+.mini-course-dots:hover {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   3. PROGRESS
+   -------------------------------------------------------------------------- */
+.study-card-progress-section {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 16px;
+}
+
+.study-card-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+}
+
+.study-card-progress-pct {
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.2px;
+}
+
+.study-card-progress-count {
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.study-card-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.study-card-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff3b53 0%, #ff2a44 100%);
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(255, 42, 68, 0.75);
+  transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   4. LESSON STATUS CHIPS
+   -------------------------------------------------------------------------- */
+.study-card-chips-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.study-card-lesson-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 10px;
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+/* Completed chip */
+.study-card-lesson-chip.completed {
+  background: rgba(255, 42, 68, 0.11);
+  border-color: rgba(255, 42, 68, 0.32);
+  color: #ffffff;
+}
+
+.study-card-lesson-chip.completed:hover {
+  background: rgba(255, 42, 68, 0.2);
+  border-color: rgba(255, 42, 68, 0.55);
+  box-shadow: 0 0 12px rgba(255, 42, 68, 0.3);
+  transform: translateY(-1px);
+}
+
+.chip-check-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 4px rgba(255, 42, 68, 0.6));
+}
+
+/* Incomplete chip */
+.study-card-lesson-chip.incomplete {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+}
+
+.study-card-lesson-chip.incomplete:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.chip-circle-icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.study-card-lesson-chip:active {
+  transform: scale(0.97);
+}
+
+/* --------------------------------------------------------------------------
+   5. BOTTOM ACTIONS
+   -------------------------------------------------------------------------- */
+.study-card-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.study-card-btn-primary {
+  flex: 1.25;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 20px;
+  background: linear-gradient(135deg, #ff3850 0%, #e61932 100%);
+  color: #ffffff;
+  font-family: var(--font-heading, "Space Grotesk", sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255, 42, 68, 0.42);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.study-card-btn-primary:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 24px rgba(255, 42, 68, 0.65);
+  filter: brightness(1.08);
+}
+
+.study-card-btn-primary:active {
+  transform: translateY(0);
+  filter: brightness(0.96);
+}
+
+.btn-arrow {
+  display: inline-block;
+  font-size: 15px;
+  transition: transform 0.2s ease;
+}
+
+.study-card-btn-primary:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+.study-card-btn-secondary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-family: var(--font-heading, "Space Grotesk", sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.study-card-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1.5px);
+}
+
+.study-card-btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   DASHBOARD BOTTOM GRID VARIANT
+   -------------------------------------------------------------------------- */
+.study-card-container.dashboard-study-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 14px;
+  padding: 11px 13px 11px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  min-height: 0;
+}
+
+.study-card-container.dashboard-study-card .study-card-header {
+  margin-bottom: 5px;
+}
+
+.study-card-container.dashboard-study-card .study-card-header-label {
+  font-size: 10px;
+  letter-spacing: 1.1px;
+}
+
+.study-card-container.dashboard-study-card .study-card-course-info {
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.study-card-container.dashboard-study-card .study-card-folder-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.study-card-container.dashboard-study-card .study-card-folder-badge svg {
+  width: 15px;
+  height: 15px;
+}
+
+.study-card-container.dashboard-study-card .study-card-course-title {
+  font-size: 13.5px;
+  margin-bottom: 1px;
+}
+
+.study-card-container.dashboard-study-card .study-card-course-subtitle {
+  font-size: 10.5px;
+}
+
+.study-card-container.dashboard-study-card .study-card-progress-section {
+  margin-bottom: 5px;
+}
+
+.study-card-container.dashboard-study-card .study-card-progress-meta {
+  font-size: 10px;
+  margin-bottom: 3px;
+}
+
+.study-card-container.dashboard-study-card .study-card-progress-track {
+  height: 4px;
+}
+
+.study-card-container.dashboard-study-card .study-card-chips-row {
+  margin-bottom: 7px;
+  gap: 4px;
+}
+
+.study-card-container.dashboard-study-card .study-card-lesson-chip {
+  padding: 2px 7px;
+  font-size: 9.5px;
+  border-radius: 5px;
+}
+
+.study-card-container.dashboard-study-card .chip-check-icon {
+  width: 9px;
+  height: 9px;
+}
+
+.study-card-container.dashboard-study-card .chip-circle-icon {
+  width: 7px;
+  height: 7px;
+}
+
+.study-card-container.dashboard-study-card .study-card-actions {
+  margin-top: auto;
+  gap: 6px;
+}
+
+.study-card-container.dashboard-study-card .study-card-btn-primary,
+.study-card-container.dashboard-study-card .study-card-btn-secondary {
+  padding: 6px 10px;
+  font-size: 11px;
+  border-radius: 7px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN & LAPTOP OPTIMIZATIONS
+   -------------------------------------------------------------------------- */
+@media (max-width: 1536px), (max-height: 900px) {
+  .study-card-container {
+    padding: 12px 16px;
+    border-radius: 13px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .study-card-header {
+    margin-bottom: 8px;
+  }
+
+  .study-card-header-label {
+    font-size: 10px;
+    letter-spacing: 1.1px;
+  }
+
+  .study-card-course-info {
+    gap: 9px;
+    margin-bottom: 8px;
+  }
+
+  .study-card-folder-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .study-card-folder-badge svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .study-card-course-title {
+    font-size: 14.5px;
+    margin-bottom: 1px;
+  }
+
+  .study-card-course-subtitle {
+    font-size: 11px;
+  }
+
+  .study-card-progress-section {
+    margin-bottom: 7px;
+  }
+
+  .study-card-progress-meta {
+    font-size: 10.5px;
+    margin-bottom: 4px;
+  }
+
+  .study-card-progress-track {
+    height: 4.5px;
+  }
+
+  .study-card-chips-row {
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .study-card-lesson-chip {
+    padding: 3px 8px;
+    font-size: 10px;
+    border-radius: 6px;
+  }
+
+  .chip-check-icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .chip-circle-icon {
+    width: 8px;
+    height: 8px;
+  }
+
+  .study-card-actions {
+    gap: 8px;
+  }
+
+  .study-card-btn-primary {
+    padding: 7px 12px;
+    font-size: 11.5px;
+    border-radius: 7px;
+  }
+
+  .study-card-btn-secondary {
+    padding: 7px 12px;
+    font-size: 11.5px;
+    border-radius: 7px;
+  }
+}
+
+@media (max-width: 640px) {
+  .study-card-container {
+    padding: 14px 16px;
+  }
+
+  .study-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .study-card-btn-primary,
+  .study-card-btn-secondary {
+    width: 100%;
+    flex: none;
+  }
+
+  .study-card-chips-row {
+    gap: 5px;
+  }
+}

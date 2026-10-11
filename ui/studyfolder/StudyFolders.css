@@ -1,0 +1,782 @@
+/* ==========================================================================
+   AURA STUDY FOLDERS COMPONENT - RPG INTERFACE STYLING
+   ========================================================================== */
+
+/* MAIN CONTAINER PANEL */
+.study-folders-panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(13, 17, 28, 0.88) 0%, rgba(8, 11, 19, 0.94) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 0 25px rgba(255, 42, 68, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  user-select: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.study-folders-panel:hover {
+  border-color: rgba(255, 255, 255, 0.17);
+  box-shadow: 
+    0 20px 42px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 0 30px rgba(255, 42, 68, 0.08);
+}
+
+/* Red Laser Notch Accent at Top-Left */
+.study-folders-red-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff2a44 0%, #ff5268 85%, transparent 100%);
+  border-radius: 16px 0 4px 0;
+  box-shadow: 0 0 12px rgba(255, 42, 68, 0.85);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Subtle Red Diagonal Accent Notch at Top-Right */
+.study-folders-corner-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, transparent 50%, rgba(255, 42, 68, 0.18) 50%, rgba(255, 42, 68, 0.4) 100%);
+  border-top-right-radius: 16px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.study-folders-corner-accent::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #ff2a44;
+  border-right: 2px solid #ff2a44;
+  border-top-right-radius: 16px;
+  box-shadow: 0 0 8px rgba(255, 42, 68, 0.7);
+}
+
+/* ==========================================================================
+   HEADER ROW
+   ========================================================================== */
+.study-folders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.study-folders-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.study-folders-title-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 42, 68, 0.14);
+  color: #ff2a44;
+  border: 1px solid rgba(255, 42, 68, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(255, 42, 68, 0.3);
+  flex-shrink: 0;
+}
+
+.study-folders-title-text {
+  font-family: var(--font-heading, 'Space Grotesk', 'Chakra Petch', sans-serif);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* View All interactive link */
+.study-folders-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--text-muted, #9aa1b2);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.study-folders-view-all .view-all-arrow {
+  display: inline-block;
+  font-size: 12px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.study-folders-view-all:hover {
+  color: #ff2a44;
+  background: rgba(255, 42, 68, 0.08);
+}
+
+.study-folders-view-all:hover .view-all-arrow {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   GRID LAYOUT
+   ========================================================================== */
+.study-folders-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  align-items: stretch;
+}
+
+/* ==========================================================================
+   INDIVIDUAL FOLDER CARDS (RPG SELECTABLE OBJECTS)
+   ========================================================================== */
+.study-folder-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  min-height: 124px;
+  min-width: 0;
+  outline: none;
+  overflow: hidden;
+  transition: 
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Corner diagonal cyber notch on each card */
+.study-folder-card .card-cyber-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-top-right-radius: 11px;
+  pointer-events: none;
+  transition: border-color 0.25s ease;
+}
+
+/* Hover State - Lift, Border Brighten, & Glow */
+.study-folder-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.study-folder-card:focus-visible {
+  outline: 2px solid #ff2a44;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   COLOR THEMES (Physics: Red | Calculus: Blue | Programming: Purple)
+   ========================================================================== */
+
+/* Red Folder (Physics Midterms) */
+.study-folder-card.theme-red {
+  --folder-accent: #ff2a44;
+  --folder-glow: rgba(255, 42, 68, 0.35);
+}
+
+.study-folder-card.theme-red .sfc-icon-badge {
+  background: rgba(255, 42, 68, 0.16);
+  color: #ff2a44;
+  border: 1px solid rgba(255, 42, 68, 0.4);
+  box-shadow: 0 0 10px rgba(255, 42, 68, 0.2);
+}
+
+.study-folder-card.theme-red:hover {
+  border-color: rgba(255, 42, 68, 0.48);
+  box-shadow: 
+    0 12px 28px -4px rgba(0, 0, 0, 0.6),
+    0 0 22px rgba(255, 42, 68, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.study-folder-card.theme-red:hover .card-cyber-accent {
+  border-color: #ff2a44;
+}
+
+/* Blue Folder (Calculus Finals) */
+.study-folder-card.theme-blue {
+  --folder-accent: #3b82f6;
+  --folder-glow: rgba(59, 130, 246, 0.35);
+}
+
+.study-folder-card.theme-blue .sfc-icon-badge {
+  background: rgba(59, 130, 246, 0.16);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.study-folder-card.theme-blue:hover {
+  border-color: rgba(59, 130, 246, 0.48);
+  box-shadow: 
+    0 12px 28px -4px rgba(0, 0, 0, 0.6),
+    0 0 22px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.study-folder-card.theme-blue:hover .card-cyber-accent {
+  border-color: #60a5fa;
+}
+
+/* Purple Folder (Programming Exam) */
+.study-folder-card.theme-purple {
+  --folder-accent: #a855f7;
+  --folder-glow: rgba(168, 85, 247, 0.35);
+}
+
+.study-folder-card.theme-purple .sfc-icon-badge {
+  background: rgba(168, 85, 247, 0.16);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+}
+
+.study-folder-card.theme-purple:hover {
+  border-color: rgba(168, 85, 247, 0.48);
+  box-shadow: 
+    0 12px 28px -4px rgba(0, 0, 0, 0.6),
+    0 0 22px rgba(168, 85, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.study-folder-card.theme-purple:hover .card-cyber-accent {
+  border-color: #c084fc;
+}
+
+/* ==========================================================================
+   CARD TOP ROW & ICON BADGE
+   ========================================================================== */
+.sfc-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.sfc-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+}
+
+.study-folder-card:hover .sfc-icon-badge {
+  transform: scale(1.07);
+  filter: brightness(1.2);
+}
+
+.sfc-folder-svg {
+  display: block;
+}
+
+/* Optional RPG Badges: Battle ready / AI active */
+.sfc-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sfc-pill-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  line-height: 1;
+}
+
+.sfc-pill-badge.battle-ready {
+  background: rgba(255, 42, 68, 0.18);
+  border-color: rgba(255, 42, 68, 0.4);
+}
+
+.sfc-pill-badge.ai-active {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* ==========================================================================
+   CARD MIDDLE: TITLE & PROGRESS
+   ========================================================================== */
+.sfc-middle-content {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.sfc-folder-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.sfc-progress-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.sfc-pct-value {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: 0.2px;
+}
+
+.sfc-last-studied {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--text-dim, #64748b);
+}
+
+.sfc-progressbar-container {
+  width: 100%;
+}
+
+/* PROGRESS BAR STYLES */
+.study-progress-track {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.study-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   CARD BOTTOM: METADATA
+   ========================================================================== */
+.sfc-bottom-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-dim, #64748b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sfc-meta-item {
+  color: #94a3b8;
+}
+
+.sfc-meta-dot {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   4TH CARD: CREATE NEW FOLDER
+   ========================================================================== */
+.study-folder-card.is-create-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-muted, #94a3b8);
+  cursor: pointer;
+  padding: 14px 10px;
+  min-height: 124px;
+  transition: 
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
+}
+
+.create-card-corner-notch {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-top: 1.5px solid transparent;
+  border-right: 1.5px solid transparent;
+  transition: border-color 0.25s ease;
+}
+
+.create-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.create-card-plus-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted, #94a3b8);
+  transition: 
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
+}
+
+.create-card-label {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: #cbd5e1;
+  transition: color 0.25s ease;
+  line-height: 1.25;
+}
+
+.create-card-subtext {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--text-dim, #64748b);
+  transition: color 0.25s ease;
+}
+
+/* Hover on Create Card */
+.study-folder-card.is-create-card:hover {
+  border-color: rgba(255, 42, 68, 0.6);
+  background: rgba(255, 42, 68, 0.05);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 12px 28px -4px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(255, 42, 68, 0.25);
+}
+
+.study-folder-card.is-create-card:hover .create-card-plus-circle {
+  border-color: #ff2a44;
+  color: #ff2a44;
+  background: rgba(255, 42, 68, 0.15);
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 0 14px rgba(255, 42, 68, 0.5);
+}
+
+.study-folder-card.is-create-card:hover .create-card-label {
+  color: #ffffff;
+}
+
+.study-folder-card.is-create-card:hover .create-card-subtext {
+  color: #ff6477;
+}
+
+.study-folder-card.is-create-card:hover .create-card-corner-notch {
+  border-color: #ff2a44;
+}
+
+/* ==========================================================================
+   EMPTY STATE (RPG HOLOGRAPHIC STYLE)
+   ========================================================================== */
+.study-folders-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  gap: 10px;
+  flex: 1;
+}
+
+.empty-state-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 42, 68, 0.08);
+  border: 1px solid rgba(255, 42, 68, 0.25);
+  color: #ff2a44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(255, 42, 68, 0.15);
+}
+
+.empty-state-headline {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 3px 0;
+}
+
+.empty-state-subtext {
+  font-size: 11.5px;
+  color: var(--text-muted, #94a3b8);
+  margin: 0;
+}
+
+.empty-state-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #ff2a44 0%, #dc2626 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 42, 68, 0.4);
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.empty-state-create-btn:hover {
+  background: linear-gradient(135deg, #ff4058 0%, #ef4444 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255, 42, 68, 0.55);
+}
+
+/* ==========================================================================
+   RESPONSIVE BEHAVIOR
+   ========================================================================== */
+
+/* Tablet / Medium Screens */
+@media (max-width: 1200px) {
+  .study-folders-grid {
+    gap: 8px;
+  }
+  
+  .sfc-folder-title {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .study-folders-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+/* Mobile Screens */
+@media (max-width: 768px) {
+  .study-folders-panel {
+    padding: 16px 18px !important;
+    border-radius: 16px !important;
+    height: auto !important;
+    min-height: unset !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
+    flex: none !important;
+  }
+
+  .study-folders-header {
+    margin-bottom: 12px !important;
+  }
+
+  .study-folders-title-text {
+    font-size: 11px !important;
+    letter-spacing: 1.2px !important;
+  }
+
+  .study-folders-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    overflow-x: visible !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Compact Folder Card - 3 Column Horizontal Row */
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas:
+      "icon title badges"
+      "icon meta badges" !important;
+    align-items: center !important;
+    padding: 10px 12px !important;
+    min-height: unset !important;
+    gap: 2px 12px !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-top-row {
+    display: contents !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-icon-badge {
+    grid-area: icon !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-badge-group {
+    grid-area: badges !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-badge-group .sfc-pill-badge {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 7px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-middle-content {
+    grid-area: title !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-folder-title {
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif) !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-pct-value,
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-progressbar-container {
+    display: none !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-bottom-meta {
+    grid-area: meta !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+    margin: 0 !important;
+  }
+
+  .study-folder-card:not(.is-detailed-card):not(.is-create-card) .sfc-meta-pct-mobile {
+    display: inline !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+  }
+
+  /* Create Folder item on mobile */
+  .study-folder-card.is-create-card {
+    min-height: unset !important;
+    padding: 12px !important;
+    border: 1.5px dashed rgba(255, 255, 255, 0.14) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+  }
+
+  .study-folder-card.is-create-card .create-card-plus-circle {
+    display: none !important;
+  }
+
+  .study-folder-card.is-create-card .create-card-inner {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+
+  .study-folder-card.is-create-card .create-card-label {
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif) !important;
+    font-size: 12px !important;
+    color: #cbd5e1 !important;
+    font-weight: 600 !important;
+  }
+
+  .study-folder-card.is-create-card .create-card-label::before {
+    content: '+ ';
+  }
+
+  .study-folder-card.is-create-card .create-card-subtext {
+    font-size: 10px !important;
+    color: #64748b !important;
+  }
+}
