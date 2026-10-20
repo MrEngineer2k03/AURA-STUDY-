@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 /**
  * FolderToolbar - Search input, filter tabs (All, My Folders, Shared With Me), and sort dropdown
  *
@@ -20,20 +18,17 @@ export default function FolderToolbar({
   onSortChange,
   archivedCount = 0,
 }) {
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth <= 768;
-    }
-    return false;
-  });
+  // Centre the clicked pill inside the tab row ONLY (never scrolls the page).
+  const scrollTabIntoView = (btn) => {
+    const row = btn?.parentElement;
+    if (!row || row.scrollWidth <= row.clientWidth) return;
+    const rowRect = row.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    const target =
+      row.scrollLeft + (btnRect.left - rowRect.left) - (rowRect.width - btnRect.width) / 2;
+    row.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+  };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
   const filterOptions = [
     { id: 'all', label: 'All' },
     { id: 'my-folders', label: 'My Folders' },
@@ -112,13 +107,7 @@ export default function FolderToolbar({
                 className={`filter-tab-pill ${activeFilter === opt.id ? 'active' : ''}`}
                 onClick={(e) => {
                   onFilterChange(opt.id);
-                  if (e.currentTarget) {
-                    e.currentTarget.scrollIntoView({
-                      behavior: 'smooth',
-                      inline: 'center',
-                      block: 'nearest',
-                    });
-                  }
+                  scrollTabIntoView(e.currentTarget);
                 }}
               >
                 {opt.label}
