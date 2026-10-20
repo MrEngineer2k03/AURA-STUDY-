@@ -62,7 +62,7 @@ export default function FolderHeader({
   return (
     <div className="folders-page-header">
       <div className="fph-left">
-        <div className="fph-eyebrow">
+        <div className="fph-eyebrow desktop-eyebrow">
           <span className="red-slant-icon">/</span> STUDY LIBRARY
           {typeof folderCount === 'number' && (
             <span className="fph-count-chip">
@@ -70,10 +70,30 @@ export default function FolderHeader({
             </span>
           )}
         </div>
-        <h1 className="fph-title">MY FOLDERS</h1>
-        <p className="fph-subtitle">
-          Organize your lessons, study materials, and battles.
-        </p>
+
+        <div className="fph-title-row">
+          <div className="fph-folder-squircle" aria-hidden="true">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" />
+            </svg>
+          </div>
+
+          <div className="fph-title-text-group">
+            <h1 className="fph-title">My Folders</h1>
+            <p className="fph-subtitle">
+              Organize your lessons, study materials, and battles.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="fph-right">

@@ -1,297 +1,303 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 
 /**
- * FlashcardModeSelector - The two large interactive options:
+ * FlashcardModeSelector - Deck view and bottom actions matching Image 3 reference
  *
- * When cards exist (cardCount > 0):
- * 1. [ REVIEW FLASHCARDS ] - Manage deck
- * 2. [ START STUDYING ] - Primary action in AURA red
- *
- * When folder has no flashcards (cardCount === 0):
- * 1. [ NO FLASHCARDS YET ] - Empty state with illustration and [+ CREATE YOUR FIRST FLASHCARD]
- * 2. [ YOUR STUDY DECK IS EMPTY ] - Locked study deck with illustration and [CREATE FLASHCARDS FIRST →]
+ * Implements:
+ * 1. Main Deck Container:
+ *    - Empty state (0 cards): Large dashed container with cyan document + icon,
+ *      "No flashcards yet" headline, and subtitle.
+ *    - Active state (> 0 cards): Sleek flashcard deck manager with status filter tabs,
+ *      card items, quick flip preview, edit, duplicate, and delete actions.
+ * 2. Bottom Action Bar:
+ *    - Left Button: [ 🔒 Study ] (locked when 0 cards; unlocked and interactive when > 0 cards)
+ *    - Right Button: [ + New flashcard ] (vibrant red primary action button)
  *
  * @param {Object} props
+ * @param {Array<Object>} props.cards - List of cards in current folder
  * @param {number} props.cardCount - Total count of flashcards
- * @param {Function} props.onSelectReview - Trigger Review Mode
+ * @param {Function} props.onSelectReview - Trigger review workspace if needed
  * @param {Function} props.onSelectStudy - Trigger Study Mode
- * @param {Function} props.onCreateFirstCard - Open Create Flashcard interface
+ * @param {Function} props.onCreateFirstCard - Open Create Flashcard modal
+ * @param {Function} [props.onPreviewCard] - Open card preview modal
+ * @param {Function} [props.onEditCard] - Open card edit modal
+ * @param {Function} [props.onDeleteCard] - Delete a card
+ * @param {Function} [props.onDuplicateCard] - Duplicate a card
  */
 export default function FlashcardModeSelector({
+  cards = [],
   cardCount = 0,
   onSelectReview,
   onSelectStudy,
   onCreateFirstCard,
+  onPreviewCard,
+  onEditCard,
+  onDeleteCard,
+  onDuplicateCard,
 }) {
-  const hasFlashcards = cardCount > 0;
+  const actualCount = cards.length || cardCount || 0;
+  const hasFlashcards = actualCount > 0;
 
-  // ==========================================
-  // CASE 1: EMPTY STATE (cardCount === 0)
-  // ==========================================
-  if (!hasFlashcards) {
-    return (
-      <div className="folder-mode-options-grid" role="region" aria-label="Flashcard Actions - Empty State">
-        {/* CARD 1: REVIEW FLASHCARDS – EMPTY STATE */}
-        <div
-          className="mode-option-card is-review is-empty-state"
-          onClick={onCreateFirstCard}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              if (onCreateFirstCard) onCreateFirstCard();
-            }
-          }}
-          aria-label="No flashcards yet. Create your first flashcard."
-        >
-          <div className="mode-option-card-accent" aria-hidden="true" />
+  // Active filter tab for non-empty deck: 'all' | 'learning' | 'mastered' | 'new'
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-          <div className="mode-option-top">
-            <div className="mode-option-icon-box is-review" aria-hidden="true">
-              {/* Folder document icon */}
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
-              </svg>
-            </div>
-            <span className="mode-option-tag">EMPTY COLLECTION</span>
-          </div>
+  // Counts for filters
+  const counts = useMemo(() => {
+    return {
+      all: cards.length,
+      learning: cards.filter((c) => c.status === 'learning').length,
+      mastered: cards.filter((c) => c.status === 'mastered').length,
+      new: cards.filter((c) => !c.status || c.status === 'new').length,
+    };
+  }, [cards]);
 
-          {/* Large visual illustration for empty flashcard collection */}
-          <div className="mode-option-illustration-box" aria-hidden="true">
-            <svg className="mode-empty-svg" viewBox="0 0 80 80" fill="none">
-              <circle cx="40" cy="40" r="32" fill="rgba(59, 130, 246, 0.08)" />
-              {/* Background dashed silhouette */}
-              <rect
-                x="22"
-                y="16"
-                width="40"
-                height="48"
-                rx="8"
-                stroke="rgba(96, 165, 250, 0.3)"
-                strokeWidth="1.5"
-                strokeDasharray="3 3"
-                fill="rgba(14, 20, 36, 0.6)"
-              />
-              {/* Foreground card */}
-              <rect
-                x="18"
-                y="20"
-                width="44"
-                height="48"
-                rx="8"
-                stroke="#60a5fa"
-                strokeWidth="1.8"
-                fill="#0d1424"
-              />
-              {/* Simulated lines on card */}
-              <line x1="26" y1="30" x2="44" y2="30" stroke="rgba(96, 165, 250, 0.5)" strokeWidth="2" strokeLinecap="round" />
-              <line x1="26" y1="38" x2="54" y2="38" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1.8" strokeLinecap="round" />
-              <line x1="26" y1="44" x2="48" y2="44" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1.8" strokeLinecap="round" />
-              {/* Floating plus badge */}
-              <circle cx="50" cy="54" r="10" fill="#2563eb" />
-              <path d="M50 49v10M45 54h10" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </div>
+  // Filtered cards list
+  const filteredCards = useMemo(() => {
+    if (!hasFlashcards) return [];
+    return cards.filter((card) => {
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const questionMatch = (card.question || card.front || '').toLowerCase().includes(q);
+        const answerMatch = (card.answer || card.back || '').toLowerCase().includes(q);
+        if (!questionMatch && !answerMatch) return false;
+      }
+      if (activeFilter === 'learning') return card.status === 'learning';
+      if (activeFilter === 'mastered') return card.status === 'mastered';
+      if (activeFilter === 'new') return !card.status || card.status === 'new';
+      return true;
+    });
+  }, [cards, hasFlashcards, activeFilter, searchQuery]);
 
-          <div className="mode-option-body">
-            <h2 className="mode-option-title">NO FLASHCARDS YET</h2>
-            <p className="mode-option-desc">
-              You haven't created any flashcards in this folder. Start building your study collection by adding your first question and answer.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className="btn-create-first-card-primary"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onCreateFirstCard) onCreateFirstCard();
-            }}
-          >
-            <span style={{ fontSize: '16px', fontWeight: 900 }}>+</span>
-            <span>CREATE YOUR FIRST FLASHCARD</span>
-          </button>
-        </div>
-
-        {/* CARD 2: START STUDYING – EMPTY STATE */}
-        <div
-          className="mode-option-card is-study is-empty-state"
-          onClick={onCreateFirstCard}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              if (onCreateFirstCard) onCreateFirstCard();
-            }
-          }}
-          aria-label="Your study deck is empty. Create flashcards first."
-        >
-          <div className="mode-option-card-accent" aria-hidden="true" />
-
-          <div className="mode-option-top">
-            <div className="mode-option-icon-box is-study" aria-hidden="true">
-              {/* Graduation Cap / Deck icon */}
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
-              </svg>
-            </div>
-            <span className="mode-option-tag">DECK LOCKED</span>
-          </div>
-
-          {/* Subtle empty deck illustration / stack of empty cards */}
-          <div className="mode-option-illustration-box" aria-hidden="true">
-            <svg className="mode-empty-svg" viewBox="0 0 80 80" fill="none">
-              <circle cx="40" cy="40" r="32" fill="rgba(255, 42, 68, 0.08)" />
-              {/* Layer 3 - Back card angled */}
-              <rect
-                x="18"
-                y="14"
-                width="44"
-                height="44"
-                rx="8"
-                stroke="rgba(255, 42, 68, 0.2)"
-                strokeWidth="1.4"
-                strokeDasharray="3 3"
-                fill="rgba(20, 15, 24, 0.5)"
-                transform="rotate(-6 40 36)"
-              />
-              {/* Layer 2 - Middle card angled */}
-              <rect
-                x="18"
-                y="16"
-                width="44"
-                height="44"
-                rx="8"
-                stroke="rgba(255, 42, 68, 0.35)"
-                strokeWidth="1.6"
-                strokeDasharray="3 3"
-                fill="rgba(20, 15, 24, 0.7)"
-                transform="rotate(4 40 38)"
-              />
-              {/* Layer 1 - Front card */}
-              <rect
-                x="18"
-                y="20"
-                width="44"
-                height="46"
-                rx="8"
-                stroke="#ff4d64"
-                strokeWidth="1.8"
-                fill="#120e18"
-              />
-              {/* Padlock / Locked symbol badge */}
-              <circle cx="40" cy="43" r="11" fill="rgba(255, 42, 68, 0.16)" stroke="#ff4d64" strokeWidth="1.4" />
-              <rect x="36" y="42" width="8" height="6" rx="1.5" fill="#ff4d64" />
-              <path d="M37.5 42v-2a2.5 2.5 0 0 1 5 0v2" stroke="#ff4d64" strokeWidth="1.2" strokeLinecap="round" />
-            </svg>
-          </div>
-
-          <div className="mode-option-body">
-            <h2 className="mode-option-title">YOUR STUDY DECK IS EMPTY</h2>
-            <p className="mode-option-desc">
-              Before you start studying, you need to create flashcards for this folder.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className="btn-create-deck-first"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onCreateFirstCard) onCreateFirstCard();
-            }}
-          >
-            <span>CREATE FLASHCARDS FIRST</span>
-            <span>→</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // ==========================================
-  // CASE 2: ACTIVE STATE (cardCount > 0)
-  // ==========================================
   return (
-    <div className="folder-mode-options-grid" role="region" aria-label="Flashcard Actions">
-      {/* 1. REVIEW FLASHCARDS OPTION */}
-      <div
-        className="mode-option-card is-review"
-        onClick={onSelectReview}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onSelectReview();
-          }
-        }}
-        aria-label="Review Flashcards - Manage your questions, edit answers, and add new flashcards"
-      >
-        <div className="mode-option-card-accent" aria-hidden="true" />
-
-        <div className="mode-option-top">
-          <div className="mode-option-icon-box is-review" aria-hidden="true">
-            {/* Folder / Document icon */}
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
+    <div className="folder-deck-section-wrapper" role="region" aria-label="Deck Content and Actions">
+      {/* ========================================================
+          1. MAIN WORKSPACE / DECK AREA
+          ======================================================== */}
+      {!hasFlashcards ? (
+        /* CASE A: EMPTY STATE MATCHING IMAGE 3 */
+        <div
+          className="folder-deck-empty-container"
+          onClick={onCreateFirstCard}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onCreateFirstCard();
+            }
+          }}
+          aria-label="No flashcards yet. Add your first question and answer to start building this deck."
+        >
+          {/* Centered Blue Icon Box with Sky-Blue Folded Page and Plus */}
+          <div className="folder-deck-empty-icon-box" aria-hidden="true">
+            <svg
+              width="26"
+              height="30"
+              viewBox="0 0 24 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 2H14L20 8V24C20 25.1046 19.1046 26 18 26H4C2.89543 26 2 25.1046 2 24V4C2 2.89543 2.89543 2 4 2Z"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M14 2V8H20"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M11 13V19M8 16H14"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
           </div>
-          <span className="mode-option-tag">DECK WORKSPACE</span>
-        </div>
 
-        <div className="mode-option-body">
-          <h2 className="mode-option-title">REVIEW FLASHCARDS</h2>
-          <p className="mode-option-desc">
-            Manage your questions, edit answers, and add new flashcards.
+          <h2 className="folder-deck-empty-title">No flashcards yet</h2>
+          <p className="folder-deck-empty-desc">
+            Add your first question and answer to start building this deck.
           </p>
         </div>
+      ) : (
+        /* CASE B: ACTIVE STATE WITH FLASHCARDS LIST */
+        <div className="folder-deck-active-container">
+          {/* Deck Filter Tabs & Search Header */}
+          <div className="folder-deck-filter-bar">
+            <div className="folder-deck-tabs-group" role="tablist">
+              <button
+                type="button"
+                className={`folder-deck-tab-pill ${activeFilter === 'all' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('all')}
+                role="tab"
+                aria-selected={activeFilter === 'all'}
+              >
+                All <span className="tab-pill-count">{counts.all}</span>
+              </button>
+              <button
+                type="button"
+                className={`folder-deck-tab-pill is-learning ${activeFilter === 'learning' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('learning')}
+                role="tab"
+                aria-selected={activeFilter === 'learning'}
+              >
+                Learning <span className="tab-pill-count">{counts.learning}</span>
+              </button>
+              <button
+                type="button"
+                className={`folder-deck-tab-pill is-mastered ${activeFilter === 'mastered' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('mastered')}
+                role="tab"
+                aria-selected={activeFilter === 'mastered'}
+              >
+                Mastered <span className="tab-pill-count">{counts.mastered}</span>
+              </button>
+            </div>
 
-        <div className="mode-option-action-btn">
-          <span>Manage Flashcards</span>
-          <span>→</span>
-        </div>
-      </div>
-
-      {/* 2. START STUDYING OPTION (Primary action, AURA red) */}
-      <div
-        className="mode-option-card is-study"
-        onClick={onSelectStudy}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onSelectStudy();
-          }
-        }}
-        aria-label="Start Studying - Test your knowledge and master your flashcards"
-      >
-        <div className="mode-option-card-accent" aria-hidden="true" />
-
-        <div className="mode-option-top">
-          <div className="mode-option-icon-box is-study" aria-hidden="true">
-            {/* Graduation Cap / Book study icon */}
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
-            </svg>
+            {cards.length > 3 && (
+              <div className="folder-deck-search-wrap">
+                <input
+                  type="text"
+                  className="folder-deck-search-input"
+                  placeholder="Search cards..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  aria-label="Search flashcards"
+                />
+              </div>
+            )}
           </div>
-          <span className="mode-option-tag">AI QUIZ SESSION</span>
-        </div>
 
-        <div className="mode-option-body">
-          <h2 className="mode-option-title">START STUDYING</h2>
-          <p className="mode-option-desc">
-            Test your knowledge and master your flashcards.
-          </p>
-        </div>
+          {/* Cards Scrollable Stream */}
+          <div className="folder-deck-cards-list">
+            {filteredCards.map((card, idx) => {
+              const question = card.question || card.front || 'Untitled Question';
+              const answer = card.answer || card.back || 'No answer';
+              const status = (card.status || 'new').toLowerCase();
 
-        <div className="mode-option-action-btn">
-          <span>Start Studying Session</span>
-          <span>→</span>
+              return (
+                <div
+                  key={card.id || `card-${idx}`}
+                  className="folder-deck-card-item"
+                  onClick={() => onPreviewCard && onPreviewCard(card, idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      onPreviewCard && onPreviewCard(card, idx);
+                    }
+                  }}
+                  aria-label={`Flashcard: ${question}`}
+                >
+                  <div className="folder-card-item-header">
+                    <span className="folder-card-item-idx">#{idx + 1}</span>
+                    <span className={`folder-card-status-chip is-${status}`}>
+                      {status === 'mastered' ? '✓ Mastered' : status === 'learning' ? '⚡ Learning' : '✦ New'}
+                    </span>
+                  </div>
+
+                  <div className="folder-card-item-q">{question}</div>
+                  <div className="folder-card-item-a">{answer}</div>
+
+                  <div className="folder-card-item-footer" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      className="folder-card-action-btn"
+                      onClick={() => onPreviewCard && onPreviewCard(card, idx)}
+                      title="Flip and preview card"
+                    >
+                      <span>👁 Preview</span>
+                    </button>
+                    {onEditCard && (
+                      <button
+                        type="button"
+                        className="folder-card-action-btn"
+                        onClick={() => onEditCard(card)}
+                        title="Edit question & answer"
+                      >
+                        <span>✏️ Edit</span>
+                      </button>
+                    )}
+                    {onDeleteCard && (
+                      <button
+                        type="button"
+                        className="folder-card-action-btn is-delete"
+                        onClick={() => onDeleteCard(card.id)}
+                        title="Delete card"
+                      >
+                        <span>🗑️</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
+      )}
+
+      {/* ========================================================
+          2. BOTTOM ACTION BAR MATCHING IMAGE 3
+          ======================================================== */}
+      <div className="folder-deck-bottom-actions" role="toolbar" aria-label="Deck Actions">
+        {/* Left Action: Study */}
+        <button
+          type="button"
+          className={`btn-folder-study-action ${!hasFlashcards ? 'is-locked' : 'is-unlocked'}`}
+          onClick={onSelectStudy}
+          aria-label={!hasFlashcards ? 'Study deck locked - add flashcards first' : 'Start studying session'}
+        >
+          {!hasFlashcards ? (
+            <>
+              {/* Lock Icon */}
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <span>Study</span>
+            </>
+          ) : (
+            <>
+              {/* Active Lightning / Flash Study Icon */}
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              <span>Study</span>
+            </>
+          )}
+        </button>
+
+        {/* Right Action: + New flashcard */}
+        <button
+          type="button"
+          className="btn-folder-new-flashcard"
+          onClick={onCreateFirstCard}
+          aria-label="Add a new flashcard"
+        >
+          <span className="plus-sign" aria-hidden="true">+</span>
+          <span>New flashcard</span>
+        </button>
       </div>
     </div>
   );

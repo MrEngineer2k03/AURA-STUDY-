@@ -10,8 +10,31 @@ import eventBanner from './assets/event_banner.png';
 import engineeringLogo from './assets/engineeringlogo.png';
 
 export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
-  const [activeTab, setActiveTab] = useState('HOME');
+  const getInitialTab = () => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const h = window.location.hash.toLowerCase();
+      if (h === '#study' || h === '#folders' || h === '#my-folders') {
+        return 'MY FOLDERS';
+      }
+    }
+    return 'HOME';
+  };
+
+  const [activeTab, setActiveTab] = useState(getInitialTab);
   const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    const handleHash = () => {
+      const h = window.location.hash.toLowerCase();
+      if (h === '#study' || h === '#folders' || h === '#my-folders') {
+        setActiveTab('MY FOLDERS');
+      } else if (h === '#home' || h === '') {
+        setActiveTab('HOME');
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   useEffect(() => {
     const timer = requestAnimationFrame(() => {

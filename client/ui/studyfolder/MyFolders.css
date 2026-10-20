@@ -205,7 +205,8 @@
   box-shadow: 0 0 14px rgba(255, 42, 68, 0.25);
 }
 
-.search-input-icon {
+.search-input-icon,
+.folder-search-icon {
   color: var(--text-muted, #9aa1b2);
   margin-right: 8px;
   flex-shrink: 0;
@@ -1557,6 +1558,24 @@
 }
 
 /* Mobile Screens (max-width: 768px) */
+/* Base desktop defaults for mobile-only elements */
+.fph-folder-squircle {
+  display: none;
+}
+.sfc-mobile-card-inner {
+  display: none;
+}
+.mobile-user-avatar-wrap {
+  display: none;
+}
+.tab-label-mobile {
+  display: none;
+}
+.mobile-home-indicator {
+  display: none;
+}
+
+/* Mobile Screens (max-width: 768px) */
 @media (max-width: 768px) {
   /* 1. Page Root & Content Container */
   .my-folders-page-root {
@@ -1575,6 +1594,7 @@
     flex-direction: column !important;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    background: #070a12 !important;
   }
 
   .my-folders-page-root::-webkit-scrollbar {
@@ -1584,139 +1604,339 @@
 
   .my-folders-content-container {
     flex-shrink: 0;
-    padding: 14px 14px calc(85px + env(safe-area-inset-bottom, 16px));
-    gap: 16px;
-    width: 100%;
-    box-sizing: border-box;
+    padding: 14px 16px calc(90px + env(safe-area-inset-bottom, 16px)) 16px !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
-  /* 2. Page Header */
+  /* 2. Top Bar Elements on Mobile */
+  .my-folders-page-root .aura-navbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 16px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    background: rgba(8, 11, 18, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 99 !important;
+  }
+
+  .my-folders-page-root .navbar-brand-logo {
+    height: 28px !important;
+    width: auto !important;
+    filter: drop-shadow(0 0 10px rgba(255, 42, 68, 0.65)) !important;
+  }
+
+  .my-folders-page-root .navbar-separator,
+  .my-folders-page-root .navbar-nav-links {
+    display: none !important;
+  }
+
+  .my-folders-page-root .navbar-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .my-folders-page-root .coins-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(234, 179, 8, 0.08) !important;
+    border: 1px solid rgba(234, 179, 8, 0.28) !important;
+    padding: 4px 11px !important;
+    border-radius: 9999px !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #facc15 !important;
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.15) !important;
+  }
+
+  .mobile-user-avatar-wrap {
+    display: block !important;
+    position: relative !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mobile-user-avatar-img {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border: 2px solid #ef4444 !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6) !important;
+  }
+
+  .mobile-user-avatar-status {
+    position: absolute !important;
+    top: 0px !important;
+    right: 0px !important;
+    width: 9px !important;
+    height: 9px !important;
+    border-radius: 50% !important;
+    background: #ff1a40 !important;
+    border: 1.5px solid #0a0d14 !important;
+  }
+
+  .icon-btn-round.desktop-only-element,
+  .user-profile-chip.desktop-only-element {
+    display: none !important;
+  }
+
+  /* 3. Page Header */
   .folders-page-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    padding-bottom: 12px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding: 4px 0 2px 0 !important;
+    margin: 0 !important;
   }
 
-  .fph-left {
-    width: 100%;
-    gap: 4px;
+  .desktop-eyebrow,
+  .fph-eyebrow {
+    display: none !important;
+  }
+
+  .fph-title-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .fph-folder-squircle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #e2e8f0 !important;
+    flex-shrink: 0 !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  .fph-title-text-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    min-width: 0 !important;
   }
 
   .fph-title {
-    font-size: 24px;
-    line-height: 1.15;
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.4px !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
   }
 
   .fph-subtitle {
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 13px !important;
+    color: #8fa0b5 !important;
+    line-height: 1.35 !important;
+    margin: 0 !important;
+    font-weight: 400 !important;
   }
 
   .fph-right {
-    display: flex;
-    width: 100%;
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  .btn-archive-header-toggle {
-    flex: 1;
-    min-width: 0;
-    justify-content: center;
-    padding: 10px 10px;
-    font-size: 12.5px;
-    border-radius: 10px;
-    min-height: 44px;
-    white-space: nowrap;
+    display: block !important;
+    width: 100% !important;
   }
 
   .btn-create-folder-primary {
-    flex: 1.25;
-    min-width: 0;
-    justify-content: center;
-    padding: 10px 12px;
-    font-size: 13px;
-    border-radius: 10px;
-    min-height: 44px;
-    white-space: nowrap;
+    width: 100% !important;
+    height: 50px !important;
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, #ff1a40 0%, #e11d48 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    border: none !important;
+    box-shadow: 0 4px 18px rgba(255, 26, 64, 0.45) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
   }
 
-  .btn-restore-all-header,
-  .btn-back-to-folders {
-    flex: 1;
-    min-width: 0;
-    justify-content: center;
-    padding: 10px 10px;
-    font-size: 12.5px;
-    border-radius: 10px;
-    min-height: 44px;
-    white-space: nowrap;
+  .btn-create-folder-primary:active {
+    transform: scale(0.985) !important;
+    box-shadow: 0 2px 10px rgba(255, 26, 64, 0.6) !important;
   }
 
-  /* 3. Search & Toolbar */
+  /* 4. Search & Filter Toolbar */
   .folder-toolbar-container {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 9px;
-    padding: 10px 12px;
-    background: rgba(14, 18, 27, 0.85);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    width: 100%;
-    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .toolbar-search-box {
-    width: 100%;
-    max-width: 100%;
-    height: 38px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 9px;
-    padding: 0 10px;
-    box-sizing: border-box;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 52px !important;
+    border-radius: 14px !important;
+    background: #0d121c !important;
+    border: 1px solid #283344 !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    transition: border-color 200ms ease, background 200ms ease, box-shadow 200ms ease !important;
+    margin: 0 !important;
   }
 
-  .toolbar-search-input {
-    font-size: 13.5px;
+  .toolbar-search-box:focus-within {
+    border-color: #ff2345 !important;
+    background: #111724 !important;
+    box-shadow: 0 0 14px rgba(255, 35, 69, 0.22), inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .folder-search-icon,
+  .toolbar-search-box .search-input-icon {
+    position: static !important;
+    transform: none !important;
+    color: #728197 !important;
+    flex-shrink: 0 !important;
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    display: block !important;
+    transition: color 200ms ease !important;
+  }
+
+  .toolbar-search-box:focus-within .folder-search-icon,
+  .toolbar-search-box:focus-within .search-input-icon {
+    color: #ff2345 !important;
+  }
+
+  .toolbar-search-box .toolbar-search-input {
+    flex: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    font-size: 12.5px !important;
+    font-family: inherit !important;
+    color: #ffffff !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: normal !important;
+    display: block !important;
+  }
+
+  .toolbar-search-box .toolbar-search-input::placeholder {
+    color: #728197 !important;
+    font-size: 12.5px !important;
+    font-weight: 400 !important;
+    opacity: 1 !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+  }
+
+  .toolbar-search-box .search-clear-btn {
+    position: static !important;
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: none !important;
+    color: #728197 !important;
+    cursor: pointer !important;
+    font-size: 11px !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
+    padding: 0 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .toolbar-search-box .search-clear-btn:hover,
+  .toolbar-search-box .search-clear-btn:active {
+    background: rgba(255, 35, 69, 0.25) !important;
+    color: #ffffff !important;
+  }
+
+  .toolbar-search-box .search-clear-btn:hover,
+  .toolbar-search-box .search-clear-btn:active {
+    background: rgba(255, 35, 69, 0.25) !important;
+    color: #ffffff !important;
   }
 
   .toolbar-controls-right {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 9px;
-    width: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    box-sizing: border-box !important;
   }
 
-  /* Horizontal Swipeable Filter Carousel */
   .toolbar-filter-tabs-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
+    width: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   }
 
   .toolbar-filter-tabs {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
     background: transparent !important;
     border: none !important;
-    padding: 2px 34px 3px 2px !important;
-    margin: 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    box-sizing: border-box;
-    overscroll-behavior-x: contain;
-    scroll-behavior: smooth;
+    padding: 2px 0 !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    box-sizing: border-box !important;
   }
 
   .toolbar-filter-tabs::-webkit-scrollbar {
@@ -1725,193 +1945,383 @@
     height: 0 !important;
   }
 
-  /* Subtle right-side fade indicator communicating swipeability */
   .filter-tabs-fade-right {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 32px;
-    background: linear-gradient(to right, rgba(14, 18, 27, 0) 0%, rgba(14, 18, 27, 0.95) 100%);
-    pointer-events: none;
-    z-index: 2;
-    border-radius: 0 9px 9px 0;
-  }
-
-  .tab-label-full {
     display: none !important;
   }
 
-  .tab-label-short {
-    display: inline !important;
-  }
-
   .filter-tab-pill {
-    white-space: nowrap;
-    flex-shrink: 0;
-    min-height: 33px;
-    padding: 6px 13px;
-    font-size: 11.5px;
-    font-weight: 700;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text-muted, #9aa1b2);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-sizing: border-box;
-    transition: all 0.18s ease;
+    border-radius: 10px !important;
+    padding: 6px 14px !important;
+    min-height: 32px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #09101a !important;
+    color: #7b8b9f !important;
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s ease !important;
+    box-sizing: border-box !important;
   }
 
   .filter-tab-pill:active {
-    transform: scale(0.96);
+    transform: scale(0.96) !important;
   }
 
   .filter-tab-pill.active {
-    background: linear-gradient(135deg, #ff2a44 0%, #dc2626 100%) !important;
+    background: #ff1a40 !important;
+    border-color: #ff1a40 !important;
     color: #ffffff !important;
-    border-color: rgba(255, 42, 68, 0.6) !important;
-    box-shadow: 0 2px 10px rgba(255, 42, 68, 0.45) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 12px rgba(255, 26, 64, 0.45) !important;
   }
 
-  /* Sort Control Row */
+  .tab-label-mobile {
+    display: inline !important;
+  }
+
+  .tab-label-desktop {
+    display: none !important;
+  }
+
   .toolbar-sort-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
-    box-sizing: border-box;
+    display: none !important;
   }
 
-  .sort-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--text-muted, #9aa1b2);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .sort-label-icon {
-    opacity: 0.85;
-    flex-shrink: 0;
-    color: #ff2a44;
-  }
-
-  .custom-select-box {
-    flex: 1;
-    min-width: 0;
-    max-width: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
-
-  .toolbar-sort-select {
-    width: 100%;
-    min-width: 0;
-    height: 35px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    color: #f1f5f9;
-    font-size: 11.5px;
-    font-weight: 700;
-    padding: 0 28px 0 10px;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-  }
-
-  .toolbar-sort-select:focus {
-    border-color: rgba(255, 42, 68, 0.5);
-    background: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 0 12px rgba(255, 42, 68, 0.2);
-  }
-
-  /* 4. Folder Grid & Cards */
+  /* 5. Folder Grid & Cards */
   .my-folders-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    width: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .folder-grid-item-wrap {
+    width: 100% !important;
+  }
+
+  #create-folder-card-section,
+  .create-folder-trailing-item,
+  .create-folder-card,
+  .create-folder-grid-card {
+    display: none !important;
+  }
+
+  .recent-activity-panel {
+    display: none !important;
   }
 
   .my-folders-page-root .study-folder-card.is-detailed-card {
-    padding: 16px 16px 14px;
-    border-radius: 14px;
-    min-height: auto;
+    display: block !important;
+    padding: 0 !important;
+    background: #0b111e !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: transform 0.15s ease, background 0.15s ease !important;
+    overflow: visible !important;
+    min-height: auto !important;
   }
 
-  .my-folders-page-root .sfc-info-section {
-    margin-bottom: 12px;
+  .my-folders-page-root .study-folder-card.is-detailed-card:active {
+    transform: scale(0.985) !important;
+    background: #0e1526 !important;
   }
 
-  .my-folders-page-root .sfc-rich-title {
-    font-size: 16px;
-    white-space: normal;
-    word-break: break-word;
-    line-height: 1.25;
+  .my-folders-page-root .sfc-desktop-wrapper {
+    display: none !important;
   }
 
-  .my-folders-page-root .sfc-rich-subtitle {
-    font-size: 12px;
-    white-space: normal;
-    line-height: 1.35;
+  .my-folders-page-root .sfc-mobile-card-inner {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  .my-folders-page-root .sfc-meta-row {
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 14px;
+  .my-folders-page-root .sfc-mobile-thumb-container {
+    width: 76px !important;
+    height: 76px !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    background: #070b13 !important;
   }
 
-  .my-folders-page-root .sfc-actions-footer {
-    display: flex;
-    gap: 8px;
-    width: 100%;
+  .my-folders-page-root .sfc-mobile-thumb-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
   }
 
-  .my-folders-page-root .btn-folder-primary {
-    flex: 1.35;
-    min-width: 0;
-    padding: 10px 10px;
-    font-size: 12px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .my-folders-page-root .study-folder-card.theme-red .sfc-mobile-thumb-container {
+    border: 2px solid #ff2a44 !important;
+    box-shadow: 0 0 12px rgba(255, 42, 68, 0.5) !important;
+  }
+  .my-folders-page-root .study-folder-card.theme-purple .sfc-mobile-thumb-container {
+    border: 2px solid #a855f7 !important;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5) !important;
+  }
+  .my-folders-page-root .study-folder-card.theme-blue .sfc-mobile-thumb-container {
+    border: 2px solid #06b6d4 !important;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5) !important;
+  }
+  .my-folders-page-root .study-folder-card.theme-cyan .sfc-mobile-thumb-container {
+    border: 2px solid #06b6d4 !important;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5) !important;
+  }
+  .my-folders-page-root .study-folder-card.theme-green .sfc-mobile-thumb-container {
+    border: 2px solid #22c55e !important;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.5) !important;
+  }
+  .my-folders-page-root .study-folder-card.theme-orange .sfc-mobile-thumb-container {
+    border: 2px solid #f97316 !important;
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.5) !important;
   }
 
-  .my-folders-page-root .btn-folder-secondary {
-    flex: 0.95;
-    min-width: 0;
-    padding: 10px 8px;
-    font-size: 12px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    white-space: nowrap;
+  .my-folders-page-root .sfc-mobile-body {
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
   }
 
-  .create-folder-grid-card {
-    min-height: 160px;
-    padding: 22px 16px;
-    border-radius: 14px;
+  .my-folders-page-root .sfc-mobile-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 20px !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-badge-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-badge.badge-new {
+    background: #ff1a40 !important;
+    color: #ffffff !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    padding: 1px 7px !important;
+    border-radius: 6px !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.4 !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-badge.badge-shared {
+    background: rgba(34, 197, 94, 0.12) !important;
+    border: 1px solid rgba(34, 197, 94, 0.4) !important;
+    color: #4ade80 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    padding: 1px 7px !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    line-height: 1.4 !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-badge.badge-archived {
+    background: rgba(148, 163, 184, 0.12) !important;
+    border: 1px solid rgba(148, 163, 184, 0.4) !important;
+    color: #cbd5e1 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    padding: 1px 7px !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    line-height: 1.4 !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-menu-wrap {
+    position: relative !important;
+    margin-left: auto !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-dots-btn {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #64748b !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-dots-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-title {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    letter-spacing: -0.2px !important;
+    line-height: 1.25 !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-subtitle {
+    font-size: 12px !important;
+    color: #8fa0b5 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-weight: 400 !important;
+    line-height: 1.35 !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-progress-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 3px !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-track {
+    flex: 1 !important;
+    height: 4.5px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 3px !important;
+    overflow: hidden !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-fill {
+    height: 100% !important;
+    border-radius: 3px !important;
+    transition: width 0.3s ease !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-fill.theme-fill-red {
+    background: linear-gradient(90deg, #ff1a40, #ff4d6d) !important;
+  }
+  .my-folders-page-root .sfc-mobile-fill.theme-fill-purple {
+    background: linear-gradient(90deg, #8b5cf6, #c084fc) !important;
+  }
+  .my-folders-page-root .sfc-mobile-fill.theme-fill-blue {
+    background: linear-gradient(90deg, #06b6d4, #38bdf8) !important;
+  }
+  .my-folders-page-root .sfc-mobile-fill.theme-fill-cyan {
+    background: linear-gradient(90deg, #06b6d4, #22d3ee) !important;
+  }
+  .my-folders-page-root .sfc-mobile-fill.theme-fill-green {
+    background: linear-gradient(90deg, #10b981, #34d399) !important;
+  }
+  .my-folders-page-root .sfc-mobile-fill.theme-fill-orange {
+    background: linear-gradient(90deg, #ea580c, #fb923c) !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-pct {
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: #8fa0b5 !important;
+    min-width: 32px !important;
+    text-align: right !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-meta-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    color: #94a3b8 !important;
+    margin-top: 3px !important;
+  }
+
+  .my-folders-page-root .sfc-mobile-meta-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+
+  .my-folders-page-root .meta-folder-icon.icon-color-red { color: #ff2a44 !important; }
+  .my-folders-page-root .meta-folder-icon.icon-color-purple { color: #a855f7 !important; }
+  .my-folders-page-root .meta-folder-icon.icon-color-blue { color: #06b6d4 !important; }
+  .my-folders-page-root .meta-folder-icon.icon-color-cyan { color: #06b6d4 !important; }
+  .my-folders-page-root .meta-folder-icon.icon-color-green { color: #22c55e !important; }
+  .my-folders-page-root .meta-folder-icon.icon-color-orange { color: #f97316 !important; }
+
+  .my-folders-page-root .meta-cards-icon { color: #a855f7 !important; }
+  .my-folders-page-root .meta-members-icon { color: #22d3ee !important; }
+
+  .my-folders-page-root .sfc-mobile-menu-wrap .sfc-dropdown-menu {
+    position: absolute !important;
+    top: calc(100% + 4px) !important;
+    right: 0 !important;
+    z-index: 50 !important;
+  }
+
+  /* 6. Bottom Navigation */
+  .mobile-bottom-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 100 !important;
+    background: rgba(9, 13, 22, 0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding-top: 6px !important;
+    padding-bottom: env(safe-area-inset-bottom, 6px) !important;
+  }
+
+  .mobile-bottom-nav-inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    width: 100% !important;
+  }
+
+  .mobile-home-indicator {
+    display: block !important;
+    width: 134px !important;
+    height: 4px !important;
+    background: #ffffff !important;
+    border-radius: 3px !important;
+    margin: 6px auto 2px !important;
+    opacity: 0.9 !important;
+  }
+
+  .mobile-nav-item {
+    color: #64748b !important;
+  }
+  .mobile-nav-item.active {
+    color: #ff1a40 !important;
+  }
+  .mobile-nav-item.active .mobile-nav-icon-wrap {
+    color: #ff1a40 !important;
+  }
+  .mobile-nav-item.active .mobile-nav-label {
+    color: #ff1a40 !important;
+    font-weight: 700 !important;
   }
 
   /* 5. Recent Activity Panel */
@@ -2309,123 +2719,6 @@
     justify-content: center;
   }
 
-  /* 8. Mobile Bottom Navigation */
-  .mobile-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 65px;
-    background: rgba(10, 13, 20, 0.94);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  .mobile-bottom-nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 500px;
-    height: 100%;
-  }
-
-  .mobile-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    background: transparent;
-    border: none;
-    color: var(--text-dim, #6b7280);
-    cursor: pointer;
-    padding: 6px 12px;
-    transition: all 0.2s ease;
-  }
-
-  .mobile-nav-item.active {
-    color: #ff2a44;
-  }
-
-  .mobile-nav-icon-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
-  }
-
-  .mobile-nav-item.active .mobile-nav-icon-wrap {
-    transform: translateY(-2px);
-    color: #ff2a44;
-    filter: drop-shadow(0 0 8px rgba(255, 42, 68, 0.6));
-  }
-
-  .mobile-nav-label {
-    font-family: var(--font-heading, 'Space Grotesk', sans-serif);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-  }
-}
-
-/* Extra Small Mobile (max-width: 400px) */
-@media (max-width: 400px) {
-  .my-folders-content-container {
-    padding: 10px 10px calc(85px + env(safe-area-inset-bottom, 16px));
-    gap: 12px;
-  }
-
-  .folder-toolbar-container {
-    padding: 8px 10px;
-    gap: 8px;
-    border-radius: 12px;
-  }
-
-  .toolbar-search-box {
-    height: 36px;
-    padding: 0 8px;
-  }
-
-  .filter-tab-pill {
-    min-height: 31px;
-    padding: 5px 11px;
-    font-size: 11px;
-  }
-
-  .toolbar-sort-select {
-    height: 33px;
-    font-size: 11px;
-    padding: 0 24px 0 8px;
-  }
-
-  .sort-label {
-    font-size: 10px;
-  }
-
-  .fph-right {
-    flex-direction: column;
-  }
-
-  .btn-archive-header-toggle,
-  .btn-create-folder-primary {
-    width: 100%;
-  }
-
-  .my-folders-page-root .sfc-actions-footer {
-    flex-direction: column;
-  }
-
-  .my-folders-page-root .btn-folder-primary,
-  .my-folders-page-root .btn-folder-secondary {
-    width: 100%;
-  }
 }
 
 /* ==========================================================================
@@ -4041,5 +4334,60 @@
     display: none;
   }
 }
+
+/* Flashcards View Header & Navbar Overrides matching Image 3 */
+.navbar-brand-text-only {
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.is-flashcard-navbar {
+  width: 100% !important;
+  max-width: 520px !important;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-sizing: border-box !important;
+}
+
+.is-flashcard-navbar .navbar-left {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.is-flashcard-navbar .navbar-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+@media (max-width: 768px) {
+  .is-flashcard-navbar {
+    max-width: 100% !important;
+    padding: 0 16px !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .my-folders-page-root.in-flashcard-view .aura-navbar {
+    display: none !important;
+  }
+}
+
+.my-folders-page-root.in-flashcard-view {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+
 
 

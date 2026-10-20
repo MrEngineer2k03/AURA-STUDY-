@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 /**
  * FolderToolbar - Search input, filter tabs (All, My Folders, Shared With Me), and sort dropdown
  *
@@ -18,25 +20,34 @@ export default function FolderToolbar({
   onSortChange,
   archivedCount = 0,
 }) {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const filterOptions = [
     { id: 'all', label: 'All' },
     { id: 'my-folders', label: 'My Folders' },
-    {
-      id: 'shared',
-      label: (
-        <>
-          <span className="tab-label-full">Shared With Me</span>
-          <span className="tab-label-short">Shared</span>
-        </>
-      ),
-    },
+    { id: 'shared', label: 'Shared' },
     {
       id: 'archived',
       label: (
-        <span className="filter-archive-pill-content">
-          <span>📦 Archived</span>
-          {archivedCount > 0 && <span className="archive-pill-count">{archivedCount}</span>}
-        </span>
+        <>
+          <span className="tab-label-mobile">Archived</span>
+          <span className="tab-label-desktop filter-archive-pill-content">
+            <span>📦 Archived</span>
+            {archivedCount > 0 && <span className="archive-pill-count">{archivedCount}</span>}
+          </span>
+        </>
       ),
     },
   ];
@@ -53,13 +64,13 @@ export default function FolderToolbar({
       {/* 1. SEARCH INPUT */}
       <div className="toolbar-search-box">
         <svg
-          className="search-input-icon"
+          className="folder-search-icon"
           width="16"
           height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2.2"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"

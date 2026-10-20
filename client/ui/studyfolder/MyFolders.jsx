@@ -43,137 +43,135 @@ export default function MyFolders({
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'MY FOLDERS';
 
-  // Realistic Example Study Folders with pre-configured lesson items & archived material
+  // Realistic Example Study Folders matching AURA study library
   const initialFolders = [
     {
-      id: 'folder-1',
-      title: 'Physics Midterms',
-      subtitle: 'Forces & Motion',
-      description: 'Forces & Motion Comprehensive Review',
-      progress: 82,
-      lessons: 5,
-      completed: 4,
-      completedLessons: 4,
-      members: 3,
-      status: 'In Progress',
+      id: 'folder-db',
+      title: 'Database Systems',
+      subtitle: 'SQL and Relational Databases',
+      description: 'SQL queries, relational algebra, indexing, and ACID transactions',
+      progress: 100,
+      lessons: 7,
+      completed: 7,
+      completedLessons: 7,
+      members: 2,
+      status: 'NEW',
       color: 'red',
-      lastStudied: '2 hours ago',
-      createdAt: '2026-09-15',
-      department: 'Engineering',
+      thumbnail: '/folders/thumb_database.jpg',
+      lastStudied: 'Today',
+      createdAt: '2026-10-18',
+      department: 'Computer Science',
       isShared: false,
       isArchived: false,
       studyType: 'flashcards',
       lessonItems: [
         {
-          id: 'file-101',
-          fileName: 'Newton_Laws_Forces_Motion.pdf',
-          fileSize: '2.4 MB',
+          id: 'f-db-1',
+          fileName: 'SQL_Joins_Indexing_Transactions.pdf',
+          fileSize: '4.2 MB',
           fileType: 'PDF',
           isArchived: false,
-          createdAt: '2026-09-15',
-        },
-        {
-          id: 'file-102',
-          fileName: 'Friction_and_Equilibrium_Exercises.docx',
-          fileSize: '1.1 MB',
-          fileType: 'DOCX',
-          isArchived: false,
-          createdAt: '2026-09-18',
+          createdAt: '2026-10-18',
         },
       ],
       flashcards: [
         {
-          id: 'card-101',
-          folderId: 'folder-1',
-          question: 'What is inertia?',
-          answer: 'The property of an object to resist changes in its state of motion.',
-          front: 'What is inertia?',
-          back: 'The property of an object to resist changes in its state of motion.',
+          id: 'fc-db-1',
+          question: 'What does ACID stand for in databases?',
+          answer: 'Atomicity, Consistency, Isolation, Durability.',
+          front: 'What does ACID stand for in databases?',
+          back: 'Atomicity, Consistency, Isolation, Durability.',
           status: 'mastered',
-          createdAt: '2026-09-15T10:00:00Z',
-          studiedAt: '2026-10-11T12:00:00Z',
-          studyCount: 4,
-          correctCount: 4,
-          lessonTag: 'Newtonian Physics',
-        },
-        {
-          id: 'card-102',
-          folderId: 'folder-1',
-          question: 'What is Newton’s second law formula?',
-          answer: 'Force equals mass times acceleration (F = m × a).',
-          front: 'What is Newton’s second law formula?',
-          back: 'Force equals mass times acceleration (F = m × a).',
-          status: 'learning',
-          createdAt: '2026-09-16T14:30:00Z',
-          studiedAt: '2026-10-11T14:15:00Z',
-          studyCount: 2,
-          correctCount: 1,
-          lessonTag: 'Forces',
-        },
-        {
-          id: 'card-103',
-          folderId: 'folder-1',
-          question: 'What is the definition of work in physics?',
-          answer: 'Work is the energy transferred to or from an object via the application of force along a displacement.',
-          front: 'What is the definition of work in physics?',
-          back: 'Work is the energy transferred to or from an object via the application of force along a displacement.',
-          status: 'mastered',
-          createdAt: '2026-09-17T09:15:00Z',
-          studiedAt: '2026-10-10T16:00:00Z',
-          studyCount: 3,
-          correctCount: 3,
-          lessonTag: 'Energy',
-        },
-        {
-          id: 'card-104',
-          folderId: 'folder-1',
-          question: 'What is power and what is its SI unit?',
-          answer: 'Power is the rate of doing work or transferring energy. Its SI unit is the Watt (W = J/s).',
-          front: 'What is power and what is its SI unit?',
-          back: 'Power is the rate of doing work or transferring energy. Its SI unit is the Watt (W = J/s).',
-          status: 'learning',
-          createdAt: '2026-09-18T11:20:00Z',
-          studiedAt: '2026-10-09T18:00:00Z',
-          studyCount: 1,
-          correctCount: 0,
-          lessonTag: 'Power',
-        },
-        {
-          id: 'card-105',
-          folderId: 'folder-1',
-          question: 'What is the law of conservation of momentum?',
-          answer: 'The total momentum of an isolated system remains constant if no external net force acts upon it.',
-          front: 'What is the law of conservation of momentum?',
-          back: 'The total momentum of an isolated system remains constant if no external net force acts upon it.',
-          status: 'new',
-          createdAt: '2026-09-20T08:00:00Z',
-          studiedAt: null,
-          studyCount: 0,
-          correctCount: 0,
-          lessonTag: 'Momentum',
+          createdAt: '2026-10-18T10:00:00Z',
         },
       ],
     },
     {
-      id: 'folder-2',
-      title: 'Calculus Finals',
-      subtitle: 'Differential Calculus',
-      description: 'Derivatives, chain rule, and optimization',
-      progress: 43,
-      lessons: 8,
-      completed: 3,
-      completedLessons: 3,
+      id: 'folder-prog',
+      title: 'Programming Exam',
+      subtitle: 'JavaScript Fundamentals',
+      description: 'Async/await, event loop, closures, and ES6+ features',
+      progress: 67,
+      lessons: 6,
+      completed: 4,
+      completedLessons: 4,
+      members: 4,
+      cards: 4,
+      status: 'In Progress',
+      color: 'purple',
+      thumbnail: '/folders/thumb_programming.jpg',
+      lastStudied: '3d ago',
+      createdAt: '2026-09-22',
+      department: 'Computer Science',
+      isShared: false,
+      isArchived: false,
+      studyType: 'flashcards',
+      lessonItems: [
+        {
+          id: 'f-prog-1',
+          fileName: 'Async_Await_and_Closures_Notes.pdf',
+          fileSize: '1.2 MB',
+          fileType: 'PDF',
+          isArchived: false,
+          createdAt: '2026-09-22',
+        },
+      ],
+      flashcards: [
+        {
+          id: 'fc-prog-1',
+          question: 'What is a closure in JavaScript?',
+          answer: 'A closure is the combination of a function bundled together with references to its lexical environment.',
+          front: 'What is a closure in JavaScript?',
+          back: 'A closure is the combination of a function bundled together with references to its lexical environment.',
+          status: 'mastered',
+        },
+        {
+          id: 'fc-prog-2',
+          question: 'What is the Event Loop?',
+          answer: 'The event loop continuously checks call stack and message queue to execute tasks.',
+          front: 'What is the Event Loop?',
+          back: 'The event loop continuously checks call stack and message queue to execute tasks.',
+          status: 'mastered',
+        },
+        {
+          id: 'fc-prog-3',
+          question: 'What does Promise.all() do?',
+          answer: 'Waits for all promises to resolve, or rejects when any promise rejects.',
+          front: 'What does Promise.all() do?',
+          back: 'Waits for all promises to resolve, or rejects when any promise rejects.',
+          status: 'learning',
+        },
+        {
+          id: 'fc-prog-4',
+          question: 'What is prototypal inheritance?',
+          answer: 'A language feature that allows objects to inherit properties and methods directly from other objects.',
+          front: 'What is prototypal inheritance?',
+          back: 'A language feature that allows objects to inherit properties and methods directly from other objects.',
+          status: 'new',
+        },
+      ],
+    },
+    {
+      id: 'folder-calc',
+      title: 'Calculus Basics',
+      subtitle: 'Limits and Derivatives',
+      description: 'Differential calculus, limit laws, continuity, and chain rule',
+      progress: 42,
+      lessons: 5,
+      completed: 2,
+      completedLessons: 2,
       members: 1,
       status: 'In Progress',
       color: 'blue',
+      thumbnail: '/folders/thumb_calculus.jpg',
       lastStudied: 'Yesterday',
       createdAt: '2026-09-20',
-      department: 'Engineering',
+      department: 'Mathematics',
       isShared: false,
       isArchived: false,
       lessonItems: [
         {
-          id: 'file-201',
+          id: 'f-calc-1',
           fileName: 'Differential_Calculus_Formula_Sheet.pdf',
           fileSize: '3.8 MB',
           fileType: 'PDF',
@@ -183,251 +181,130 @@ export default function MyFolders({
       ],
       flashcards: [
         {
-          id: 'card-calc-101',
-          folderId: 'folder-2',
+          id: 'fc-calc-1',
           question: 'What is the derivative of sin(x)?',
-          answer: 'The derivative of sin(x) with respect to x is cos(x).',
+          answer: 'cos(x)',
           front: 'What is the derivative of sin(x)?',
-          back: 'The derivative of sin(x) with respect to x is cos(x).',
+          back: 'cos(x)',
           status: 'mastered',
-          createdAt: '2026-09-20T10:00:00Z',
-          studiedAt: '2026-10-10T11:00:00Z',
-          studyCount: 2,
-          correctCount: 2,
-          lessonTag: 'Trigonometry',
-        },
-        {
-          id: 'card-calc-102',
-          folderId: 'folder-2',
-          question: 'What is the chain rule for derivatives?',
-          answer: 'If y = f(g(x)), then dy/dx = f\'(g(x)) * g\'(x).',
-          front: 'What is the chain rule for derivatives?',
-          back: 'If y = f(g(x)), then dy/dx = f\'(g(x)) * g\'(x).',
-          status: 'learning',
-          createdAt: '2026-09-21T10:00:00Z',
-          studiedAt: '2026-10-10T11:15:00Z',
-          studyCount: 1,
-          correctCount: 0,
-          lessonTag: 'Derivatives',
-        },
-        {
-          id: 'card-calc-103',
-          folderId: 'folder-2',
-          question: 'What is L\'Hopital\'s Rule?',
-          answer: 'A method of evaluating limits of indeterminate forms 0/0 or ∞/∞ by taking derivatives of the numerator and denominator.',
-          front: 'What is L\'Hopital\'s Rule?',
-          back: 'A method of evaluating limits of indeterminate forms 0/0 or ∞/∞ by taking derivatives of the numerator and denominator.',
-          status: 'new',
-          createdAt: '2026-09-22T10:00:00Z',
-          studiedAt: null,
-          studyCount: 0,
-          correctCount: 0,
-          lessonTag: 'Limits',
         },
       ],
     },
     {
-      id: 'folder-3',
-      title: 'Programming Exam',
-      subtitle: 'JavaScript Fundamentals',
-      description: 'Async, closures, and DOM events',
-      progress: 67,
-      lessons: 6,
-      completed: 4,
-      completedLessons: 4,
-      members: 4,
-      status: 'In Progress',
-      color: 'purple',
-      lastStudied: '3 days ago',
-      createdAt: '2026-09-22',
-      department: 'Computer Science',
+      id: 'folder-bio',
+      title: 'Biology 101',
+      subtitle: 'Cell Structure and Function',
+      description: 'Cell biology, organelles, DNA replication, and cellular respiration',
+      progress: 65,
+      lessons: 8,
+      completed: 5,
+      completedLessons: 5,
+      members: 3,
+      status: 'SHARED',
+      color: 'green',
+      thumbnail: '/folders/thumb_biology.jpg',
+      lastStudied: '1d ago',
+      createdAt: '2026-09-25',
+      department: 'Life Sciences',
       isShared: true,
       isArchived: false,
       lessonItems: [
         {
-          id: 'file-301',
-          fileName: 'Async_Await_and_Closures_Notes.txt',
-          fileSize: '480 KB',
-          fileType: 'TXT',
+          id: 'f-bio-1',
+          fileName: 'Cell_Structure_Organelles_Notes.pdf',
+          fileSize: '5.2 MB',
+          fileType: 'PDF',
           isArchived: false,
-          createdAt: '2026-09-22',
+          createdAt: '2026-09-25',
         },
       ],
       flashcards: [
         {
-          id: 'card-dev-001',
-          folderId: 'folder-3',
-          question: 'What is food?',
-          answer: 'Food is what we consume every day.',
-          front: 'What is food?',
-          back: 'Food is what we consume every day.',
+          id: 'fc-bio-1',
+          question: 'What is the function of Mitochondria?',
+          answer: 'Generates ATP energy via cellular respiration.',
+          front: 'What is the function of Mitochondria?',
+          back: 'Generates ATP energy via cellular respiration.',
           status: 'mastered',
-          createdAt: '2026-09-22T10:00:00Z',
-          studiedAt: '2026-10-11T09:00:00Z',
-          studyCount: 3,
-          correctCount: 3,
-          lessonTag: 'General',
-        },
-        {
-          id: 'card-dev-002',
-          folderId: 'folder-3',
-          question: 'What is photosynthesis?',
-          answer: 'The process by which plants use sunlight to produce food from carbon dioxide and water.',
-          front: 'What is photosynthesis?',
-          back: 'The process by which plants use sunlight to produce food from carbon dioxide and water.',
-          status: 'learning',
-          createdAt: '2026-09-22T10:15:00Z',
-          studiedAt: '2026-10-11T09:10:00Z',
-          studyCount: 2,
-          correctCount: 1,
-          lessonTag: 'Biology',
-        },
-        {
-          id: 'card-dev-003',
-          folderId: 'folder-3',
-          question: 'What is an algorithm?',
-          answer: 'A step-by-step procedure for solving a problem or completing a task.',
-          front: 'What is an algorithm?',
-          back: 'A step-by-step procedure for solving a problem or completing a task.',
-          status: 'mastered',
-          createdAt: '2026-09-22T10:30:00Z',
-          studiedAt: '2026-10-11T09:20:00Z',
-          studyCount: 3,
-          correctCount: 3,
-          lessonTag: 'Algorithms',
-        },
-        {
-          id: 'card-dev-004',
-          folderId: 'folder-3',
-          question: 'What is a closure in JavaScript?',
-          answer: 'A closure is the combination of a function bundled together with references to its lexical environment.',
-          front: 'What is a closure in JavaScript?',
-          back: 'A closure is the combination of a function bundled together with references to its lexical environment.',
-          status: 'new',
-          createdAt: '2026-09-23T11:00:00Z',
-          studiedAt: null,
-          studyCount: 0,
-          correctCount: 0,
-          lessonTag: 'JavaScript',
         },
       ],
     },
     {
-      id: 'folder-4',
-      title: 'Database Systems',
-      subtitle: 'SQL and Relational Databases',
-      description: 'Indexing, ACID transactions, and normalization',
-      progress: 100,
-      lessons: 7,
-      completed: 7,
-      completedLessons: 7,
-      members: 2,
-      status: 'Completed',
-      color: 'cyan',
-      lastStudied: '4 days ago',
-      createdAt: '2026-09-10',
-      department: 'Computer Science',
+      id: 'folder-biz',
+      title: 'Business Strategy',
+      subtitle: 'Entrepreneurship',
+      description: 'Market analysis, business model canvas, and venture scalability',
+      progress: 25,
+      lessons: 4,
+      completed: 1,
+      completedLessons: 1,
+      members: 1,
+      status: 'In Progress',
+      color: 'orange',
+      thumbnail: '/folders/thumb_business.jpg',
+      lastStudied: '5 hours ago',
+      createdAt: '2026-10-01',
+      department: 'Business',
       isShared: false,
       isArchived: false,
       lessonItems: [
         {
-          id: 'file-401',
-          fileName: 'SQL_Joins_Indexing_Transactions.pdf',
-          fileSize: '4.2 MB',
+          id: 'f-biz-1',
+          fileName: 'Business_Model_Canvas_Guide.pdf',
+          fileSize: '2.1 MB',
           fileType: 'PDF',
-          isArchived: false,
-          createdAt: '2026-09-10',
-        },
-      ],
-    },
-    {
-      id: 'folder-5',
-      title: 'Engineering Mathematics',
-      subtitle: 'Algebra and Trigonometry',
-      description: 'Vectors, complex numbers, and matrices',
-      progress: 18,
-      lessons: 10,
-      completed: 2,
-      completedLessons: 2,
-      members: 5,
-      status: 'New',
-      color: 'orange',
-      lastStudied: '5 hours ago',
-      createdAt: '2026-10-01',
-      department: 'Engineering',
-      isShared: true,
-      isArchived: false,
-      lessonItems: [
-        {
-          id: 'file-501',
-          fileName: 'Algebra_and_Matrices_Slides.pptx',
-          fileSize: '5.6 MB',
-          fileType: 'PPTX',
           isArchived: false,
           createdAt: '2026-10-01',
         },
       ],
     },
     {
-      id: 'folder-archived-1',
-      title: 'Chemistry 101',
-      subtitle: 'Periodic Trends & Bonding',
-      description: 'First semester comprehensive general chemistry unit',
+      id: 'folder-phys',
+      title: 'Physics Review',
+      subtitle: 'Mechanics and Motion',
+      description: 'Newtonian mechanics, momentum, kinematics, and energy conservation',
       progress: 100,
-      lessons: 9,
-      completed: 9,
-      completedLessons: 9,
-      members: 2,
-      status: 'Archived',
-      color: 'cyan',
+      lessons: 12,
+      completed: 12,
+      completedLessons: 12,
+      members: 5,
+      status: 'ARCHIVED',
+      color: 'blue',
+      thumbnail: '/folders/thumb_physics.jpg',
       lastStudied: '2 weeks ago',
-      createdAt: '2026-08-10',
-      archivedAt: '2026-09-28',
-      department: 'Chemistry',
+      createdAt: '2026-08-15',
+      archivedAt: '2026-10-15',
+      department: 'Physics',
       isShared: false,
       isArchived: true,
       studyType: 'flashcards',
       lessonItems: [
         {
-          id: 'file-arc-1',
-          fileName: 'Organic_Chemistry_Bonding_Guide.pdf',
-          fileSize: '3.1 MB',
+          id: 'f-phys-1',
+          fileName: 'Mechanics_and_Motion_Formula_Reference.pdf',
+          fileSize: '4.5 MB',
           fileType: 'PDF',
           isArchived: true,
-          archivedAt: '2026-09-28',
-          createdAt: '2026-08-10',
-        },
-        {
-          id: 'file-arc-2',
-          fileName: 'Chemical_Kinetics_Lab_Manual.docx',
-          fileSize: '1.5 MB',
-          fileType: 'DOCX',
-          isArchived: true,
-          archivedAt: '2026-09-28',
-          createdAt: '2026-08-12',
+          createdAt: '2026-08-15',
         },
       ],
       flashcards: [
         {
-          id: 'fc-201',
-          front: 'What type of bond is formed by the sharing of electron pairs between atoms?',
-          back: 'Covalent bond',
-          sourceType: 'manual',
-        },
-        {
-          id: 'fc-202',
-          front: 'What is the measure of the ability of an atom in a chemical compound to attract electrons?',
-          back: 'Electronegativity',
-          sourceType: 'manual',
+          id: 'fc-phys-1',
+          question: 'What is Newton’s Second Law?',
+          answer: 'F = m * a (Force = mass times acceleration).',
+          front: 'What is Newton’s Second Law?',
+          back: 'F = m * a (Force = mass times acceleration).',
+          status: 'mastered',
         },
       ],
     },
   ];
 
-  // State Management with localStorage persistence
+  // State Management with localStorage persistence (v5 key for latest folder catalog)
   const [folders, setFolders] = useState(() => {
     try {
-      const saved = localStorage.getItem('aura_study_folders');
+      const saved = localStorage.getItem('aura_study_folders_v5');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -443,7 +320,7 @@ export default function MyFolders({
   // Save to localStorage whenever folders change
   useEffect(() => {
     try {
-      localStorage.setItem('aura_study_folders', JSON.stringify(folders));
+      localStorage.setItem('aura_study_folders_v5', JSON.stringify(folders));
     } catch (e) {
       console.warn('Failed to save folders to localStorage', e);
     }
@@ -846,9 +723,9 @@ export default function MyFolders({
     }
   };
 
-  // Filter & Search & Sort Pipeline for Active Folders
+  // Filter & Search & Sort Pipeline
   const filteredActiveFolders = useMemo(() => {
-    return activeFolders
+    return folders
       .filter((folder) => {
         // Search Filter
         const query = searchQuery.toLowerCase().trim();
@@ -856,14 +733,21 @@ export default function MyFolders({
           !query ||
           folder.title.toLowerCase().includes(query) ||
           folder.subtitle?.toLowerCase().includes(query) ||
-          folder.department?.toLowerCase().includes(query);
+          folder.department?.toLowerCase().includes(query) ||
+          (Array.isArray(folder.lessonItems) &&
+            folder.lessonItems.some(
+              (item) =>
+                item.fileName?.toLowerCase().includes(query) ||
+                item.title?.toLowerCase().includes(query)
+            ));
 
         if (!matchesSearch) return false;
 
         // Tab Filter
-        if (activeFilter === 'my-folders') return !folder.isShared;
-        if (activeFilter === 'shared') return !!folder.isShared;
-        return true;
+        if (activeFilter === 'my-folders') return !folder.isShared && !folder.isArchived;
+        if (activeFilter === 'shared') return !!folder.isShared && !folder.isArchived;
+        if (activeFilter === 'archived') return !!folder.isArchived;
+        return true; // 'all' shows all folders
       })
       .sort((a, b) => {
         if (sortBy === 'progress') {
@@ -875,35 +759,46 @@ export default function MyFolders({
         if (sortBy === 'recent-created') {
           return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         }
-        // Default: recent-studied
-        return String(b.id).localeCompare(String(a.id));
+        return 0;
       });
-  }, [activeFolders, searchQuery, activeFilter, sortBy]);
+  }, [folders, searchQuery, activeFilter, sortBy]);
 
   // Navbar Component
-  const renderNavbar = () => (
-    <header className="aura-navbar">
+  const renderNavbar = (isFlashcardMode = false) => (
+    <header className={`aura-navbar ${isFlashcardMode ? 'is-flashcard-navbar' : ''}`}>
       <div className="navbar-left">
-        <img
-          src={auraLogo}
-          alt="AURA"
-          className="navbar-brand-logo"
-          style={{ cursor: 'pointer' }}
-          onClick={() => handleNavTabClick('HOME')}
-        />
-        <span className="navbar-separator">·</span>
-        <nav className="navbar-nav-links" aria-label="Main Navigation">
-          {navTabs.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              className={`nav-tab-btn ${activeTab === tab ? 'active' : ''}`}
-              onClick={() => handleNavTabClick(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </nav>
+        {isFlashcardMode ? (
+          <div
+            className="navbar-brand-text-only"
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleNavTabClick('HOME')}
+          >
+            AURA
+          </div>
+        ) : (
+          <img
+            src={auraLogo}
+            alt="AURA"
+            className="navbar-brand-logo"
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleNavTabClick('HOME')}
+          />
+        )}
+        {!isFlashcardMode && <span className="navbar-separator">·</span>}
+        {!isFlashcardMode && (
+          <nav className="navbar-nav-links" aria-label="Main Navigation">
+            {navTabs.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                className={`nav-tab-btn ${activeTab === tab ? 'active' : ''}`}
+                onClick={() => handleNavTabClick(tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </nav>
+        )}
       </div>
 
       <div className="navbar-right">
@@ -912,28 +807,36 @@ export default function MyFolders({
           <span>2,450</span>
         </div>
 
+        {/* Mobile user profile avatar circle with neon red glowing ring */}
+        <div className="mobile-user-avatar-wrap" title="User Profile">
+          <img src="/user_avatar.jpg" alt="Carl" className="mobile-user-avatar-img" />
+          <span className="mobile-user-avatar-status" aria-hidden="true" />
+        </div>
+
         <button
           type="button"
-          className="icon-btn-round"
+          className="icon-btn-round desktop-only-element"
           aria-label="Notifications"
         >
           🔔
         </button>
 
-        <div className="user-profile-chip">
-          <div className="user-avatar-circle">
-            <img
-              src={characterImg}
-              alt="Carl"
-              className="user-avatar-img"
-            />
+        {!isFlashcardMode && (
+          <div className="user-profile-chip desktop-only-element">
+            <div className="user-avatar-circle">
+              <img
+                src={characterImg}
+                alt="Carl"
+                className="user-avatar-img"
+              />
+            </div>
+            <div className="user-info-text">
+              <span className="user-info-name">CARL_MONDIGO</span>
+              <span className="user-info-dept">Lv. 12 · Engineering</span>
+            </div>
+            <span className="user-chevron">▾</span>
           </div>
-          <div className="user-info-text">
-            <span className="user-info-name">CARL_MONDIGO</span>
-            <span className="user-info-dept">Lv. 12 · Engineering</span>
-          </div>
-          <span className="user-chevron">▾</span>
-        </div>
+        )}
       </div>
     </header>
   );
@@ -941,9 +844,9 @@ export default function MyFolders({
   // VIEW 1: DEDICATED FLASHCARDS SECTION VIEW
   if (currentView === 'flashcards' && activeFolderForStudy) {
     return (
-      <div className="my-folders-page-root">
+      <div className="my-folders-page-root in-flashcard-view">
         <div className="my-folders-ambient-bg" aria-hidden="true" />
-        {showNavbar && renderNavbar()}
+        {showNavbar && renderNavbar(true)}
         <FlashcardsPage
           folder={activeFolderForStudy}
           onBackToFolders={() => setCurrentView('grid')}
@@ -1191,6 +1094,7 @@ export default function MyFolders({
             <span className="mobile-nav-label">Events</span>
           </button>
         </div>
+        <div className="mobile-home-indicator" aria-hidden="true" />
       </nav>
     </div>
   );
