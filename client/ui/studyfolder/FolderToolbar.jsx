@@ -1,71 +1,55 @@
+import React from 'react';
+
 /**
- * FolderToolbar - Search input, filter tabs (All, My Folders, Shared With Me), and sort dropdown
+ * FolderToolbar - Modern Student-Friendly Search & Filter Toolbar
+ * Matches reference design:
+ * - Search input on left with magnifying glass icon
+ * - Filter pills with live counts: All 6, In progress 3, Completed 1, Shared 1, New 1
+ * - Sort dropdown on right: "Recently studied ⌵"
+ * - View mode toggles: Grid & List
  *
  * @param {Object} props
- * @param {string} props.searchQuery - Current search string
- * @param {Function} props.onSearchChange - Search input change handler
- * @param {string} props.activeFilter - 'all' | 'my-folders' | 'shared'
- * @param {Function} props.onFilterChange - Filter change handler
+ * @param {string} props.searchQuery - Current search text
+ * @param {Function} props.onSearchChange - Change callback for search
+ * @param {string} props.activeFilter - 'all' | 'in-progress' | 'completed' | 'shared' | 'new'
+ * @param {Function} props.onFilterChange - Callback when filter pill changes
+ * @param {Object} [props.filterCounts={ all: 6, inProgress: 3, completed: 1, shared: 1, new: 1 }]
  * @param {string} props.sortBy - 'recent-studied' | 'recent-created' | 'progress' | 'alpha'
- * @param {Function} props.onSortChange - Sort selection handler
+ * @param {Function} props.onSortChange - Callback when sorting changes
+ * @param {string} [props.viewMode='grid'] - 'grid' | 'list'
+ * @param {Function} [props.onViewModeChange] - Callback to toggle grid vs list
  */
 export default function FolderToolbar({
-  searchQuery,
+  searchQuery = '',
   onSearchChange,
   activeFilter = 'all',
   onFilterChange,
+  filterCounts = { all: 6, inProgress: 3, completed: 1, shared: 1, new: 1 },
   sortBy = 'recent-studied',
   onSortChange,
-  archivedCount = 0,
+  viewMode = 'grid',
+  onViewModeChange,
 }) {
-  // Centre the clicked pill inside the tab row ONLY (never scrolls the page).
-  const scrollTabIntoView = (btn) => {
-    const row = btn?.parentElement;
-    if (!row || row.scrollWidth <= row.clientWidth) return;
-    const rowRect = row.getBoundingClientRect();
-    const btnRect = btn.getBoundingClientRect();
-    const target =
-      row.scrollLeft + (btnRect.left - rowRect.left) - (rowRect.width - btnRect.width) / 2;
-    row.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
-  };
-
-  const filterOptions = [
-    { id: 'all', label: 'All' },
-    { id: 'my-folders', label: 'My Folders' },
-    { id: 'shared', label: 'Shared' },
-    {
-      id: 'archived',
-      label: (
-        <>
-          <span className="tab-label-mobile">Archived</span>
-          <span className="tab-label-desktop filter-archive-pill-content">
-            <span>📦 Archived</span>
-            {archivedCount > 0 && <span className="archive-pill-count">{archivedCount}</span>}
-          </span>
-        </>
-      ),
-    },
-  ];
-
-  const sortOptions = [
-    { id: 'recent-studied', label: 'Recently Studied' },
-    { id: 'recent-created', label: 'Recently Created' },
-    { id: 'progress', label: 'Progress' },
-    { id: 'alpha', label: 'Alphabetical' },
+  const filterTabs = [
+    { id: 'all', label: 'All', count: filterCounts.all },
+    { id: 'in-progress', label: 'In progress', count: filterCounts.inProgress },
+    { id: 'completed', label: 'Completed', count: filterCounts.completed },
+    { id: 'shared', label: 'Shared', count: filterCounts.shared },
+    { id: 'new', label: 'New', count: filterCounts.new },
   ];
 
   return (
-    <div className="folder-toolbar-container">
+    <div className="folders-redesign-toolbar" role="toolbar" aria-label="Folder search and filters">
       {/* 1. SEARCH INPUT */}
-      <div className="toolbar-search-box">
+      <div className="frt-search-wrapper">
         <svg
-          className="folder-search-icon"
-          width="16"
-          height="16"
+          className="frt-search-icon"
+          width="15"
+          height="15"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"
@@ -73,19 +57,21 @@ export default function FolderToolbar({
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
+
         <input
           type="text"
-          className="toolbar-search-input"
-          placeholder="Search folders..."
+          className="frt-search-input"
+          placeholder="Search folders"
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
           aria-label="Search folders"
         />
+
         {searchQuery && (
           <button
             type="button"
-            className="search-clear-btn"
-            onClick={() => onSearchChange('')}
+            className="frt-search-clear"
+            onClick={() => onSearchChange && onSearchChange('')}
             aria-label="Clear search"
           >
             ✕
@@ -93,64 +79,79 @@ export default function FolderToolbar({
         )}
       </div>
 
-      {/* 2. FILTER CONTROLS & SORT DROPDOWN */}
-      <div className="toolbar-controls-right">
-        {/* Filter Pills with Swipeable Carousel Wrapper & Subtle Fade */}
-        <div className="toolbar-filter-tabs-wrapper">
-          <div className="toolbar-filter-tabs" role="tablist" aria-label="Filter folders">
-            {filterOptions.map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                role="tab"
-                aria-selected={activeFilter === opt.id}
-                className={`filter-tab-pill ${activeFilter === opt.id ? 'active' : ''}`}
-                onClick={(e) => {
-                  onFilterChange(opt.id);
-                  scrollTabIntoView(e.currentTarget);
-                }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-          <div className="filter-tabs-fade-right" aria-hidden="true" />
+      {/* 2. FILTER PILLS WITH COUNTS */}
+      <div className="frt-filter-pills" role="tablist" aria-label="Filter folders by status">
+        {filterTabs.map((tab) => {
+          const isActive = activeFilter === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              className={`frt-pill-btn ${isActive ? 'is-active' : ''}`}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => onFilterChange && onFilterChange(tab.id)}
+            >
+              <span>{tab.label}</span>
+              {typeof tab.count === 'number' && (
+                <span className="frt-pill-count">{tab.count}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 3. CONTROLS ON RIGHT: SORT & VIEW TOGGLES */}
+      <div className="frt-controls-right">
+        {/* Sort Dropdown */}
+        <div className="frt-sort-wrapper">
+          <select
+            className="frt-sort-select"
+            value={sortBy}
+            onChange={(e) => onSortChange && onSortChange(e.target.value)}
+            aria-label="Sort folders"
+          >
+            <option value="recent-studied">Recently studied</option>
+            <option value="recent-created">Recently created</option>
+            <option value="progress">Progress</option>
+            <option value="alpha">Alphabetical</option>
+          </select>
+          <span className="frt-sort-chevron" aria-hidden="true">⌵</span>
         </div>
 
-        {/* Sort Select Dropdown */}
-        <div className="toolbar-sort-wrapper">
-          <span className="sort-label">
-            <svg
-              className="sort-label-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M7 4v16M7 4l-4 4M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4" />
+        {/* View Mode Toggle (Grid vs List) */}
+        <div className="frt-view-toggle-group" role="group" aria-label="View layout">
+          <button
+            type="button"
+            className={`frt-view-btn ${viewMode === 'grid' ? 'is-active' : ''}`}
+            onClick={() => onViewModeChange && onViewModeChange('grid')}
+            title="Grid view"
+            aria-label="Grid view"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
             </svg>
-            <span>SORT:</span>
-          </span>
-          <div className="custom-select-box">
-            <select
-              className="toolbar-sort-select"
-              value={sortBy}
-              onChange={(e) => onSortChange(e.target.value)}
-              aria-label="Sort folders by"
-            >
-              {sortOptions.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <span className="select-chevron-icon" aria-hidden="true">▾</span>
-          </div>
+          </button>
+
+          <button
+            type="button"
+            className={`frt-view-btn ${viewMode === 'list' ? 'is-active' : ''}`}
+            onClick={() => onViewModeChange && onViewModeChange('list')}
+            title="List view"
+            aria-label="List view"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

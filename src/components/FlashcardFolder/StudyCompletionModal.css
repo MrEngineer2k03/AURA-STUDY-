@@ -1,0 +1,705 @@
+/* ==========================================================================
+   AURA STUDY SESSION COMPLETION POPUP & DETAILED RESULTS MODAL
+   Pixel-accurate implementation matching reference designs:
+   - Image 1: Congratulations Popup (Green & Gold accents, celebratory modal)
+   - Image 2: Detailed Session Results (Scrollable question breakdown)
+   - Scenario B: Encouragement Popup (Blue & Purple accents for incomplete answers)
+   ========================================================================== */
+
+/* 1. BACKDROP OVERLAY */
+.aura-completion-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(4, 9, 8, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: auraBackdropFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+@keyframes auraBackdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 2. MODAL CARD CONTAINER */
+.aura-completion-modal {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 28px;
+  padding: 32px 28px 28px;
+  box-sizing: border-box;
+  color: #ffffff;
+  font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  animation: auraModalEntrance 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.15) forwards;
+  transform-origin: center center;
+  overflow: hidden;
+}
+
+@keyframes auraModalEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* THEME: CONGRATULATIONS (Green & Gold - Scenario A) */
+.aura-completion-modal.theme-congrats {
+  background: radial-gradient(130% 120% at 50% 0%, rgba(13, 38, 30, 0.98) 0%, rgba(7, 18, 14, 0.99) 100%);
+  border: 1px solid rgba(0, 214, 154, 0.35);
+  box-shadow:
+    0 0 50px rgba(0, 214, 154, 0.16),
+    0 24px 48px rgba(0, 0, 0, 0.75),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+/* THEME: ENCOURAGEMENT (Blue & Purple - Scenario B) */
+.aura-completion-modal.theme-encouragement {
+  background: radial-gradient(130% 120% at 50% 0%, rgba(20, 24, 48, 0.98) 0%, rgba(10, 11, 24, 0.99) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.38);
+  box-shadow:
+    0 0 50px rgba(99, 102, 241, 0.18),
+    0 24px 48px rgba(0, 0, 0, 0.75),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Ambient Inner Glow */
+.aura-modal-ambient-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 180px;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.theme-congrats .aura-modal-ambient-glow {
+  background: radial-gradient(circle, rgba(0, 214, 154, 0.28) 0%, rgba(245, 197, 24, 0.14) 50%, transparent 75%);
+}
+
+.theme-encouragement .aura-modal-ambient-glow {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.28) 0%, rgba(139, 92, 246, 0.18) 50%, transparent 75%);
+}
+
+/* Ambient Confetti / Particles for Celebratory Feeling */
+.aura-celebration-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.celebration-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: auraFloatSparkle 3s ease-in-out infinite;
+}
+
+.sparkle-1 {
+  top: 18%;
+  left: 14%;
+  width: 6px;
+  height: 6px;
+  background: #f5c518;
+  box-shadow: 0 0 8px #f5c518;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  top: 14%;
+  right: 16%;
+  width: 7px;
+  height: 7px;
+  background: #00d69a;
+  box-shadow: 0 0 10px #00d69a;
+  animation-delay: 0.8s;
+}
+
+.sparkle-3 {
+  top: 32%;
+  left: 8%;
+  width: 5px;
+  height: 5px;
+  background: #2ee59d;
+  box-shadow: 0 0 8px #2ee59d;
+  animation-delay: 1.4s;
+}
+
+.sparkle-4 {
+  top: 36%;
+  right: 10%;
+  width: 6px;
+  height: 6px;
+  background: #ffaa32;
+  box-shadow: 0 0 8px #ffaa32;
+  animation-delay: 0.5s;
+}
+
+.sparkle-5 {
+  top: 24%;
+  left: 48%;
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+  box-shadow: 0 0 6px #ffffff;
+  animation-delay: 1.9s;
+}
+
+@keyframes auraFloatSparkle {
+  0%, 100% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.2);
+    opacity: 0.95;
+  }
+}
+
+/* 3. MODAL HEADER & ICON CONTAINER */
+.aura-modal-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.aura-completion-icon-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+  animation: auraIconFloat 3.2s ease-in-out infinite;
+}
+
+@keyframes auraIconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.theme-congrats .aura-completion-icon-box {
+  background: linear-gradient(135deg, rgba(16, 52, 40, 0.95) 0%, rgba(8, 30, 22, 0.95) 100%);
+  border: 1.5px solid rgba(245, 197, 24, 0.38);
+  box-shadow:
+    0 0 24px rgba(245, 197, 24, 0.24),
+    0 0 12px rgba(0, 214, 154, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.theme-encouragement .aura-completion-icon-box {
+  background: linear-gradient(135deg, rgba(28, 32, 68, 0.95) 0%, rgba(14, 16, 40, 0.95) 100%);
+  border: 1.5px solid rgba(139, 92, 246, 0.45);
+  box-shadow:
+    0 0 24px rgba(99, 102, 241, 0.28),
+    0 0 12px rgba(139, 92, 246, 0.22),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.aura-completion-icon-svg {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+/* 4. HEADINGS & SUBTITLES */
+.aura-completion-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.theme-congrats .aura-completion-title {
+  color: #00d69a;
+  text-shadow: 0 0 18px rgba(0, 214, 154, 0.35);
+}
+
+.theme-encouragement .aura-completion-title {
+  color: #818cf8;
+  text-shadow: 0 0 18px rgba(129, 140, 248, 0.35);
+}
+
+.aura-completion-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0 0 18px 0;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* 5. SEGMENTED MINI PROGRESS BAR */
+.aura-completion-mini-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+.completion-segment-pill {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  transition: transform 0.2s ease;
+}
+
+.completion-segment-pill.is-correct {
+  background: #00d69a;
+  box-shadow: 0 0 8px rgba(0, 214, 154, 0.55);
+}
+
+.completion-segment-pill.is-incorrect {
+  background: #ff405c;
+  box-shadow: 0 0 8px rgba(255, 64, 92, 0.5);
+}
+
+.completion-segment-pill.is-unanswered {
+  background: #ffaa32;
+  box-shadow: 0 0 8px rgba(255, 170, 50, 0.45);
+}
+
+/* 6. 2x2 STATS CARDS GRID (Scenario A) */
+.aura-completion-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+/* 5-Item Responsive Stats Grid (Scenario B) */
+.aura-completion-stats-grid-5 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.aura-completion-stats-grid-5 .stat-card-xp {
+  grid-column: span 2;
+}
+
+.aura-stat-summary-card {
+  background: rgba(14, 25, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-encouragement .aura-stat-summary-card {
+  background: rgba(18, 22, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.aura-stat-summary-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.aura-stat-card-value {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 5px;
+}
+
+.aura-stat-card-value.val-teal {
+  color: #00d69a;
+}
+
+.aura-stat-card-value.val-red {
+  color: #ff405c;
+}
+
+.aura-stat-card-value.val-gold {
+  color: #ffaa32;
+}
+
+.aura-stat-card-value.val-blue {
+  color: #38bdf8;
+}
+
+.aura-stat-card-value.val-amber {
+  color: #ffaa32;
+}
+
+.aura-stat-card-label {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 400;
+  line-height: 1.25;
+  text-transform: none;
+}
+
+/* 7. MOTIVATIONAL & ENCOURAGEMENT MESSAGE */
+.aura-completion-message {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #94a3b8;
+  max-width: 420px;
+  margin: 0 auto 24px auto;
+  font-weight: 400;
+}
+
+/* 8. ACTION BUTTONS ROW */
+.aura-completion-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-aura-primary-action {
+  width: 100%;
+  height: 50px;
+  border-radius: 14px;
+  border: none;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.theme-congrats .btn-aura-primary-action {
+  background: #00d69a;
+  color: #061e16;
+  box-shadow: 0 4px 18px rgba(0, 214, 154, 0.35);
+}
+
+.theme-congrats .btn-aura-primary-action:hover {
+  background: #00efa8;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 22px rgba(0, 214, 154, 0.5);
+}
+
+.theme-encouragement .btn-aura-primary-action {
+  background: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
+}
+
+.theme-encouragement .btn-aura-primary-action:hover {
+  background: #7579f6;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 22px rgba(99, 102, 241, 0.5);
+}
+
+.btn-aura-secondary-action {
+  width: 100%;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(13, 25, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.theme-encouragement .btn-aura-secondary-action {
+  background: rgba(18, 22, 42, 0.85);
+}
+
+.btn-aura-secondary-action:hover {
+  background: rgba(24, 40, 36, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.theme-encouragement .btn-aura-secondary-action:hover {
+  background: rgba(28, 34, 64, 0.95);
+}
+
+.btn-aura-tertiary-action {
+  width: 100%;
+  height: 44px;
+  border-radius: 14px;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  color: #94a3b8;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.btn-aura-tertiary-action:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   9. DETAILED RESULTS VIEW (Exact Match to Image 2)
+   ========================================================================== */
+.aura-detailed-results-view {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.results-view-header {
+  margin-bottom: 18px;
+}
+
+.results-view-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+}
+
+.results-view-subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Scrollable Question Results List */
+.results-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-bottom: 22px;
+}
+
+/* Sleek Dark Scrollbar */
+.results-questions-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.results-questions-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
+}
+
+.results-questions-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.results-questions-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 214, 154, 0.4);
+}
+
+/* Individual Question Item Card */
+.results-question-card {
+  background: rgba(14, 24, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 13px 15px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.results-question-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(18, 30, 28, 0.8);
+}
+
+.results-q-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.results-q-title-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+}
+
+.results-q-index-badge {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.results-q-prompt-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+/* Status Pills matching Image 2 */
+.results-status-pill {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2.5px 10px;
+  border-radius: 999px;
+  line-height: 1.3;
+}
+
+.results-status-pill.is-correct {
+  background: rgba(0, 214, 154, 0.14);
+  color: #00d69a;
+  border: 1px solid rgba(0, 214, 154, 0.32);
+}
+
+.results-status-pill.is-incorrect {
+  background: rgba(255, 64, 92, 0.14);
+  color: #ff405c;
+  border: 1px solid rgba(255, 64, 92, 0.32);
+}
+
+.results-status-pill.is-unanswered {
+  background: rgba(255, 170, 50, 0.14);
+  color: #ffaa32;
+  border: 1px solid rgba(255, 170, 50, 0.32);
+}
+
+/* Question Subtext (Your answer | Correct answer) */
+.results-q-subtext {
+  margin: 6px 0 0 32px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #94a3b8;
+  word-break: break-word;
+}
+
+.results-q-subtext .correct-part {
+  color: #cbd5e1;
+}
+
+.results-q-subtext .sep {
+  margin: 0 6px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* 10. RESPONSIVE BREAKPOINTS (Desktop & Mobile) */
+@media (max-width: 640px) {
+  .aura-completion-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .aura-completion-modal {
+    max-width: 100%;
+    border-radius: 22px;
+    padding: 24px 18px 20px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+
+  .aura-completion-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+  }
+
+  .aura-completion-title {
+    font-size: 22px;
+  }
+
+  .aura-completion-subtitle {
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  .aura-completion-stats-grid,
+  .aura-completion-stats-grid-5 {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .aura-stat-summary-card {
+    padding: 12px 8px;
+  }
+
+  .aura-stat-card-value {
+    font-size: 22px;
+  }
+
+  .aura-completion-message {
+    font-size: 12.5px;
+    margin-bottom: 18px;
+  }
+
+  .results-questions-list {
+    max-height: 280px;
+  }
+}
+

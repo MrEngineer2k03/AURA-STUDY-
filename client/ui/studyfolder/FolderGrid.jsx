@@ -1,34 +1,40 @@
+import React from 'react';
 import StudyFolderCard from './StudyFolderCard';
 import CreateFolderCard from './CreateFolderCard';
 
 /**
- * FolderGrid - Responsive grid container for study folders with empty state handling
+ * FolderGrid - 4-Column Responsive Grid & List Container for My Folders
+ * Matches reference design (media_1793596234655_f4b8a921.jpg)
  *
  * @param {Object} props
  * @param {Array<Object>} props.folders - List of folder objects
+ * @param {string} [props.viewMode='grid'] - 'grid' | 'list'
  * @param {Function} props.onCreateFolder - Create folder trigger
  * @param {Function} props.onOpenFolder - Open folder trigger
  * @param {Function} props.onStudyFolder - Study folder trigger
- * @param {Function} props.onFolderAction - Three-dot menu action trigger
+ * @param {Function} props.onFolderAction - Action menu trigger
  */
 export default function FolderGrid({
   folders = [],
+  viewMode = 'grid',
   onCreateFolder,
   onOpenFolder,
   onStudyFolder,
   onFolderAction,
 }) {
-  const hasFolders = folders.length > 0;
+  const visibleFolders = folders.filter(
+    (folder) => !folder.isArchived && folder.status?.toLowerCase() !== 'archived'
+  );
+  const hasFolders = visibleFolders.length > 0;
 
   if (!hasFolders) {
     return (
       <div className="folders-empty-stage">
         <div className="empty-hologram-box">
-          <div className="empty-hologram-glow" aria-hidden="true" />
           <svg
             className="empty-hologram-icon"
-            width="48"
-            height="48"
+            width="44"
+            height="44"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -42,9 +48,9 @@ export default function FolderGrid({
           </svg>
         </div>
 
-        <h3 className="empty-headline">No study folders yet</h3>
+        <h3 className="empty-headline">No study folders found</h3>
         <p className="empty-description">
-          Create your first study folder and start your AURA journey.
+          Try adjusting your search or filters, or create a new folder.
         </p>
 
         <button
@@ -52,23 +58,26 @@ export default function FolderGrid({
           className="btn-create-first-folder"
           onClick={onCreateFolder}
         >
-          <span className="btn-plus-symbol">+</span> Create Your First Folder
+          <span className="btn-plus-symbol">+</span> Create New Folder
         </button>
       </div>
     );
   }
 
   return (
-    <div className="my-folders-grid" role="region" aria-label="Study Folders Grid">
-      {folders.map((folder, index) => (
+    <div
+      className={`student-folders-container layout-${viewMode}`}
+      role="region"
+      aria-label="Study Folders Grid"
+    >
+      {visibleFolders.map((folder, index) => (
         <div
           key={folder.id}
-          className="folder-grid-item-wrap"
-          style={{ animationDelay: `${index * 60}ms` }}
+          className="student-grid-item"
+          style={{ animationDelay: `${index * 40}ms` }}
         >
           <StudyFolderCard
             folder={folder}
-            variant="detailed"
             onClick={onOpenFolder}
             onOpen={onOpenFolder}
             onStudy={onStudyFolder}
@@ -77,14 +86,16 @@ export default function FolderGrid({
         </div>
       ))}
 
-      {/* Trailing Create Folder Card */}
-      <div
-        id="create-folder-card-section"
-        className="folder-grid-item-wrap"
-        style={{ animationDelay: `${folders.length * 60}ms` }}
-      >
-        <CreateFolderCard onCreateFolder={onCreateFolder} />
-      </div>
+      {/* Trailing Create Folder Card (shown in grid view) */}
+      {viewMode === 'grid' && (
+        <div
+          id="create-folder-card-section"
+          className="student-grid-item"
+          style={{ animationDelay: `${visibleFolders.length * 40}ms` }}
+        >
+          <CreateFolderCard onCreateFolder={onCreateFolder} />
+        </div>
+      )}
     </div>
   );
 }

@@ -95,7 +95,10 @@ export default function StudyFolders({
     }
   };
 
-  const hasFolders = Array.isArray(folders) && folders.length > 0;
+  const activeFolders = (folders || []).filter(
+    (folder) => !folder.isArchived && folder.status?.toLowerCase() !== 'archived'
+  );
+  const hasFolders = activeFolders.length > 0;
 
   return (
     <div className={`study-folders-panel ${className}`}>
@@ -138,7 +141,7 @@ export default function StudyFolders({
       {/* CONTENT AREA: FOLDER GRID OR EMPTY STATE */}
       {hasFolders ? (
         <div className="study-folders-grid">
-          {folders.map((folder) => (
+          {activeFolders.map((folder) => (
             <StudyFolderCard
               key={folder.id}
               folder={folder}

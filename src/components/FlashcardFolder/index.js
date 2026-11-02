@@ -10,4 +10,5 @@ export { default as MultipleChoiceQuestion } from './MultipleChoiceQuestion';
 export { default as StudyProgress } from './StudyProgress';
 export { default as StudyResults } from './StudyResults';
 export { default as ReviewMistakes } from './ReviewMistakes';
+export { default as StudyCompletionModal } from './StudyCompletionModal';
 export { default as FlashcardPreviewModal } from './FlashcardPreviewModal';

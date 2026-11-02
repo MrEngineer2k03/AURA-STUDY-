@@ -51,8 +51,23 @@ export default function FlashcardFolderHeader({
           type="button"
           className="folder-breadcrumb-btn"
           onClick={onBackToFolders}
+          title="Back to My Folders"
         >
-          My Folders
+          <span className="folder-breadcrumb-back-icon" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </span>
+          <span className="folder-breadcrumb-btn-label">My Folders</span>
         </button>
         <span className="folder-breadcrumb-sep">/</span>
         <span className="folder-breadcrumb-name">{folderTitle}</span>

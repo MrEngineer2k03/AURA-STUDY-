@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import AnswerFeedbackNotification from './AnswerFeedbackNotification';
 
 /**
  * Subject-specific fallback distractors for when the folder has fewer than 4 flashcards
@@ -173,35 +174,15 @@ export default function MultipleChoiceQuestion({
         })}
       </div>
 
-      {/* 4. ANSWER VALIDATION BANNER & NEXT ACTION */}
+      {/* 4. ANSWER FEEDBACK NOTIFICATION & ACTION */}
       {isAnswered && (
-        <div className={`study-feedback-banner ${isSelectedCorrect ? 'is-correct' : 'is-incorrect'}`}>
-          <div className="feedback-banner-left">
-            <div className="feedback-icon-box">
-              {isSelectedCorrect ? '✓' : '✕'}
-            </div>
-            <div>
-              <div className="feedback-headline">
-                {isSelectedCorrect ? 'CORRECT ANSWER!' : 'NOT QUITE!'}
-              </div>
-              <p className="feedback-subtext">
-                {isSelectedCorrect
-                  ? 'Great job! You got it right.'
-                  : "Don't worry. Review the correct answer and keep learning."}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="btn-next-question-action"
-            onClick={onNext}
-            autoFocus
-          >
-            <span>{isLast ? 'COMPLETE STUDY SESSION' : 'NEXT QUESTION'}</span>
-            <span>→</span>
-          </button>
-        </div>
+        <AnswerFeedbackNotification
+          feedbackState={isSelectedCorrect ? 'correct' : 'wrong'}
+          correctAnswerText={optionsData.options[optionsData.correctIndex]}
+          xpEarned={10}
+          isLastQuestion={isLast}
+          onNext={onNext}
+        />
       )}
     </div>
   );

@@ -1,0 +1,446 @@
+/* ==========================================================================
+   AURA – Answer Feedback Notification Component Styles
+   States: Correct (#00D69A), Wrong (#FF405C), Time's Up (#FFAA32)
+   ========================================================================== */
+
+.aura-feedback-notification {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 22px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  margin-top: auto;
+  user-select: none;
+  animation: auraNotificationEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index: 5;
+}
+
+/* --------------------------------------------------------------------------
+   A. STATE-SPECIFIC PALETTES & GLOWS
+   -------------------------------------------------------------------------- */
+
+/* 1. Correct Answer State: Emerald Green (#00D69A) */
+.aura-feedback-notification.feedback-state-correct {
+  background: rgba(6, 18, 22, 0.88);
+  border: 1px solid rgba(0, 214, 154, 0.45);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(0, 214, 154, 0.16),
+    inset 0 1px 0 rgba(0, 214, 154, 0.2);
+}
+
+.aura-feedback-notification.feedback-state-correct .feedback-icon-box {
+  background: rgba(0, 214, 154, 0.12);
+  border: 1.5px solid #00D69A;
+  box-shadow: 0 0 18px rgba(0, 214, 154, 0.3);
+}
+
+.aura-feedback-notification.feedback-state-correct .feedback-title {
+  color: #00D69A;
+  text-shadow: 0 0 16px rgba(0, 214, 154, 0.35);
+}
+
+.aura-feedback-notification.feedback-state-correct .btn-feedback-action {
+  border-color: rgba(0, 214, 154, 0.4);
+}
+
+.aura-feedback-notification.feedback-state-correct .btn-feedback-action:hover {
+  background: rgba(0, 214, 154, 0.18);
+  border-color: #00D69A;
+  box-shadow: 0 0 20px rgba(0, 214, 154, 0.4);
+}
+
+/* 2. Wrong Answer State: Vibrant Red (#FF405C) */
+.aura-feedback-notification.feedback-state-wrong {
+  background: rgba(22, 8, 14, 0.88);
+  border: 1px solid rgba(255, 64, 92, 0.45);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(255, 64, 92, 0.16),
+    inset 0 1px 0 rgba(255, 64, 92, 0.2);
+}
+
+.aura-feedback-notification.feedback-state-wrong .feedback-icon-box {
+  background: rgba(255, 64, 92, 0.12);
+  border: 1.5px solid #FF405C;
+  box-shadow: 0 0 18px rgba(255, 64, 92, 0.3);
+}
+
+.aura-feedback-notification.feedback-state-wrong .feedback-title {
+  color: #FF405C;
+  text-shadow: 0 0 16px rgba(255, 64, 92, 0.35);
+}
+
+.aura-feedback-notification.feedback-state-wrong .btn-feedback-action {
+  border-color: rgba(255, 64, 92, 0.4);
+}
+
+.aura-feedback-notification.feedback-state-wrong .btn-feedback-action:hover {
+  background: rgba(255, 64, 92, 0.18);
+  border-color: #FF405C;
+  box-shadow: 0 0 20px rgba(255, 64, 92, 0.4);
+}
+
+/* 3. Time's Up State: Amber Orange (#FFAA32) */
+.aura-feedback-notification.feedback-state-timeout {
+  background: rgba(22, 14, 6, 0.88);
+  border: 1px solid rgba(255, 170, 50, 0.45);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(255, 170, 50, 0.16),
+    inset 0 1px 0 rgba(255, 170, 50, 0.2);
+}
+
+.aura-feedback-notification.feedback-state-timeout .feedback-icon-box {
+  background: rgba(255, 170, 50, 0.12);
+  border: 1.5px solid #FFAA32;
+  box-shadow: 0 0 18px rgba(255, 170, 50, 0.3);
+}
+
+.aura-feedback-notification.feedback-state-timeout .feedback-title {
+  color: #FFAA32;
+  text-shadow: 0 0 16px rgba(255, 170, 50, 0.35);
+}
+
+.aura-feedback-notification.feedback-state-timeout .btn-feedback-action {
+  border-color: rgba(255, 170, 50, 0.4);
+}
+
+.aura-feedback-notification.feedback-state-timeout .btn-feedback-action:hover {
+  background: rgba(255, 170, 50, 0.18);
+  border-color: #FFAA32;
+  box-shadow: 0 0 20px rgba(255, 170, 50, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   B. COMPONENT SUB-SECTIONS
+   -------------------------------------------------------------------------- */
+
+/* Left Status Icon Box */
+.feedback-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.feedback-icon-svg {
+  display: block;
+}
+
+.feedback-icon-svg.icon-check {
+  animation: auraIconScaleIn 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.feedback-icon-svg.icon-cross {
+  animation: auraIconScaleIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.feedback-icon-svg.icon-clock {
+  animation: auraIconClockPulse 1.8s ease-in-out infinite;
+}
+
+/* Center Content Column */
+.feedback-content-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.feedback-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  line-height: 1.25;
+}
+
+.feedback-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+/* Metadata Row (XP Chip or Correct Answer Display) */
+.feedback-meta-row {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* 1. XP Pill */
+.feedback-xp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 214, 154, 0.35);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 214, 154, 0.12);
+  animation: auraXpFloatUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.feedback-bolt-icon {
+  font-size: 12px;
+  color: #fbbf24;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.7));
+}
+
+.feedback-xp-text {
+  color: #ffffff;
+}
+
+/* 2. Correct Answer Callout Pill (for Wrong and Timeout states) */
+.feedback-correct-answer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 214, 154, 0.08);
+  border: 1px solid rgba(0, 214, 154, 0.32);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  max-width: 100%;
+  box-sizing: border-box;
+  animation: auraXpFloatUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.feedback-check-small {
+  color: #00D69A;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.feedback-answer-label {
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.feedback-answer-value {
+  color: #ffffff;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Right Action Column */
+.feedback-action-col {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-feedback-action {
+  background: rgba(9, 15, 27, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 10px 22px;
+  color: #ffffff;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.btn-feedback-action:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.action-btn-arrow {
+  font-size: 15px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.btn-feedback-action:hover .action-btn-arrow {
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   C. PARTICLE EFFECT (Subtle Success Sparkles)
+   -------------------------------------------------------------------------- */
+.feedback-sparkles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.feedback-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #00D69A;
+  box-shadow: 0 0 10px #00D69A;
+  opacity: 0;
+}
+
+.feedback-particle.particle-1 {
+  top: 24%;
+  left: 60px;
+  animation: auraParticleDrift 1.2s ease-out forwards;
+  --tx: -18px;
+  --ty: -16px;
+}
+.feedback-particle.particle-2 {
+  top: 70%;
+  left: 70px;
+  animation: auraParticleDrift 1.4s ease-out 0.1s forwards;
+  --tx: -14px;
+  --ty: 14px;
+}
+.feedback-particle.particle-3 {
+  top: 30%;
+  left: 20%;
+  animation: auraParticleDrift 1.3s ease-out 0.05s forwards;
+  --tx: 16px;
+  --ty: -18px;
+}
+.feedback-particle.particle-4 {
+  top: 65%;
+  left: 45%;
+  animation: auraParticleDrift 1.5s ease-out 0.15s forwards;
+  --tx: 12px;
+  --ty: 16px;
+}
+.feedback-particle.particle-5 {
+  top: 20%;
+  right: 180px;
+  animation: auraParticleDrift 1.2s ease-out 0.08s forwards;
+  --tx: -12px;
+  --ty: -14px;
+}
+.feedback-particle.particle-6 {
+  top: 50%;
+  right: 220px;
+  animation: auraParticleDrift 1.4s ease-out 0.12s forwards;
+  --tx: 14px;
+  --ty: -12px;
+}
+
+/* --------------------------------------------------------------------------
+   D. KEYFRAME ANIMATIONS
+   -------------------------------------------------------------------------- */
+@keyframes auraNotificationEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes auraIconScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  70% {
+    transform: scale(1.18);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes auraIconClockPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes auraXpFloatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes auraParticleDrift {
+  0% {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 10px), var(--ty, -10px)) scale(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   E. RESPONSIVENESS
+   -------------------------------------------------------------------------- */
+@media (max-width: 680px) {
+  .aura-feedback-notification {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    gap: 14px;
+  }
+
+  .feedback-content-col {
+    text-align: left;
+  }
+
+  .btn-feedback-action {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 18px;
+  }
+
+  .feedback-title {
+    font-size: 16px;
+  }
+
+  .feedback-subtitle {
+    font-size: 12.5px;
+  }
+}

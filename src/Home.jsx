@@ -94,8 +94,22 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     },
   ]);
 
+  const getInitialFolder = () => {
+    if (typeof window !== 'undefined' && window.location.hash.toLowerCase().includes('study')) {
+      return {
+        id: 'folder-1',
+        title: 'Physics Midterms',
+        subtitle: 'Forces & Motion',
+        progress: 82,
+        lessons: 5,
+        color: 'red',
+      };
+    }
+    return null;
+  };
+
   const [scrollToCreateFolder, setScrollToCreateFolder] = useState(false);
-  const [selectedFolderForStudy, setSelectedFolderForStudy] = useState(null);
+  const [selectedFolderForStudy, setSelectedFolderForStudy] = useState(getInitialFolder);
 
   const handleSelectFolder = (folder) => {
     const targetFolder = {

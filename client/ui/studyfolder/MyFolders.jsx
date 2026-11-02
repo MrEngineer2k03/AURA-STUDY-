@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import FolderHeader from './FolderHeader';
+import ContinueHeroCard from './ContinueHeroCard';
 import FolderToolbar from './FolderToolbar';
 import FolderGrid from './FolderGrid';
 import RecentActivity from './RecentActivity';
@@ -43,189 +44,32 @@ export default function MyFolders({
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'MY FOLDERS';
 
-  // Realistic Example Study Folders matching AURA study library
+  // Realistic Example Study Folders matching exact reference design (media_1793596234655_f4b8a921.jpg)
   const initialFolders = [
     {
-      id: 'folder-db',
-      title: 'Database Systems',
-      subtitle: 'SQL and Relational Databases',
-      description: 'SQL queries, relational algebra, indexing, and ACID transactions',
-      progress: 100,
-      lessons: 7,
-      completed: 7,
-      completedLessons: 7,
-      members: 2,
-      status: 'NEW',
-      color: 'red',
-      thumbnail: '/folders/thumb_database.jpg',
-      lastStudied: 'Today',
-      createdAt: '2026-10-18',
-      department: 'Computer Science',
-      isShared: false,
-      isArchived: false,
-      studyType: 'flashcards',
-      lessonItems: [
-        {
-          id: 'f-db-1',
-          fileName: 'SQL_Joins_Indexing_Transactions.pdf',
-          fileSize: '4.2 MB',
-          fileType: 'PDF',
-          isArchived: false,
-          createdAt: '2026-10-18',
-        },
-      ],
-      flashcards: [
-        {
-          id: 'fc-db-1',
-          question: 'What does ACID stand for in databases?',
-          answer: 'Atomicity, Consistency, Isolation, Durability.',
-          front: 'What does ACID stand for in databases?',
-          back: 'Atomicity, Consistency, Isolation, Durability.',
-          status: 'mastered',
-          createdAt: '2026-10-18T10:00:00Z',
-        },
-      ],
-    },
-    {
-      id: 'folder-prog',
-      title: 'Programming Exam',
-      subtitle: 'JavaScript Fundamentals',
-      description: 'Async/await, event loop, closures, and ES6+ features',
-      progress: 67,
-      lessons: 6,
-      completed: 4,
-      completedLessons: 4,
-      members: 4,
-      cards: 4,
-      status: 'In Progress',
-      color: 'purple',
-      thumbnail: '/folders/thumb_programming.jpg',
-      lastStudied: '3d ago',
-      createdAt: '2026-09-22',
-      department: 'Computer Science',
-      isShared: false,
-      isArchived: false,
-      studyType: 'flashcards',
-      lessonItems: [
-        {
-          id: 'f-prog-1',
-          fileName: 'Async_Await_and_Closures_Notes.pdf',
-          fileSize: '1.2 MB',
-          fileType: 'PDF',
-          isArchived: false,
-          createdAt: '2026-09-22',
-        },
-      ],
-      flashcards: [
-        {
-          id: 'fc-prog-1',
-          question: 'What is a closure in JavaScript?',
-          answer: 'A closure is the combination of a function bundled together with references to its lexical environment.',
-          front: 'What is a closure in JavaScript?',
-          back: 'A closure is the combination of a function bundled together with references to its lexical environment.',
-          status: 'mastered',
-        },
-        {
-          id: 'fc-prog-2',
-          question: 'What is the Event Loop?',
-          answer: 'The event loop continuously checks call stack and message queue to execute tasks.',
-          front: 'What is the Event Loop?',
-          back: 'The event loop continuously checks call stack and message queue to execute tasks.',
-          status: 'mastered',
-        },
-        {
-          id: 'fc-prog-3',
-          question: 'What does Promise.all() do?',
-          answer: 'Waits for all promises to resolve, or rejects when any promise rejects.',
-          front: 'What does Promise.all() do?',
-          back: 'Waits for all promises to resolve, or rejects when any promise rejects.',
-          status: 'learning',
-        },
-        {
-          id: 'fc-prog-4',
-          question: 'What is prototypal inheritance?',
-          answer: 'A language feature that allows objects to inherit properties and methods directly from other objects.',
-          front: 'What is prototypal inheritance?',
-          back: 'A language feature that allows objects to inherit properties and methods directly from other objects.',
-          status: 'new',
-        },
-      ],
-    },
-    {
-      id: 'folder-calc',
-      title: 'Calculus Basics',
-      subtitle: 'Limits and Derivatives',
-      description: 'Differential calculus, limit laws, continuity, and chain rule',
-      progress: 42,
-      lessons: 5,
-      completed: 2,
-      completedLessons: 2,
+      id: 'folder-test',
+      title: 'Test',
+      subtitle: 'for test',
+      description: 'for test',
+      progress: 0,
+      lessons: 0,
+      completed: 0,
+      completedLessons: 0,
+      cards: 1,
       members: 1,
-      status: 'In Progress',
-      color: 'blue',
-      thumbnail: '/folders/thumb_calculus.jpg',
-      lastStudied: 'Yesterday',
-      createdAt: '2026-09-20',
-      department: 'Mathematics',
+      status: 'New',
+      color: 'red',
+      lastStudied: 'Just now',
+      createdAt: '2026-10-25',
+      department: 'Testing',
       isShared: false,
       isArchived: false,
-      lessonItems: [
-        {
-          id: 'f-calc-1',
-          fileName: 'Differential_Calculus_Formula_Sheet.pdf',
-          fileSize: '3.8 MB',
-          fileType: 'PDF',
-          isArchived: false,
-          createdAt: '2026-09-20',
-        },
-      ],
+      studyType: 'flashcards',
       flashcards: [
         {
-          id: 'fc-calc-1',
-          question: 'What is the derivative of sin(x)?',
-          answer: 'cos(x)',
-          front: 'What is the derivative of sin(x)?',
-          back: 'cos(x)',
-          status: 'mastered',
-        },
-      ],
-    },
-    {
-      id: 'folder-bio',
-      title: 'Biology 101',
-      subtitle: 'Cell Structure and Function',
-      description: 'Cell biology, organelles, DNA replication, and cellular respiration',
-      progress: 65,
-      lessons: 8,
-      completed: 5,
-      completedLessons: 5,
-      members: 3,
-      status: 'SHARED',
-      color: 'green',
-      thumbnail: '/folders/thumb_biology.jpg',
-      lastStudied: '1d ago',
-      createdAt: '2026-09-25',
-      department: 'Life Sciences',
-      isShared: true,
-      isArchived: false,
-      lessonItems: [
-        {
-          id: 'f-bio-1',
-          fileName: 'Cell_Structure_Organelles_Notes.pdf',
-          fileSize: '5.2 MB',
-          fileType: 'PDF',
-          isArchived: false,
-          createdAt: '2026-09-25',
-        },
-      ],
-      flashcards: [
-        {
-          id: 'fc-bio-1',
-          question: 'What is the function of Mitochondria?',
-          answer: 'Generates ATP energy via cellular respiration.',
-          front: 'What is the function of Mitochondria?',
-          back: 'Generates ATP energy via cellular respiration.',
-          status: 'mastered',
+          id: 'fc-test-1',
+          question: 'Who is the prettiest woman in your life?',
+          answer: 'Stepanie',
         },
       ],
     },
@@ -239,72 +83,152 @@ export default function MyFolders({
       completed: 1,
       completedLessons: 1,
       members: 1,
-      status: 'In Progress',
+      cards: 1,
+      status: 'In progress',
       color: 'orange',
-      thumbnail: '/folders/thumb_business.jpg',
-      lastStudied: '5 hours ago',
+      lastStudied: '5h ago',
       createdAt: '2026-10-01',
       department: 'Business',
       isShared: false,
       isArchived: false,
-      lessonItems: [
+      studyType: 'flashcards',
+      flashcards: [
         {
-          id: 'f-biz-1',
-          fileName: 'Business_Model_Canvas_Guide.pdf',
-          fileSize: '2.1 MB',
-          fileType: 'PDF',
-          isArchived: false,
-          createdAt: '2026-10-01',
+          id: 'fc-biz-1',
+          question: 'What is a value proposition?',
+          answer: 'The promise of value to be delivered and acknowledged.',
         },
       ],
     },
     {
-      id: 'folder-phys',
-      title: 'Physics Review',
-      subtitle: 'Mechanics and Motion',
-      description: 'Newtonian mechanics, momentum, kinematics, and energy conservation',
+      id: 'folder-db',
+      title: 'Database Systems',
+      subtitle: 'SQL and Relational Databases',
+      description: 'SQL queries, relational algebra, indexing, and ACID transactions',
       progress: 100,
-      lessons: 12,
-      completed: 12,
-      completedLessons: 12,
-      members: 5,
-      status: 'ARCHIVED',
-      color: 'blue',
-      thumbnail: '/folders/thumb_physics.jpg',
-      lastStudied: '2 weeks ago',
-      createdAt: '2026-08-15',
-      archivedAt: '2026-10-15',
-      department: 'Physics',
+      lessons: 7,
+      completed: 7,
+      completedLessons: 7,
+      cards: 1,
+      members: 2,
+      status: 'Completed',
+      color: 'cyan',
+      lastStudied: '20h ago',
+      createdAt: '2026-10-18',
+      department: 'Computer Science',
       isShared: false,
-      isArchived: true,
+      isArchived: false,
       studyType: 'flashcards',
-      lessonItems: [
-        {
-          id: 'f-phys-1',
-          fileName: 'Mechanics_and_Motion_Formula_Reference.pdf',
-          fileSize: '4.5 MB',
-          fileType: 'PDF',
-          isArchived: true,
-          createdAt: '2026-08-15',
-        },
-      ],
       flashcards: [
         {
-          id: 'fc-phys-1',
-          question: 'What is Newton’s Second Law?',
-          answer: 'F = m * a (Force = mass times acceleration).',
-          front: 'What is Newton’s Second Law?',
-          back: 'F = m * a (Force = mass times acceleration).',
-          status: 'mastered',
+          id: 'fc-db-1',
+          question: 'What does ACID stand for in databases?',
+          answer: 'Atomicity, Consistency, Isolation, Durability.',
+        },
+      ],
+    },
+    {
+      id: 'folder-bio',
+      title: 'Biology 101',
+      subtitle: 'Cell Structure and Function',
+      description: 'Cell biology, organelles, DNA replication, and cellular respiration',
+      progress: 63,
+      lessons: 8,
+      completed: 5,
+      completedLessons: 5,
+      cards: 1,
+      members: 3,
+      status: 'Shared',
+      color: 'green',
+      lastStudied: 'Yesterday',
+      createdAt: '2026-09-25',
+      department: 'Life Sciences',
+      isShared: true,
+      isArchived: false,
+      studyType: 'flashcards',
+      flashcards: [
+        {
+          id: 'fc-bio-1',
+          question: 'What is the function of Mitochondria?',
+          answer: 'Generates ATP energy via cellular respiration.',
+        },
+      ],
+    },
+    {
+      id: 'folder-calc',
+      title: 'Calculus Basics',
+      subtitle: 'Limits and Derivatives',
+      description: 'Differential calculus, limit laws, continuity, and chain rule',
+      progress: 40,
+      lessons: 5,
+      completed: 2,
+      completedLessons: 2,
+      cards: 1,
+      members: 1,
+      status: 'In progress',
+      color: 'blue',
+      lastStudied: 'Yesterday',
+      createdAt: '2026-09-20',
+      department: 'Mathematics',
+      isShared: false,
+      isArchived: false,
+      studyType: 'flashcards',
+      flashcards: [
+        {
+          id: 'fc-calc-1',
+          question: 'What is the derivative of sin(x)?',
+          answer: 'cos(x)',
+        },
+      ],
+    },
+    {
+      id: 'folder-prog',
+      title: 'Programming Exam',
+      subtitle: 'JavaScript Fundamentals',
+      description: 'Async/await, event loop, closures, and ES6+ features',
+      progress: 67,
+      lessons: 6,
+      completed: 4,
+      completedLessons: 4,
+      cards: 4,
+      members: 4,
+      status: 'In progress',
+      color: 'purple',
+      lastStudied: '3d ago',
+      createdAt: '2026-09-22',
+      department: 'Computer Science',
+      isShared: false,
+      isArchived: false,
+      studyType: 'flashcards',
+      flashcards: [
+        {
+          id: 'fc-prog-1',
+          question: 'What is a closure in JavaScript?',
+          answer: 'A closure is the combination of a function bundled together with references to its lexical environment.',
+        },
+        {
+          id: 'fc-prog-2',
+          question: 'What is the Event Loop?',
+          answer: 'The event loop continuously checks call stack and message queue to execute tasks.',
+        },
+        {
+          id: 'fc-prog-3',
+          question: 'What does Promise.all() do?',
+          answer: 'Waits for all promises to resolve, or rejects when any promise rejects.',
+        },
+        {
+          id: 'fc-prog-4',
+          question: 'What is prototypal inheritance?',
+          answer: 'A language feature that allows objects to inherit properties and methods directly from other objects.',
         },
       ],
     },
   ];
 
-  // State Management with localStorage persistence (v5 key for latest folder catalog)
+  // State Management with localStorage persistence (v6 key for latest redesign)
   const [folders, setFolders] = useState(() => {
     try {
-      const saved = localStorage.getItem('aura_study_folders_v5');
+      const saved = localStorage.getItem('aura_study_folders_v6');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -320,15 +244,16 @@ export default function MyFolders({
   // Save to localStorage whenever folders change
   useEffect(() => {
     try {
-      localStorage.setItem('aura_study_folders_v5', JSON.stringify(folders));
+      localStorage.setItem('aura_study_folders_v6', JSON.stringify(folders));
     } catch (e) {
       console.warn('Failed to save folders to localStorage', e);
     }
   }, [folders]);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'my-folders' | 'shared' | 'archived'
+  const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'in-progress' | 'completed' | 'shared' | 'new' | 'archived'
   const [sortBy, setSortBy] = useState('recent-studied'); // 'recent-studied' | 'recent-created' | 'progress' | 'alpha'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
 
   // Section State: Archive View vs Active View
   const [isArchiveView, setIsArchiveView] = useState(false);
@@ -402,11 +327,15 @@ export default function MyFolders({
 
   // Separate Active and Archived Folders
   const activeFolders = useMemo(() => {
-    return folders.filter((f) => !f.isArchived);
+    return folders.filter(
+      (f) => !f.isArchived && f.status?.toLowerCase() !== 'archived'
+    );
   }, [folders]);
 
   const archivedFolders = useMemo(() => {
-    return folders.filter((f) => Boolean(f.isArchived));
+    return folders.filter(
+      (f) => Boolean(f.isArchived || f.status?.toLowerCase() === 'archived')
+    );
   }, [folders]);
 
   // Aggregate all archived files across all folders
@@ -564,25 +493,29 @@ export default function MyFolders({
           : f
       )
     );
-    showToast(`Folder "${folder.title}" restored to My Folders.`);
+    showToast(`Restored ${folder.title}`, () => handleArchiveFolder(folder));
   };
 
-  // Restore All Archived Folders
+  // Restore All Archived Folders and Files (Image 3 confirmation workflow)
   const handleRestoreAllFolders = () => {
-    if (archivedFolders.length === 0) return;
     setFolders((prev) =>
-      prev.map((f) =>
-        f.isArchived
-          ? {
-              ...f,
-              isArchived: false,
-              status: (f.progress || 0) >= 100 ? 'Completed' : 'In Progress',
-              archivedAt: null,
-            }
-          : f
-      )
+      prev.map((f) => {
+        const updatedItems = (f.lessonItems || []).map((item) =>
+          item.isArchived ? { ...item, isArchived: false, archivedAt: null } : item
+        );
+        if (f.isArchived) {
+          return {
+            ...f,
+            isArchived: false,
+            status: (f.progress || 0) >= 100 ? 'Completed' : 'In Progress',
+            archivedAt: null,
+            lessonItems: updatedItems,
+          };
+        }
+        return { ...f, lessonItems: updatedItems };
+      })
     );
-    showToast('All archived folders restored to your active library.');
+    showToast('Restored all archived items');
   };
 
   // Permanently Delete Folder
@@ -636,7 +569,7 @@ export default function MyFolders({
         return f;
       })
     );
-    showToast(`File "${file.fileName}" restored to active folder.`);
+    showToast(`Restored ${file.fileName}`, () => handleArchiveFile(file, folderId));
   };
 
   // Delete an Individual File
@@ -723,10 +656,48 @@ export default function MyFolders({
     }
   };
 
+  // Filter counts calculation matching reference design
+  const filterCounts = useMemo(() => {
+    const all = activeFolders.length;
+    let inProgress = 0;
+    let completed = 0;
+    let shared = 0;
+    let newCount = 0;
+
+    activeFolders.forEach((f) => {
+      const s = (f.status || '').toLowerCase();
+      const p = f.progress || 0;
+      if (s.includes('new') || p === 0) {
+        newCount++;
+      } else if (s.includes('completed') || p >= 100) {
+        completed++;
+      } else if (s.includes('shared') || f.isShared) {
+        shared++;
+      } else {
+        inProgress++;
+      }
+    });
+
+    return { all, inProgress, completed, shared, new: newCount };
+  }, [activeFolders]);
+
+  // Featured Hero Folder ("Business Strategy" or most recent active)
+  const heroFolder = useMemo(() => {
+    const found = activeFolders.find((f) =>
+      f.title?.toLowerCase().includes('business strategy')
+    );
+    return found || activeFolders[0] || null;
+  }, [activeFolders]);
+
   // Filter & Search & Sort Pipeline
   const filteredActiveFolders = useMemo(() => {
     return folders
       .filter((folder) => {
+        const isArchived = Boolean(
+          folder.isArchived || folder.status?.toLowerCase() === 'archived'
+        );
+        if (isArchived) return false;
+
         // Search Filter
         const query = searchQuery.toLowerCase().trim();
         const matchesSearch =
@@ -744,10 +715,25 @@ export default function MyFolders({
         if (!matchesSearch) return false;
 
         // Tab Filter
-        if (activeFilter === 'my-folders') return !folder.isShared && !folder.isArchived;
-        if (activeFilter === 'shared') return !!folder.isShared && !folder.isArchived;
-        if (activeFilter === 'archived') return !!folder.isArchived;
-        return true; // 'all' shows all folders
+        if (activeFilter === 'in-progress') {
+          const s = (folder.status || '').toLowerCase();
+          const p = folder.progress || 0;
+          return !s.includes('new') && !s.includes('completed') && p > 0 && p < 100;
+        }
+        if (activeFilter === 'completed') {
+          const s = (folder.status || '').toLowerCase();
+          const p = folder.progress || 0;
+          return s.includes('completed') || p >= 100;
+        }
+        if (activeFilter === 'shared') {
+          return Boolean(folder.isShared || folder.status?.toLowerCase().includes('shared'));
+        }
+        if (activeFilter === 'new') {
+          const s = (folder.status || '').toLowerCase();
+          const p = folder.progress || 0;
+          return s.includes('new') || p === 0;
+        }
+        return true; // 'all' shows all active (non-archived) folders
       })
       .sort((a, b) => {
         if (sortBy === 'progress') {
@@ -759,7 +745,7 @@ export default function MyFolders({
         if (sortBy === 'recent-created') {
           return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         }
-        return 0;
+        return 0; // 'recent-studied'
       });
   }, [folders, searchQuery, activeFilter, sortBy]);
 
@@ -879,7 +865,7 @@ export default function MyFolders({
 
   // VIEW 2: DEDICATED MY FOLDERS (ACTIVE GRID OR ARCHIVE SECTION)
   return (
-    <div className="my-folders-page-root">
+    <div className={`my-folders-page-root ${isArchiveView ? 'in-archive-view' : ''}`}>
       {/* Ambient Cyber Atmosphere */}
       <div className="my-folders-ambient-bg" aria-hidden="true" />
 
@@ -888,10 +874,11 @@ export default function MyFolders({
 
       {/* 2. MAIN CONTENT STAGE */}
       <main className="my-folders-content-container">
-        {/* Page Header with Create Folder */}
+        {/* Page Header matching reference */}
         <FolderHeader
           onCreateFolder={() => setIsCreateModalOpen(true)}
           folderCount={activeFolders.length}
+          lastStudiedName={heroFolder?.title || 'Business Strategy'}
           isArchiveView={isArchiveView}
           onToggleArchive={() => {
             const nextView = !isArchiveView;
@@ -925,36 +912,37 @@ export default function MyFolders({
           />
         ) : (
           <>
-            {/* Search & Filter Toolbar */}
+            {/* "Continue where you left off" Hero Banner */}
+            {heroFolder && (
+              <ContinueHeroCard
+                folder={heroFolder}
+                onContinue={handleStudyFolder}
+                onOpen={handleOpenFolder}
+              />
+            )}
+
+            {/* Search & Filter Toolbar with Live Counts */}
             <FolderToolbar
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
               activeFilter={activeFilter}
-              onFilterChange={(filterId) => {
-                if (filterId === 'archived') {
-                  setIsArchiveView(true);
-                  setActiveFilter('archived');
-                } else {
-                  setIsArchiveView(false);
-                  setActiveFilter(filterId);
-                }
-              }}
+              onFilterChange={setActiveFilter}
+              filterCounts={filterCounts}
               sortBy={sortBy}
               onSortChange={setSortBy}
-              archivedCount={archivedFolders.length}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
             />
 
-            {/* Responsive Folder Grid */}
+            {/* Responsive 4-Column Folder Grid or List */}
             <FolderGrid
               folders={filteredActiveFolders}
+              viewMode={viewMode}
               onCreateFolder={() => setIsCreateModalOpen(true)}
               onOpenFolder={handleOpenFolder}
               onStudyFolder={handleStudyFolder}
               onFolderAction={handleFolderAction}
             />
-
-            {/* Compact Recent Activity Panel */}
-            <RecentActivity />
           </>
         )}
       </main>

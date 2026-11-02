@@ -1,12 +1,21 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import StudyResults from './StudyResults';
 import ReviewMistakes from './ReviewMistakes';
+import AnswerFeedbackNotification from './AnswerFeedbackNotification';
+import StudyCompletionModal from './StudyCompletionModal';
 import './FlashcardFolder.css';
 
 /**
  * Subject-specific fallback distractors for when the folder has fewer than 4 flashcards
  */
 const FALLBACK_DISTRACTORS = [
+  'Force equals mass times acceleration.',
+  'An object stays at rest or in motion unless a net force acts on it.',
+  '2',
+  '2x',
+  'Watt',
+  'Newton',
+  'Joule',
   'The instantaneous rate of change of mass with respect to time.',
   'An object remains in perpetual motion regardless of external applied forces.',
   'Force is directly proportional to displacement divided by friction coefficient.',
@@ -17,7 +26,6 @@ const FALLBACK_DISTRACTORS = [
   'A vector quantity defined by the rate of change of momentum over distance.',
   'The work required to accelerate a body of a given mass from rest to velocity.',
   'The internal thermal equilibrium state achieved only during adiabatic expansion.',
-  'meow',
 ];
 
 /**
@@ -35,21 +43,26 @@ function shuffleArray(array) {
 /**
  * Circular Countdown Timer Ring Component
  */
-function TimerRing({ timeLeft, totalTime = 10 }) {
+function TimerRing({ timeLeft, totalTime = 10, isTimedOut = false }) {
   const radius = 13;
   const strokeWidth = 2.5;
   const circumference = 2 * Math.PI * radius; // ~81.68
   const strokeDashoffset = circumference - (Math.max(0, timeLeft) / totalTime) * circumference;
 
-  let strokeColor = '#10b981'; // Cyan / emerald
-  if (timeLeft <= 2) {
-    strokeColor = '#ef4444'; // Red alert
+  let strokeColor = '#00D69A'; // Emerald cyan default
+  if (isTimedOut || timeLeft === 0) {
+    strokeColor = '#FFAA32'; // Amber orange for timeout
+  } else if (timeLeft <= 2) {
+    strokeColor = '#FF405C'; // Red alert
   } else if (timeLeft <= 4) {
-    strokeColor = '#f59e0b'; // Amber warning
+    strokeColor = '#FFAA32'; // Amber warning
   }
 
   return (
-    <div className="study-timer-ring-wrap" title={`${timeLeft}s remaining`}>
+    <div
+      className={`study-timer-ring-wrap ${isTimedOut ? 'is-timed-out' : ''} ${timeLeft <= 2 && !isTimedOut ? 'is-critical' : ''}`}
+      title={isTimedOut ? "Time's Up!" : `${timeLeft}s remaining`}
+    >
       <svg className="study-timer-svg" width="34" height="34" viewBox="0 0 34 34">
         {/* Track circle */}
         <circle
@@ -69,15 +82,24 @@ function TimerRing({ timeLeft, totalTime = 10 }) {
           stroke={strokeColor}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
+          strokeDashoffset={isTimedOut ? circumference : strokeDashoffset}
           strokeLinecap="round"
           transform="rotate(-90 17 17)"
           style={{ transition: 'stroke-dashoffset 0.8s linear, stroke 0.3s ease' }}
         />
       </svg>
-      <span className="study-timer-val" style={{ color: strokeColor }}>
-        {timeLeft}
-      </span>
+      {isTimedOut ? (
+        <span className="study-timer-val is-clock-indicator" aria-label="Time's Up">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFAA32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </span>
+      ) : (
+        <span className="study-timer-val" style={{ color: strokeColor }}>
+          {timeLeft}
+        </span>
+      )}
     </div>
   );
 }
@@ -129,6 +151,7 @@ export default function StudyMode({
   cards = [],
   folder,
   onExit,
+  onBackToFolders,
   onRecordStudyResult,
   onSessionComplete,
 }) {
@@ -138,11 +161,23 @@ export default function StudyMode({
   // Gamified Session Stats
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
+  const [unansweredCount, setUnansweredCount] = useState(0);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [xpEarned, setXpEarned] = useState(0);
   const [mistakesList, setMistakesList] = useState([]);
-  const [answeredQuestionIds, setAnsweredQuestionIds] = useState(new Set());
+  const [sessionResults, setSessionResults] = useState([]);
+
+  // Completion Modal State & Ref Guards
+  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
+  const hasCompletedRef = useRef(false);
+  const statsRef = useRef({
+    correct: 0,
+    incorrect: 0,
+    unanswered: 0,
+    xp: 0,
+    results: [],
+  });
 
   // Interactive Question State
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
@@ -151,6 +186,67 @@ export default function StudyMode({
 
   // Active view: 'quiz' | 'results' | 'mistakes'
   const [studyView, setStudyView] = useState('quiz');
+
+  // Question Card & Text Refs for dynamic font-size fitting
+  const cardRef = useRef(null);
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+  const rafRef = useRef(null);
+
+  // Dynamic question font size auto-fitting algorithm
+  // Adapts from maxFs (~32px mobile / ~40px desktop) down to minFs (16px mobile / 20px desktop)
+  const fitQuestionText = useCallback(() => {
+    const container = containerRef.current;
+    const textEl = textRef.current;
+    if (!container || !textEl) return;
+
+    const isMobile = window.innerWidth <= 900;
+    const isShortScreen = window.innerHeight < 600;
+
+    // Bounds:
+    // Short questions (1-30 chars) up to 32px on mobile (40px desktop)
+    // Scale smoothly down to 16px minimum on mobile (14px on very short screens)
+    const maxFs = isMobile ? (isShortScreen ? 24 : 32) : 40;
+    const minFs = isMobile ? (isShortScreen ? 14 : 16) : 20;
+
+    // Temporarily disable overflow scrollbars for accurate dimension measurement
+    const originalOverflow = container.style.overflowY;
+    container.style.overflowY = 'hidden';
+
+    const availHeight = container.clientHeight;
+    const availWidth = container.clientWidth;
+
+    if (availHeight <= 0 || availWidth <= 0) {
+      container.style.overflowY = originalOverflow;
+      return;
+    }
+
+    // Step down from maxFs to minFs in 1px steps until text fits without clipping
+    let fs = maxFs;
+    for (; fs > minFs; fs--) {
+      textEl.style.fontSize = `${fs}px`;
+      textEl.style.lineHeight = '1.25';
+      if (textEl.scrollHeight <= availHeight && textEl.scrollWidth <= availWidth) {
+        break;
+      }
+    }
+    textEl.style.fontSize = `${fs}px`;
+    textEl.style.lineHeight = '1.25';
+
+    // If text still overflows at minFs, allow only the question card to scroll internally
+    const overflowsAtMin = textEl.scrollHeight > availHeight;
+    container.style.overflowY = overflowsAtMin ? 'auto' : 'hidden';
+  }, []);
+
+  // Debounced fit scheduler
+  const scheduleFit = useCallback(() => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    rafRef.current = requestAnimationFrame(() => {
+      fitQuestionText();
+    });
+  }, [fitQuestionText]);
 
   // Mount effect: hide global navbar, breadcrumbs, and parent spacing during study mode, and scroll to top
   useEffect(() => {
@@ -162,25 +258,44 @@ export default function StudyMode({
     document.body.classList.add('aura-study-mode-active');
     return () => {
       document.body.classList.remove('aura-study-mode-active');
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
-  // Reset/sync session if cards change
+  const prevFolderIdRef = useRef(folder?.id);
+
+  // Sync session ONLY if folder changes or if session is empty and cards arrive
   useEffect(() => {
-    setSessionCards([...cards]);
-    setCurrentIndex(0);
-    setCorrectCount(0);
-    setIncorrectCount(0);
-    setStreak(0);
-    setBestStreak(0);
-    setXpEarned(0);
-    setMistakesList([]);
-    setAnsweredQuestionIds(new Set());
-    setSelectedOptionIndex(null);
-    setIsAnswered(false);
-    setTimeLeft(10);
-    setStudyView('quiz');
-  }, [cards]);
+    const isNewFolder = folder?.id && folder.id !== prevFolderIdRef.current;
+    if (isNewFolder) {
+      prevFolderIdRef.current = folder.id;
+      setSessionCards([...cards]);
+      setCurrentIndex(0);
+      setCorrectCount(0);
+      setIncorrectCount(0);
+      setUnansweredCount(0);
+      setStreak(0);
+      setBestStreak(0);
+      setXpEarned(0);
+      setMistakesList([]);
+      setSessionResults([]);
+      setSelectedOptionIndex(null);
+      setIsAnswered(false);
+      setTimeLeft(10);
+      setIsCompletionModalOpen(false);
+      hasCompletedRef.current = false;
+      statsRef.current = {
+        correct: 0,
+        incorrect: 0,
+        unanswered: 0,
+        xp: 0,
+        results: [],
+      };
+      setStudyView('quiz');
+    } else if (sessionCards.length === 0 && cards.length > 0) {
+      setSessionCards([...cards]);
+    }
+  }, [folder?.id, cards, sessionCards.length]);
 
   const totalCards = sessionCards.length;
   const currentCard = sessionCards[currentIndex] || null;
@@ -218,7 +333,7 @@ export default function StudyMode({
     };
   }, [currentCard?.id, sessionCards]);
 
-  // Answer handler
+  // Answer handler - prevents duplicate submissions and updates actual session data
   const handleSelectOption = useCallback((optIdx) => {
     if (isAnswered || !currentCard) return;
 
@@ -228,24 +343,67 @@ export default function StudyMode({
     const isCorrect = optIdx === optionsData.correctIndex;
     const selectedAnswerText = optionsData.options[optIdx];
     const correctAnswerText = optionsData.options[optionsData.correctIndex];
+    const letterPrefixes = ['A', 'B', 'C', 'D'];
+    const selectedLetter = letterPrefixes[optIdx] || 'A';
+    const correctLetter = letterPrefixes[optionsData.correctIndex] || 'A';
+
+    const currentQText = currentCard.question || currentCard.front || 'Untitled Question';
+
+    const resultRecord = {
+      cardId: currentCard.id,
+      questionIndex: currentIndex,
+      question: currentQText,
+      selectedOptionIndex: optIdx,
+      selectedAnswer: `${selectedLetter}. ${selectedAnswerText}`,
+      rawSelectedAnswer: selectedAnswerText,
+      selectedLetter,
+      correctOptionIndex: optionsData.correctIndex,
+      correctAnswer: `${correctLetter}. ${correctAnswerText}`,
+      rawCorrectAnswer: correctAnswerText,
+      correctLetter,
+      status: isCorrect ? 'correct' : 'incorrect',
+      isAnswered: true,
+      isCorrect,
+      isTimeout: false,
+    };
+
+    setSessionResults((prev) => {
+      const updated = [...prev];
+      updated[currentIndex] = resultRecord;
+      return updated;
+    });
+
+    statsRef.current.results[currentIndex] = resultRecord;
 
     if (isCorrect) {
-      setCorrectCount((prev) => prev + 1);
+      setCorrectCount((prev) => {
+        const next = prev + 1;
+        statsRef.current.correct = next;
+        return next;
+      });
+      setXpEarned((prev) => {
+        const next = prev + 10;
+        statsRef.current.xp = next;
+        return next;
+      });
       setStreak((prev) => {
         const nextStreak = prev + 1;
         setBestStreak((b) => Math.max(b, nextStreak));
         return nextStreak;
       });
-      setXpEarned((prev) => prev + 10);
     } else {
-      setIncorrectCount((prev) => prev + 1);
+      setIncorrectCount((prev) => {
+        const next = prev + 1;
+        statsRef.current.incorrect = next;
+        return next;
+      });
       setStreak(0);
       setMistakesList((prev) => [
         ...prev,
         {
-          question: currentCard.question || currentCard.front,
-          selectedAnswer: selectedAnswerText,
-          correctAnswer: correctAnswerText,
+          question: currentQText,
+          selectedAnswer: `${selectedLetter}. ${selectedAnswerText}`,
+          correctAnswer: `${correctLetter}. ${correctAnswerText}`,
           index: currentIndex,
         },
       ]);
@@ -264,48 +422,108 @@ export default function StudyMode({
       setIsAnswered(false);
       setTimeLeft(10);
     } else {
-      // Completed all questions
-      const completionBonus = 20;
-      const perfectBonus = incorrectCount === 0 && correctCount > 0 ? 50 : 0;
-      const finalXp = xpEarned + completionBonus + perfectBonus;
-      setXpEarned(finalXp);
+      // Completed all questions in the session
+      const total = totalCards;
+      const finalCorrect = statsRef.current.correct;
+      const finalIncorrect = statsRef.current.incorrect;
+      const finalAnswered = finalCorrect + finalIncorrect;
+      const finalUnanswered = Math.max(0, total - finalAnswered);
+      const finalXp = finalCorrect * 10;
 
       const calculatedAccuracy =
-        totalCards > 0 ? Math.round((correctCount / totalCards) * 100) : 0;
+        total > 0 ? Math.round((finalCorrect / total) * 100) : 0;
 
-      if (onSessionComplete) {
-        onSessionComplete({
-          totalQuestions: totalCards,
-          correctAnswers: correctCount,
-          incorrectAnswers: incorrectCount,
-          accuracy: calculatedAccuracy,
-          xpEarned: finalXp,
-        });
+      // Ensure completion logic and XP award are triggered exactly once
+      if (!hasCompletedRef.current) {
+        hasCompletedRef.current = true;
+        if (onSessionComplete) {
+          onSessionComplete({
+            totalQuestions: total,
+            answeredQuestions: finalAnswered,
+            unansweredQuestions: finalUnanswered,
+            correctAnswers: finalCorrect,
+            incorrectAnswers: finalIncorrect,
+            accuracy: calculatedAccuracy,
+            xpEarned: finalXp,
+          });
+        }
       }
 
-      setStudyView('results');
+      // Automatically display completion popup
+      setIsCompletionModalOpen(true);
     }
-  }, [currentIndex, totalCards, incorrectCount, correctCount, xpEarned, onSessionComplete]);
+  }, [currentIndex, totalCards, onSessionComplete]);
 
-  // Timer countdown hook
+  // Auto-advance / trigger completion popup on final question
   useEffect(() => {
-    if (isAnswered || studyView !== 'quiz' || !currentCard) return;
+    if (!isAnswered || currentIndex !== totalCards - 1 || isCompletionModalOpen) return;
+
+    // A short 2.2s delay allows the user to see the feedback card, then opens the completion modal
+    // Clicking "View Results" or pressing Enter triggers it immediately
+    const autoAdvanceTimer = setTimeout(() => {
+      handleNext();
+    }, 2200);
+
+    return () => clearTimeout(autoAdvanceTimer);
+  }, [isAnswered, currentIndex, totalCards, isCompletionModalOpen, handleNext]);
+
+  // Timer countdown hook - counts expiration as UNANSWERED (not incorrect)
+  useEffect(() => {
+    if (isAnswered || studyView !== 'quiz' || !currentCard || isCompletionModalOpen) return;
 
     if (timeLeft <= 0) {
-      // Time ran out!
+      // Time ran out! Mark question as UNANSWERED
       setIsAnswered(true);
       setSelectedOptionIndex(-1);
-      setIncorrectCount((prev) => prev + 1);
+
+      const correctAnswerText = optionsData.options[optionsData.correctIndex];
+      const letterPrefixes = ['A', 'B', 'C', 'D'];
+      const correctLetter = letterPrefixes[optionsData.correctIndex] || 'A';
+      const currentQText = currentCard.question || currentCard.front || 'Untitled Question';
+
+      const timeoutRecord = {
+        cardId: currentCard.id,
+        questionIndex: currentIndex,
+        question: currentQText,
+        selectedOptionIndex: -1,
+        selectedAnswer: '(No answer - Time expired)',
+        rawSelectedAnswer: null,
+        selectedLetter: null,
+        correctOptionIndex: optionsData.correctIndex,
+        correctAnswer: `${correctLetter}. ${correctAnswerText}`,
+        rawCorrectAnswer: correctAnswerText,
+        correctLetter,
+        status: 'unanswered',
+        isAnswered: false,
+        isCorrect: false,
+        isTimeout: true,
+      };
+
+      setSessionResults((prev) => {
+        const updated = [...prev];
+        updated[currentIndex] = timeoutRecord;
+        return updated;
+      });
+
+      statsRef.current.results[currentIndex] = timeoutRecord;
+
+      setUnansweredCount((prev) => {
+        const next = prev + 1;
+        statsRef.current.unanswered = next;
+        return next;
+      });
       setStreak(0);
+
       setMistakesList((prev) => [
         ...prev,
         {
-          question: currentCard.question || currentCard.front,
+          question: currentQText,
           selectedAnswer: 'Time ran out',
-          correctAnswer: optionsData.options[optionsData.correctIndex],
+          correctAnswer: `${correctLetter}. ${correctAnswerText}`,
           index: currentIndex,
         },
       ]);
+
       if (onRecordStudyResult) {
         onRecordStudyResult(currentCard.id, false);
       }
@@ -317,11 +535,13 @@ export default function StudyMode({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, isAnswered, studyView, currentCard, optionsData, currentIndex, onRecordStudyResult]);
+  }, [timeLeft, isAnswered, studyView, currentCard, optionsData, currentIndex, isCompletionModalOpen, onRecordStudyResult]);
 
   // Keyboard shortcuts (A, B, C, D to answer, Enter to advance)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // If completion popup modal is open, avoid triggering quiz shortcuts
+      if (isCompletionModalOpen) return;
       if (studyView !== 'quiz') return;
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
@@ -341,7 +561,7 @@ export default function StudyMode({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isAnswered, studyView, handleSelectOption, handleNext]);
+  }, [isAnswered, studyView, isCompletionModalOpen, handleSelectOption, handleNext]);
 
   // Restart Study Session
   const handleStudyAgain = () => {
@@ -350,15 +570,35 @@ export default function StudyMode({
     setCurrentIndex(0);
     setCorrectCount(0);
     setIncorrectCount(0);
+    setUnansweredCount(0);
     setStreak(0);
     setBestStreak(0);
     setXpEarned(0);
     setMistakesList([]);
-    setAnsweredQuestionIds(new Set());
+    setSessionResults([]);
     setSelectedOptionIndex(null);
     setIsAnswered(false);
     setTimeLeft(10);
+    setIsCompletionModalOpen(false);
+    hasCompletedRef.current = false;
+    statsRef.current = {
+      correct: 0,
+      incorrect: 0,
+      unanswered: 0,
+      xp: 0,
+      results: [],
+    };
     setStudyView('quiz');
+  };
+
+  // Navigate back to folders
+  const handleBackToFolders = () => {
+    setIsCompletionModalOpen(false);
+    if (onBackToFolders) {
+      onBackToFolders();
+    } else if (onExit) {
+      onExit();
+    }
   };
 
   const accuracy =
@@ -385,17 +625,20 @@ export default function StudyMode({
   // View: Results
   if (studyView === 'results') {
     return (
-      <div className="study-mode-root" role="region" aria-label="Study Results">
-        <StudyResults
-          folderTitle={folder?.title || 'Test'}
+      <div className="study-redesign-root" role="region" aria-label="Study Results">
+        <StudyCompletionModal
+          isOpen={true}
+          folderTitle={folder?.title || 'Physics Midterms'}
           totalQuestions={totalCards}
+          answeredQuestions={correctCount + incorrectCount}
+          unansweredQuestions={Math.max(0, totalCards - (correctCount + incorrectCount))}
           correctAnswers={correctCount}
           incorrectAnswers={incorrectCount}
-          accuracy={accuracy}
-          xpEarned={xpEarned}
+          xpEarned={correctCount * 10}
+          questionResults={sessionResults}
+          onBackToFolders={handleBackToFolders}
           onStudyAgain={handleStudyAgain}
-          onReviewMistakes={() => setStudyView('mistakes')}
-          onBackToFolder={onExit}
+          onClose={() => setStudyView('quiz')}
         />
       </div>
     );
@@ -415,6 +658,44 @@ export default function StudyMode({
   }
 
   const questionText = currentCard?.question || currentCard?.front || 'Untitled Question';
+  const feedbackState = !isAnswered
+    ? null
+    : selectedOptionIndex === -1
+    ? 'timeout'
+    : selectedOptionIndex === optionsData.correctIndex
+    ? 'correct'
+    : 'wrong';
+
+  // Trigger fit whenever currentIndex, question text or feedbackState changes
+  useEffect(() => {
+    scheduleFit();
+  }, [currentIndex, questionText, feedbackState, scheduleFit]);
+
+  // Window resize, orientation change, document fonts ready, and ResizeObserver listeners
+  useEffect(() => {
+    window.addEventListener('resize', scheduleFit);
+    window.addEventListener('orientationchange', scheduleFit);
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        scheduleFit();
+      });
+    }
+
+    let ro = null;
+    if (containerRef.current && typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        scheduleFit();
+      });
+      ro.observe(containerRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', scheduleFit);
+      window.removeEventListener('orientationchange', scheduleFit);
+      if (ro) ro.disconnect();
+    };
+  }, [scheduleFit]);
 
   return (
     <div className="study-redesign-root" role="region" aria-label="Flashcard Study Session">
@@ -450,9 +731,15 @@ export default function StudyMode({
       <header className="study-mobile-top-bar" aria-label="Mobile Session Header">
         <div className="study-mobile-brand-row">
           <span className="study-brand-aura">AURA</span>
-          <div className="study-coins-badge">
-            <span className="coins-icon">🪙</span>
-            <span className="coins-amount">2,450</span>
+          <div className="study-mobile-header-right">
+            <div className="study-coins-badge">
+              <span className="coins-icon">🪙</span>
+              <span className="coins-amount">2,450</span>
+            </div>
+            <div className="mobile-user-avatar-wrap" title="User Profile">
+              <img src="/user_avatar.jpg" alt="Carl" className="mobile-user-avatar-img" />
+              <span className="mobile-user-avatar-status" aria-hidden="true" />
+            </div>
           </div>
         </div>
 
@@ -489,16 +776,39 @@ export default function StudyMode({
                 <span>+10 XP</span>
               </div>
 
-              <TimerRing timeLeft={timeLeft} totalTime={10} />
+              <TimerRing
+                timeLeft={timeLeft}
+                totalTime={10}
+                isTimedOut={isAnswered && selectedOptionIndex === -1}
+              />
             </div>
           </div>
 
-          {/* Flashcard Question Card with Glowing Red Notch Accent */}
-          <div className="study-question-hero-card">
-            <div className="study-card-glowing-notch" aria-hidden="true" />
-            <div className="study-card-content-center">
-              <span className="study-card-question-text">{questionText}</span>
+          {/* Flashcard Question Card with State-Adaptive Accent Lighting */}
+          <div
+            className={`study-question-hero-card ${feedbackState ? `feedback-${feedbackState} has-feedback` : ''}`}
+            ref={cardRef}
+          >
+            <div
+              className={`study-card-glowing-notch ${feedbackState ? `notch-${feedbackState}` : ''}`}
+              aria-hidden="true"
+            />
+            <div className="study-card-content-center" ref={containerRef}>
+              <span className="study-card-question-text" ref={textRef}>
+                {questionText}
+              </span>
             </div>
+
+            {/* Answer Feedback Notification (State-Adaptive Notification Component) */}
+            {isAnswered && (
+              <AnswerFeedbackNotification
+                feedbackState={feedbackState}
+                correctAnswerText={optionsData.options[optionsData.correctIndex]}
+                xpEarned={10}
+                isLastQuestion={currentIndex === totalCards - 1}
+                onNext={handleNext}
+              />
+            )}
           </div>
 
           {/* Multiple-Choice Answer Choices (2x2 on Desktop, 1 Col on Mobile) */}
@@ -513,7 +823,7 @@ export default function StudyMode({
                 if (isCorrectChoice) {
                   choiceState = 'is-correct';
                 } else if (isSelected && !isCorrectChoice) {
-                  choiceState = 'is-incorrect';
+                  choiceState = 'is-incorrect aura-shake';
                 } else {
                   choiceState = 'is-dimmed';
                 }
@@ -530,32 +840,61 @@ export default function StudyMode({
                   aria-checked={isSelected}
                 >
                   <div className="choice-letter-badge">
-                    {isAnswered && isCorrectChoice
-                      ? '✓'
-                      : isAnswered && isSelected && !isCorrectChoice
-                      ? '✕'
-                      : letter}
+                    {letter}
                   </div>
                   <span className="choice-text-content">{optionText}</span>
+
+                  {/* Right Status Icon Indicator */}
+                  {isAnswered && (isCorrectChoice || isSelected) && (
+                    <div
+                      className={`choice-status-icon ${
+                        isCorrectChoice ? 'icon-correct' : 'icon-wrong'
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {isCorrectChoice ? (
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#00D69A"
+                          strokeWidth="3.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      ) : (
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#FF405C"
+                          strokeWidth="3.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      )}
+                    </div>
+                  )}
                 </button>
               );
             })}
           </div>
 
-          {/* Bottom Guidance Hint (Mobile) or Next Action Button */}
+          {/* Bottom Guidance Hint (Mobile/Desktop) */}
           <div className="study-quiz-footer-row">
             {!isAnswered ? (
               <p className="study-tap-hint-text">Tap an answer before time runs out</p>
             ) : (
-              <button
-                type="button"
-                className="btn-study-advance-action"
-                onClick={handleNext}
-                autoFocus
-              >
-                <span>{currentIndex < totalCards - 1 ? 'Next card' : 'Finish session'}</span>
-                <span className="kbd-shortcut-hint" aria-hidden="true">↵</span>
-              </button>
+              <p className="study-tap-hint-text is-answered-hint">
+                Press <kbd className="study-footer-kbd">Enter</kbd> or tap <strong>{currentIndex === totalCards - 1 ? 'View Results' : 'Next Question'}</strong> to continue
+              </p>
             )}
           </div>
         </main>
@@ -619,6 +958,24 @@ export default function StudyMode({
           </div>
         </aside>
       </div>
+
+      {/* ========================================================
+          3. STUDY SESSION COMPLETION & DETAILED SUMMARY POPUP MODAL
+          ======================================================== */}
+      <StudyCompletionModal
+        isOpen={isCompletionModalOpen}
+        folderTitle={folder?.title || 'Physics Midterms'}
+        totalQuestions={totalCards}
+        answeredQuestions={correctCount + incorrectCount}
+        unansweredQuestions={Math.max(0, totalCards - (correctCount + incorrectCount))}
+        correctAnswers={correctCount}
+        incorrectAnswers={incorrectCount}
+        xpEarned={correctCount * 10}
+        questionResults={sessionResults}
+        onBackToFolders={handleBackToFolders}
+        onStudyAgain={handleStudyAgain}
+        onClose={() => setIsCompletionModalOpen(false)}
+      />
     </div>
   );
 }

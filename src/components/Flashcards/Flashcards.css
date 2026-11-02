@@ -7,8 +7,8 @@
 .aura-flashcards-page {
   position: relative;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   padding: 24px 32px 64px;
   display: flex;
   flex-direction: column;

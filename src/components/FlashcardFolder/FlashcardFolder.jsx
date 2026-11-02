@@ -41,9 +41,43 @@ export default function FlashcardFolder({
     flashcards: [],
   };
 
+  const DEFAULT_FOLDER_CARDS = [
+    {
+      id: 'fc-aura-01',
+      question: 'Who is the prettiest woman in your life?',
+      answer: 'Stepanie',
+      status: 'learning',
+    },
+    {
+      id: 'fc-aura-02',
+      question: "Newton's first law",
+      answer: 'An object stays at rest or in motion unless a net force acts on it.',
+      status: 'learning',
+    },
+    {
+      id: 'fc-aura-03',
+      question: 'sin²θ + cos²θ',
+      answer: '1',
+      status: 'learning',
+    },
+    {
+      id: 'fc-aura-04',
+      question: 'Derivative of x²',
+      answer: '2x',
+      status: 'mastered',
+    },
+    {
+      id: 'fc-aura-05',
+      question: 'Unit of force',
+      answer: 'Newton',
+      status: 'learning',
+    },
+  ];
+
   // Helper to normalize card objects
   const normalizeCards = (rawList = []) => {
-    return rawList.map((card, idx) => ({
+    const listToUse = rawList && rawList.length > 0 ? rawList : DEFAULT_FOLDER_CARDS;
+    return listToUse.map((card, idx) => ({
       id: card.id || `card-${Date.now()}-${idx}`,
       folderId: currentFolder.id,
       question: card.question || card.front || 'Untitled Question',
@@ -62,7 +96,12 @@ export default function FlashcardFolder({
   const [cards, setCards] = useState(() => normalizeCards(currentFolder.flashcards || []));
 
   // Active view: 'overview' | 'review' | 'study'
-  const [activeView, setActiveView] = useState('overview');
+  const [activeView, setActiveView] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash.toLowerCase().includes('study')) {
+      return 'study';
+    }
+    return 'overview';
+  });
 
   // Modals & Menu state
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -286,6 +325,7 @@ export default function FlashcardFolder({
           cards={cards}
           folder={currentFolder}
           onExit={() => setActiveView('overview')}
+          onBackToFolders={onBackToFolders || (() => setActiveView('overview'))}
           onRecordStudyResult={handleRecordStudyResult}
           onSessionComplete={handleSessionComplete}
         />
@@ -312,8 +352,23 @@ export default function FlashcardFolder({
                 type="button"
                 className="folder-breadcrumb-btn"
                 onClick={onBackToFolders}
+                title="Back to My Folders"
               >
-                My Folders
+                <span className="folder-breadcrumb-back-icon" aria-hidden="true">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </span>
+                <span className="folder-breadcrumb-btn-label">My Folders</span>
               </button>
               <span className="folder-breadcrumb-sep">/</span>
               <span className="folder-breadcrumb-name">{folderTitle}</span>

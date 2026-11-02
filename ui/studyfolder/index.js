@@ -8,4 +8,5 @@ export { default as FolderToolbar } from './FolderToolbar';
 export { default as FolderGrid } from './FolderGrid';
 export { default as CreateFolderCard } from './CreateFolderCard';
 export { default as CreateFolderModal } from './CreateFolderModal';
+export { default as ContinueHeroCard } from './ContinueHeroCard';
 export { default as RecentActivity } from './RecentActivity';

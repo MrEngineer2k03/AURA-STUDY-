@@ -7,8 +7,8 @@
 .flashcard-folder-root {
   position: relative;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   padding: 20px 32px 48px;
   display: flex;
   flex-direction: column;
@@ -22,8 +22,8 @@
 .folder-view-ambient-glow {
   position: absolute;
   top: 0;
-  left: 10%;
-  width: 80%;
+  left: 0;
+  width: 100%;
   height: 280px;
   background: radial-gradient(ellipse at 50% 0%, rgba(255, 42, 68, 0.12) 0%, rgba(14, 19, 32, 0) 70%);
   pointer-events: none;
@@ -55,38 +55,81 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  font-size: 13.5px;
+  gap: 12px;
+  font-size: 14px;
   font-family: var(--font-heading, 'Space Grotesk', sans-serif);
   font-weight: 500;
   color: #72839d;
 }
 
 .folder-breadcrumb-btn {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: #72839d;
+  background: #0b101c;
+  border: 1px solid #1a253a;
+  border-radius: 12px;
+  padding: 5px 16px 5px 6px;
+  color: #ffffff;
   cursor: pointer;
-  font-size: 13.5px;
-  font-family: inherit;
-  font-weight: 500;
-  transition: color 0.18s ease;
+  font-size: 14px;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  user-select: none;
+  line-height: 1;
 }
 
 .folder-breadcrumb-btn:hover {
+  background: #101728;
+  border-color: rgba(255, 42, 68, 0.45);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(255, 42, 68, 0.2);
+}
+
+.folder-breadcrumb-btn:active {
+  transform: translateY(0);
+}
+
+.folder-breadcrumb-back-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.22);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff2a44;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.folder-breadcrumb-btn:hover .folder-breadcrumb-back-icon {
+  background: rgba(239, 68, 68, 0.32);
+  border-color: rgba(255, 42, 68, 0.6);
+  box-shadow: 0 0 10px rgba(255, 42, 68, 0.4);
+}
+
+.folder-breadcrumb-btn-label {
   color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.1px;
 }
 
 .folder-breadcrumb-sep {
   color: #38455d;
   user-select: none;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .folder-breadcrumb-name {
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 14px;
   max-width: 260px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -95,7 +138,8 @@
 
 .folder-breadcrumb-current {
   color: #ef4444;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .folder-web-top-right {
@@ -1368,9 +1412,9 @@
 .study-redesign-root {
   position: relative;
   width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 18px 24px 48px;
+  max-width: 100%;
+  margin: 0;
+  padding: 20px 32px 48px;
   display: flex;
   flex-direction: column;
   color: #ffffff;
@@ -1423,9 +1467,10 @@
 
 .study-web-progress-container {
   flex: 1;
-  max-width: 400px;
+  max-width: 500px;
   display: flex;
   align-items: center;
+  margin: 0 24px;
 }
 
 .study-web-top-right {
@@ -1479,19 +1524,28 @@ body.aura-study-mode-active .my-folders-ambient-bg {
   display: none !important;
 }
 
-body.aura-study-mode-active {
+body.aura-study-mode-active,
+html:has(body.aura-study-mode-active) {
   background: #060913 !important;
-  min-height: 100vh !important;
-  min-height: 100dvh !important;
-  overflow-x: hidden !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
 }
 
+body.aura-study-mode-active #root,
 body.aura-study-mode-active .my-folders-page-root,
 body.aura-study-mode-active .flashcard-folder-root {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
   padding: 0 !important;
   max-width: 100% !important;
   margin: 0 !important;
   background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 /* 2. Mobile Top Bar (Mobile View) */
@@ -1534,7 +1588,7 @@ body.aura-study-mode-active .flashcard-folder-root {
    ========================================================================== */
 .study-redesign-grid {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 300px;
   gap: 28px;
   width: 100%;
   align-items: start;
@@ -1621,21 +1675,31 @@ body.aura-study-mode-active .flashcard-folder-root {
   user-select: none;
 }
 
-/* Flashcard Question Card with Glowing Red Notch Accent */
+/* ==========================================================================
+   Flashcard Question Card with State-Adaptive Accent Lighting
+   Default (#00D69A / cyan), Correct (#00D69A), Wrong (#FF405C), Time's Up (#FFAA32)
+   ========================================================================== */
 .study-question-hero-card {
   position: relative;
   width: 100%;
-  min-height: 330px;
-  background: radial-gradient(ellipse at 50% 0%, rgba(255, 42, 68, 0.15) 0%, rgba(13, 17, 28, 0.96) 65%, #080c16 100%);
-  border: 1px solid rgba(255, 42, 68, 0.22);
+  min-height: 350px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0, 214, 154, 0.10) 0%, rgba(13, 17, 28, 0.96) 65%, #080c16 100%);
+  border: 1px solid rgba(0, 214, 154, 0.22);
   border-radius: 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  padding: 32px 24px;
+  padding: 36px 24px 24px 24px;
   box-sizing: border-box;
   overflow: hidden;
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.study-question-hero-card.has-feedback {
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .study-card-glowing-notch {
@@ -1643,33 +1707,97 @@ body.aura-study-mode-active .flashcard-folder-root {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 64px;
+  width: 68px;
   height: 3.5px;
-  background: #ff2a44;
+  background: #00D69A;
   border-radius: 999px;
-  box-shadow: 0 0 14px #ff2a44, 0 0 24px rgba(255, 42, 68, 0.6);
+  box-shadow: 0 0 14px #00D69A, 0 0 24px rgba(0, 214, 154, 0.6);
+  transition: all 0.35s ease;
+}
+
+/* 1. Correct Answer Accent Lighting */
+.study-question-hero-card.feedback-correct {
+  background: radial-gradient(ellipse at 50% 0%, rgba(0, 214, 154, 0.20) 0%, rgba(8, 20, 26, 0.97) 65%, #050e12 100%);
+  border-color: rgba(0, 214, 154, 0.42);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 32px rgba(0, 214, 154, 0.2), inset 0 1px 0 rgba(0, 214, 154, 0.3);
+  animation: auraGreenFlash 0.5s ease-out;
+}
+
+.study-card-glowing-notch.notch-correct {
+  background: #00D69A;
+  box-shadow: 0 0 16px #00D69A, 0 0 30px rgba(0, 214, 154, 0.85);
+}
+
+/* 2. Wrong Answer Accent Lighting */
+.study-question-hero-card.feedback-wrong {
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 64, 92, 0.20) 0%, rgba(26, 10, 16, 0.97) 65%, #100609 100%);
+  border-color: rgba(255, 64, 92, 0.42);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 32px rgba(255, 64, 92, 0.2), inset 0 1px 0 rgba(255, 64, 92, 0.3);
+  animation: auraRedFlash 0.5s ease-out;
+}
+
+.study-card-glowing-notch.notch-wrong {
+  background: #FF405C;
+  box-shadow: 0 0 16px #FF405C, 0 0 30px rgba(255, 64, 92, 0.85);
+}
+
+/* 3. Time's Up Accent Lighting */
+.study-question-hero-card.feedback-timeout {
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 170, 50, 0.18) 0%, rgba(24, 16, 8, 0.97) 65%, #120b05 100%);
+  border-color: rgba(255, 170, 50, 0.42);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 32px rgba(255, 170, 50, 0.2), inset 0 1px 0 rgba(255, 170, 50, 0.3);
+  animation: auraAmberFlash 0.5s ease-out;
+}
+
+.study-card-glowing-notch.notch-timeout {
+  background: #FFAA32;
+  box-shadow: 0 0 16px #FFAA32, 0 0 30px rgba(255, 170, 50, 0.85);
 }
 
 .study-card-content-center {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  flex: 1;
   text-align: center;
-  max-width: 90%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 214, 154, 0.3) transparent;
+  padding: 8px 12px;
+}
+
+.study-card-content-center::-webkit-scrollbar {
+  width: 4px;
+}
+.study-card-content-center::-webkit-scrollbar-thumb {
+  background: rgba(0, 214, 154, 0.3);
+  border-radius: 999px;
 }
 
 .study-card-question-text {
+  margin: auto 0;
   font-family: var(--font-heading, 'Space Grotesk', sans-serif);
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 0.3px;
   line-height: 1.25;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  overflow-wrap: anywhere;
   word-break: break-word;
+  hyphens: auto;
+  width: 100%;
+  max-width: 100%;
 }
 
-/* Multiple-Choice Choices Grid */
+/* ==========================================================================
+   Multiple-Choice Choices Grid & Gamified Option Cards
+   ========================================================================== */
 .study-choices-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1679,6 +1807,7 @@ body.aura-study-mode-active .flashcard-folder-root {
 
 /* Individual Choice Option Card */
 .study-choice-card {
+  position: relative;
   background: #080d19;
   border: 1px solid #1a253c;
   border-radius: 14px;
@@ -1690,16 +1819,17 @@ body.aura-study-mode-active .flashcard-folder-root {
   text-align: left;
   width: 100%;
   box-sizing: border-box;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   font-family: inherit;
 }
 
 .study-choice-card:hover:not(:disabled) {
-  border-color: rgba(96, 165, 250, 0.35);
+  border-color: rgba(0, 214, 154, 0.45);
   background: #0d1527;
   transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 214, 154, 0.15);
 }
 
 .study-choice-card:disabled {
@@ -1720,7 +1850,7 @@ body.aura-study-mode-active .flashcard-folder-root {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.18s ease;
+  transition: all 0.2s ease;
 }
 
 .choice-text-content {
@@ -1731,17 +1861,39 @@ body.aura-study-mode-active .flashcard-folder-root {
   flex: 1;
 }
 
-/* Validation States */
+/* Right Status Icon Indicator (Checkmark / Cross) */
+.choice-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  margin-left: auto;
+  animation: auraCheckPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.choice-status-icon.icon-correct {
+  filter: drop-shadow(0 0 8px rgba(0, 214, 154, 0.7));
+}
+
+.choice-status-icon.icon-wrong {
+  filter: drop-shadow(0 0 8px rgba(255, 64, 92, 0.7));
+}
+
+/* 1. Correct Choice State (#00D69A) */
 .study-choice-card.is-correct {
-  background: rgba(16, 185, 129, 0.14) !important;
-  border-color: #10b981 !important;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.25) !important;
+  background: rgba(0, 214, 154, 0.09) !important;
+  border-color: #00D69A !important;
+  box-shadow: 0 0 24px rgba(0, 214, 154, 0.26), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
 }
 
 .study-choice-card.is-correct .choice-letter-badge {
-  background: #10b981 !important;
-  border-color: #10b981 !important;
-  color: #ffffff !important;
+  background: #00D69A !important;
+  border-color: #00D69A !important;
+  color: #080d19 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 12px rgba(0, 214, 154, 0.4);
 }
 
 .study-choice-card.is-correct .choice-text-content {
@@ -1749,24 +1901,119 @@ body.aura-study-mode-active .flashcard-folder-root {
   font-weight: 600;
 }
 
+/* 2. Incorrect Choice State (#FF405C) */
 .study-choice-card.is-incorrect {
-  background: rgba(239, 68, 68, 0.14) !important;
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.25) !important;
+  background: rgba(255, 64, 92, 0.10) !important;
+  border-color: #FF405C !important;
+  box-shadow: 0 0 24px rgba(255, 64, 92, 0.26), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
 }
 
 .study-choice-card.is-incorrect .choice-letter-badge {
-  background: #ef4444 !important;
-  border-color: #ef4444 !important;
+  background: #FF405C !important;
+  border-color: #FF405C !important;
   color: #ffffff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 12px rgba(255, 64, 92, 0.4);
 }
 
 .study-choice-card.is-incorrect .choice-text-content {
   color: #ffffff !important;
 }
 
+/* Shake Animation on Wrong Answer */
+.study-choice-card.aura-shake {
+  animation: auraShake 0.44s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* 3. Dimmed Choices State */
 .study-choice-card.is-dimmed {
-  opacity: 0.45;
+  opacity: 0.38 !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  filter: grayscale(0.2);
+}
+
+/* Keyframe Animations */
+@keyframes auraCheckPop {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes auraShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  15%, 45%, 75% {
+    transform: translateX(-6px);
+  }
+  30%, 60%, 90% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes auraGreenFlash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 214, 154, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 40px 8px rgba(0, 214, 154, 0.35);
+  }
+  100% {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 32px rgba(0, 214, 154, 0.2);
+  }
+}
+
+@keyframes auraRedFlash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 64, 92, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 40px 8px rgba(255, 64, 92, 0.35);
+  }
+  100% {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 32px rgba(255, 64, 92, 0.2);
+  }
+}
+
+@keyframes auraAmberFlash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 170, 50, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 40px 8px rgba(255, 170, 50, 0.35);
+  }
+  100% {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 32px rgba(255, 170, 50, 0.2);
+  }
+}
+
+@keyframes timerWarningPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(255, 170, 50, 0));
+  }
+  50% {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 10px rgba(255, 170, 50, 0.85));
+  }
+}
+
+.study-timer-ring-wrap.is-timed-out {
+  animation: timerWarningPulse 1.6s ease-in-out infinite;
+}
+
+.study-timer-val.is-clock-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Quiz Footer / Guidance */
@@ -1775,7 +2022,7 @@ body.aura-study-mode-active .flashcard-folder-root {
   align-items: center;
   justify-content: center;
   min-height: 38px;
-  margin-top: 4px;
+  margin-top: 6px;
   width: 100%;
 }
 
@@ -1787,35 +2034,20 @@ body.aura-study-mode-active .flashcard-folder-root {
   text-align: center;
 }
 
-.btn-study-advance-action {
-  background: linear-gradient(135deg, #ff2a44 0%, #dc2626 100%);
-  border: none;
-  color: #ffffff;
-  border-radius: 12px;
-  padding: 10px 24px;
-  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 18px rgba(255, 42, 68, 0.4);
-  transition: all 0.2s ease;
+.study-tap-hint-text.is-answered-hint {
+  color: #94a3b8;
 }
 
-.btn-study-advance-action:hover {
-  background: linear-gradient(135deg, #ff3e57 0%, #ef4444 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(255, 42, 68, 0.6);
-}
-
-.btn-study-advance-action .kbd-shortcut-hint {
-  background: rgba(0, 0, 0, 0.25);
+.study-footer-kbd {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   padding: 1px 6px;
-  font-size: 11px;
   font-family: monospace;
+  font-size: 11.5px;
+  color: #ffffff;
+  margin: 0 4px;
 }
 
 /* ==========================================================================
@@ -1825,7 +2057,7 @@ body.aura-study-mode-active .flashcard-folder-root {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  width: 280px;
+  width: 300px;
   flex-shrink: 0;
 }
 
@@ -1993,8 +2225,20 @@ body.aura-study-mode-active .flashcard-folder-root {
    ========================================================================== */
 @media (max-width: 900px) {
   .study-redesign-root {
-    max-width: 520px !important;
-    padding: 12px 16px 28px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    padding-top: max(8px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    padding-left: max(14px, env(safe-area-inset-left)) !important;
+    padding-right: max(14px, env(safe-area-inset-right)) !important;
+    margin: 0 !important;
   }
 
   .study-web-top-bar {
@@ -2004,9 +2248,10 @@ body.aura-study-mode-active .flashcard-folder-root {
   .study-mobile-top-bar {
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px !important;
-    margin-bottom: 16px !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
     width: 100% !important;
+    flex-shrink: 0 !important;
   }
 
   .study-mobile-brand-row {
@@ -2014,18 +2259,73 @@ body.aura-study-mode-active .flashcard-folder-root {
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .study-mobile-header-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .study-mobile-top-bar .study-coins-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(234, 179, 8, 0.08) !important;
+    border: 1px solid rgba(234, 179, 8, 0.28) !important;
+    padding: 3px 10px !important;
+    border-radius: 9999px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #facc15 !important;
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.15) !important;
+  }
+
+  .study-mobile-top-bar .mobile-user-avatar-wrap {
+    display: block !important;
+    position: relative !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  .study-mobile-top-bar .mobile-user-avatar-img {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border: 2px solid #ef4444 !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6) !important;
+  }
+
+  .study-mobile-top-bar .mobile-user-avatar-status {
+    position: absolute !important;
+    top: 0px !important;
+    right: 0px !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #ff1a40 !important;
+    border: 1.5px solid #0a0d14 !important;
   }
 
   .study-mobile-subbar {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 10px !important;
     width: 100% !important;
+    flex-shrink: 0 !important;
   }
 
   .btn-study-mobile-close {
-    width: 38px !important;
-    height: 38px !important;
+    width: 34px !important;
+    height: 34px !important;
     border-radius: 10px !important;
     background: rgba(255, 255, 255, 0.04) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -2033,7 +2333,7 @@ body.aura-study-mode-active .flashcard-folder-root {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
     transition: all 0.2s ease !important;
@@ -2053,73 +2353,240 @@ body.aura-study-mode-active .flashcard-folder-root {
   .study-redesign-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
     width: 100% !important;
+    overflow: hidden !important;
+    gap: 0 !important;
   }
 
   .study-main-quiz-col {
-    gap: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    gap: 8px !important;
   }
 
   .study-question-meta-row {
-    margin-bottom: 2px !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
   }
 
   .study-question-counter-text {
-    font-size: 16px !important;
+    font-size: 15px !important;
     font-weight: 700 !important;
   }
 
   .study-question-hero-card {
-    min-height: 280px !important;
-    max-height: 380px !important;
-    height: 36vh !important;
-    border-radius: 20px !important;
-    padding: 24px 18px !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    border-radius: 18px !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .study-card-content-center {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 
   .study-card-question-text {
-    font-size: 38px !important;
+    margin: auto 0 !important;
+    font-size: 32px !important;
     font-weight: 800 !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    line-height: 1.25 !important;
   }
 
   .study-choices-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 10px !important;
-    margin-top: 4px !important;
+    gap: 6px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
   }
 
   .study-choice-card {
-    padding: 14px 16px !important;
-    border-radius: 14px !important;
-    gap: 14px !important;
+    flex-shrink: 0 !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    padding: 6px 12px !important;
+    border-radius: 12px !important;
+    gap: 10px !important;
     background: #080d19 !important;
     border: 1px solid #1a253c !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
   }
 
   .choice-letter-badge {
-    width: 32px !important;
-    height: 32px !important;
+    width: 28px !important;
+    height: 28px !important;
     font-size: 13px !important;
-    border-radius: 8px !important;
+    border-radius: 7px !important;
     color: #60739f !important;
+    flex-shrink: 0 !important;
   }
 
   .choice-text-content {
     font-size: 13.5px !important;
-    line-height: 1.35 !important;
+    line-height: 1.25 !important;
     color: #cbd5e1 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-break: break-word !important;
+    flex: 1 !important;
+  }
+
+  .study-quiz-footer-row {
+    flex-shrink: 0 !important;
+    min-height: 26px !important;
+    margin-top: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
   }
 
   .study-tap-hint-text {
-    margin: 14px 0 6px 0 !important;
-    font-size: 13px !important;
+    margin: 0 !important;
+    font-size: 12px !important;
     color: #52617a !important;
+  }
+
+  .btn-study-advance-action {
+    padding: 7px 18px !important;
+    font-size: 13px !important;
   }
 
   .study-sidebar-col {
     display: none !important;
+  }
+}
+
+/* Extra Short Screen Optimizations (Height < 600px) */
+@media (max-width: 900px) and (max-height: 600px) {
+  .study-redesign-root {
+    padding-top: max(4px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(4px, env(safe-area-inset-bottom)) !important;
+    padding-left: max(10px, env(safe-area-inset-left)) !important;
+    padding-right: max(10px, env(safe-area-inset-right)) !important;
+  }
+
+  .study-mobile-top-bar {
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .study-mobile-brand-row {
+    padding-bottom: 4px !important;
+  }
+
+  .study-brand-aura {
+    font-size: 16px !important;
+  }
+
+  .study-mobile-top-bar .study-coins-badge {
+    padding: 2px 7px !important;
+    font-size: 12px !important;
+  }
+
+  .study-mobile-top-bar .mobile-user-avatar-wrap,
+  .study-mobile-top-bar .mobile-user-avatar-img {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .btn-study-mobile-close {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
+
+  .study-main-quiz-col {
+    gap: 4px !important;
+  }
+
+  .study-question-counter-text {
+    font-size: 13px !important;
+  }
+
+  .study-xp-chip {
+    padding: 2px 7px !important;
+    font-size: 11px !important;
+  }
+
+  .study-timer-ring-wrap {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .study-question-hero-card {
+    padding: 6px 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .study-choices-grid {
+    gap: 4px !important;
+  }
+
+  .study-choice-card {
+    min-height: 40px !important;
+    height: 40px !important;
+    padding: 4px 10px !important;
+    border-radius: 9px !important;
+    gap: 8px !important;
+  }
+
+  .choice-letter-badge {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+  }
+
+  .choice-text-content {
+    font-size: 12px !important;
+  }
+
+  .study-quiz-footer-row {
+    min-height: 20px !important;
+    margin-top: 1px !important;
+  }
+
+  .study-tap-hint-text {
+    font-size: 11px !important;
+  }
+
+  .btn-study-advance-action {
+    padding: 5px 14px !important;
+    font-size: 12px !important;
   }
 }
 
@@ -2350,8 +2817,8 @@ body.aura-study-mode-active .flashcard-folder-root {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   width: 100%;
 }
 
@@ -2523,13 +2990,24 @@ body.aura-study-mode-active .flashcard-folder-root {
 
   .folder-breadcrumbs-bar {
     font-size: 12px;
-    gap: 6px;
+    gap: 8px;
   }
 
   .folder-breadcrumb-btn {
-    padding: 3px 6px;
+    padding: 4px 10px 4px 4px;
     font-size: 12px;
-    gap: 4px;
+    gap: 6px;
+    border-radius: 9px;
+  }
+
+  .folder-breadcrumb-back-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+  }
+
+  .folder-breadcrumb-btn-label {
+    font-size: 12px;
   }
 
   .folder-breadcrumb-name {
