@@ -994,7 +994,7 @@
   position: relative;
   z-index: 15;
   width: 100%;
-  align-items: stretch;
+  align-items: start;
   flex-shrink: 0;
 }
 
@@ -1008,8 +1008,7 @@
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+  gap: 8px;
   min-height: 140px;
   min-width: 0;
   overflow: hidden;
@@ -1201,8 +1200,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 1;
-  justify-content: center;
 }
 
 .friend-item-row {
@@ -1420,8 +1417,7 @@
 .event-preview-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
+  gap: 10px;
 }
 
 .event-top-info {

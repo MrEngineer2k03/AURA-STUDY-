@@ -1,6 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import StudyFolderCard from './StudyFolderCard';
 import CreateFolderCard from './CreateFolderCard';
+import FolderListRow from './FolderListRow';
+import MobileFolderCard from './MobileFolderCard';
+
+const MOBILE_QUERY = '(max-width: 768px)';
+
+/** Tracks whether the viewport is mobile-sized (matches the CSS mobile breakpoint). */
+function useIsMobile() {
+  const getMatch = () =>
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia(MOBILE_QUERY).matches
+      : false;
+
+  const [isMobile, setIsMobile] = useState(getMatch);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return undefined;
+    const mql = window.matchMedia(MOBILE_QUERY);
+    const onChange = (e) => setIsMobile(e.matches);
+    setIsMobile(mql.matches);
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else mql.addListener(onChange);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener('change', onChange);
+      else mql.removeListener(onChange);
+    };
+  }, []);
+
+  return isMobile;
+}
 
 /**
  * FolderGrid - 4-Column Responsive Grid & List Container for My Folders
@@ -26,6 +55,8 @@ export default function FolderGrid({
     (folder) => !folder.isArchived && folder.status?.toLowerCase() !== 'archived'
   );
   const hasFolders = visibleFolders.length > 0;
+  const isMobile = useIsMobile();
+  const isMobileGrid = isMobile && viewMode === 'grid';
 
   if (!hasFolders) {
     return (
@@ -64,11 +95,46 @@ export default function FolderGrid({
     );
   }
 
+  // MOBILE GRID VIEW – compact two-column folder library
+  if (isMobileGrid) {
+    return (
+      <div className="mobile-folder-grid" role="region" aria-label="Study Folders Grid">
+        {visibleFolders.map((folder, index) => (
+          <div
+            key={folder.id}
+            className="mobile-folder-grid-item"
+            style={{ animationDelay: `${index * 40}ms` }}
+          >
+            <MobileFolderCard
+              folder={folder}
+              onOpen={onOpenFolder}
+              onStudy={onStudyFolder}
+              onAction={onFolderAction}
+            />
+          </div>
+        ))}
+
+        <div className="mobile-folder-grid-item">
+          <button
+            type="button"
+            className="mobile-create-folder-card"
+            onClick={onCreateFolder}
+            aria-label="Create new study folder"
+          >
+            <span className="mcfc-plus" aria-hidden="true">+</span>
+            <span className="mcfc-title">New folder</span>
+            <span className="mcfc-sub">Add lessons</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`student-folders-container layout-${viewMode}`}
       role="region"
-      aria-label="Study Folders Grid"
+      aria-label={viewMode === 'list' ? 'Study Folders List' : 'Study Folders Grid'}
     >
       {visibleFolders.map((folder, index) => (
         <div
@@ -76,13 +142,23 @@ export default function FolderGrid({
           className="student-grid-item"
           style={{ animationDelay: `${index * 40}ms` }}
         >
-          <StudyFolderCard
-            folder={folder}
-            onClick={onOpenFolder}
-            onOpen={onOpenFolder}
-            onStudy={onStudyFolder}
-            onAction={onFolderAction}
-          />
+          {viewMode === 'list' ? (
+            <FolderListRow
+              folder={folder}
+              onClick={onOpenFolder}
+              onOpen={onOpenFolder}
+              onStudy={onStudyFolder}
+              onAction={onFolderAction}
+            />
+          ) : (
+            <StudyFolderCard
+              folder={folder}
+              onClick={onOpenFolder}
+              onOpen={onOpenFolder}
+              onStudy={onStudyFolder}
+              onAction={onFolderAction}
+            />
+          )}
         </div>
       ))}
 

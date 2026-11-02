@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 import './Home.css';
-import StudyCard from './components/StudyCard';
-import StudyFolders from 'ui/studyfolder/StudyFolders';
 import MyFolders from 'ui/studyfolder/MyFolders';
+import {
+  ContinueStudyingCard,
+  HomeFoldersPanel,
+  UpcomingEventsCard,
+  FOLDER_STORAGE_KEY,
+  isActiveFolder,
+  loadStoredFolders,
+  sortByRecent,
+} from './components/HomeBottom';
 import characterImg from './assets/character.png';
 import auraLogo from './assets/logoname.png';
 import homeBg from './assets/homebackground.png';
@@ -58,10 +65,12 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     );
   };
 
-  const [studyFolders, setStudyFolders] = useState([
+  // Fallback folders, only used when the My Folders store (localStorage) is empty.
+  const fallbackFolders = [
     {
       id: 1,
       title: 'Physics Midterms',
+      subtitle: 'Forces & Motion',
       progress: 82,
       lessons: 5,
       members: 3,
@@ -73,6 +82,7 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     {
       id: 2,
       title: 'Calculus Finals',
+      subtitle: 'Limits and Derivatives',
       progress: 43,
       lessons: 8,
       members: 1,
@@ -84,6 +94,7 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     {
       id: 3,
       title: 'Programming Exam',
+      subtitle: 'JavaScript Fundamentals',
       progress: 67,
       lessons: 6,
       members: 4,
@@ -92,7 +103,67 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
       hasAiReviewer: false,
       lastStudied: '3d ago',
     },
-  ]);
+  ];
+
+  // Real folder data shared with the My Folders page.
+  const readHomeFolders = () => {
+    const stored = loadStoredFolders().filter(isActiveFolder);
+    return stored.length > 0 ? stored : fallbackFolders;
+  };
+
+  const [studyFolders, setStudyFolders] = useState(readHomeFolders);
+
+  // Re-sync whenever the user returns to Home (folders may have changed on My Folders)
+  // or another tab updates the store.
+  useEffect(() => {
+    if (activeTab === 'HOME') setStudyFolders(readHomeFolders());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
+  useEffect(() => {
+    const handleStorage = (e) => {
+      if (e.key === FOLDER_STORAGE_KEY) setStudyFolders(readHomeFolders());
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const recentFolders = sortByRecent(studyFolders);
+  const continueFolder = recentFolders[0] || null;
+  const homeFolderCards = recentFolders.slice(0, 3);
+
+  // Topics for the Continue card: explicit folder topics, the interactive lesson checklist
+  // for the legacy Physics folder, or read-only tags derived from the folder's metadata.
+  const continueTopics = (() => {
+    if (!continueFolder) return { items: [], interactive: false };
+    if (Array.isArray(continueFolder.topics) && continueFolder.topics.length > 0) {
+      return { items: continueFolder.topics, interactive: false };
+    }
+    if (continueFolder.id === 1) return { items: studyLessons, interactive: true };
+    const tags = [continueFolder.department, continueFolder.studyType]
+      .filter(Boolean)
+      .map((name) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), completed: false }));
+    return { items: tags, interactive: false };
+  })();
+
+  const upcomingEvents = [
+    {
+      id: 'event-engineering-week',
+      title: 'Engineering Week',
+      dateLabel: 'Sep 30 – Oct 7',
+      timeLabel: 'All week · Engineering Department',
+      description: 'Join department challenges and study battles to earn limited-time rewards.',
+      category: 'Department',
+      color: 'red',
+      thumbnail: eventBanner,
+      rewards: [
+        { icon: 'shirt', label: 'Exclusive outfit', tone: 'purple' },
+        { icon: 'bolt', label: '2x XP', tone: 'gold' },
+        { icon: 'coin', label: 'Bonus coins', tone: 'green' },
+      ],
+    },
+  ];
 
   const getInitialFolder = () => {
     if (typeof window !== 'undefined' && window.location.hash.toLowerCase().includes('study')) {
@@ -120,17 +191,21 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     setActiveTab('MY FOLDERS');
   };
 
-  const handleContinueStudying = () => {
-    const physicsFolder = {
-      id: 'folder-1',
-      title: 'Physics Midterms',
-      subtitle: 'Forces & Motion',
-      progress: 82,
-      lessons: 5,
-      color: 'red',
-    };
-    setSelectedFolderForStudy(physicsFolder);
-    setActiveTab('MY FOLDERS');
+  // Opens the most recently studied folder's study session.
+  const handleContinueStudying = (folder = continueFolder) => {
+    if (!folder) return;
+    handleSelectFolder(folder);
+  };
+
+  const handleOpenEvent = (event) => {
+    console.info(`[AURA] Opening event: ${event?.title || 'events'}`);
+    window.location.hash = 'events';
+    setActiveTab('EVENTS');
+  };
+
+  const handleViewAllEvents = () => {
+    window.location.hash = 'events';
+    setActiveTab('EVENTS');
   };
 
   const handleCreateFolder = () => {
@@ -421,69 +496,35 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
           </div>
         </div>
 
-        {/* 4. BOTTOM DASHBOARD FEATURE GRID (STACKED VERTICALLY ON MOBILE) */}
-        <section className="dashboard-bottom-grid">
-          {/* COLUMN 1: CONTINUE STUDYING CARD */}
-          <StudyCard
-            className="dashboard-study-card"
-            title="Physics Midterms"
-            subtitle="Forces & Motion"
-            progress={82}
-            lessonsCompleted={4}
-            totalLessons={5}
-            lessons={studyLessons}
-            onToggleLesson={toggleStudyLesson}
+        {/* 4. BOTTOM DASHBOARD (3-column grid on desktop, stacked on mobile) */}
+        <section className="hb-grid" aria-label="Study dashboard">
+          {/* COLUMN 1: CONTINUE STUDYING */}
+          <ContinueStudyingCard
+            folder={continueFolder}
+            topics={continueTopics.items}
+            onToggleTopic={continueTopics.interactive ? toggleStudyLesson : undefined}
             onContinue={handleContinueStudying}
-            onViewFolder={handleViewAllFolders}
+            onViewFolder={handleSelectFolder}
+            onCreateFolder={handleCreateFolder}
           />
 
           {/* DAILY MISSIONS CARD (MOBILE POSITION BETWEEN CONTINUE STUDYING & MY STUDY FOLDERS) */}
           {renderDailyMissions('mobile-only')}
 
-          {/* COLUMN 2: MY STUDY FOLDERS (EXPANDED MIDDLE SECTION) */}
-          <StudyFolders
-            folders={studyFolders}
-            onSelectFolder={handleSelectFolder}
+          {/* COLUMN 2: MY STUDY FOLDERS */}
+          <HomeFoldersPanel
+            folders={homeFolderCards}
+            onOpenFolder={handleSelectFolder}
             onCreateFolder={handleCreateFolder}
             onViewAll={handleViewAllFolders}
           />
 
           {/* COLUMN 3: UPCOMING EVENTS */}
-          <div className="bottom-feature-card upcoming-events-card">
-            <div className="feature-header-row">
-              <div className="feature-title-label">
-                <span>📅</span> UPCOMING EVENTS
-              </div>
-              <a href="#events" className="view-all-link">
-                View all →
-              </a>
-            </div>
-
-            <div className="event-preview-content">
-              <div className="event-top-info">
-                <img src={eventBanner} alt="Engineering Week" className="event-banner-img" />
-                <div className="event-meta-info">
-                  <div className="event-name">Engineering Week</div>
-                  <div className="event-dates">Sep 30 – Oct 7</div>
-                  <div className="event-perks-list">
-                    <span className="event-perk-item">
-                      <span className="perk-icon-star">★</span> Exclusive outfit
-                    </span>
-                    <span className="event-perk-item">
-                      <span className="perk-icon-bolt">⚡</span> 2x XP
-                    </span>
-                    <span className="event-perk-item">
-                      <span className="perk-icon-coin">🪙</span> Bonus coins
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <button type="button" className="btn-view-event">
-                View Event
-              </button>
-            </div>
-          </div>
+          <UpcomingEventsCard
+            events={upcomingEvents}
+            onOpenEvent={handleOpenEvent}
+            onViewAll={handleViewAllEvents}
+          />
         </section>
       </div>
 

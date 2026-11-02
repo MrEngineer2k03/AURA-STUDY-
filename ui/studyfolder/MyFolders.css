@@ -5306,8 +5306,10 @@
 }
 
 .frt-view-btn.is-active {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 42, 68, 0.16);
   color: #ffffff;
+  border: 1px solid rgba(255, 42, 68, 0.38);
+  box-shadow: 0 0 10px rgba(255, 42, 68, 0.22);
 }
 
 /* 4. STUDENT FOLDERS GRID (4 Columns on Desktop) */
@@ -5751,3 +5753,1036 @@
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   AURA MY FOLDERS – COMPACT LIST VIEW REDESIGN (FolderListRow)
+   Structured 5-Column Clean Layout
+   ========================================================================== */
+
+.student-folders-container.layout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.student-folders-container.layout-list .student-grid-item {
+  width: 100%;
+  display: block;
+}
+
+/* Base Folder List Row */
+.folder-list-row {
+  position: relative;
+  width: 100%;
+  height: 112px;
+  min-height: 112px;
+  background: linear-gradient(150deg, rgba(16, 21, 33, 0.88) 0%, rgba(9, 13, 21, 0.95) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 0 24px;
+  display: grid;
+  /* Shared column template – identical tracks on every row.
+     [info] [progress] [stats] [last studied] [actions]
+     No `auto` tracks: content can never change a column's x-position. */
+  --flr-columns: minmax(160px, 1.3fr) minmax(200px, 2fr) 150px 130px 182px;
+  grid-template-columns: var(--flr-columns);
+  gap: 20px;
+  align-items: center;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: visible;
+  user-select: none;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease,
+              box-shadow 0.22s ease,
+              background 0.22s ease;
+}
+
+.folder-list-row:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: linear-gradient(150deg, rgba(20, 26, 42, 0.94) 0%, rgba(12, 16, 26, 0.98) 100%);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.folder-list-row:focus-visible {
+  outline: 2px solid rgba(255, 42, 68, 0.85);
+  outline-offset: 2px;
+}
+
+/* Subtle laser notch accent on top-left */
+.flr-laser-notch {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  width: 48px;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  opacity: 0.85;
+  box-shadow: 0 0 10px currentColor;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 1: FOLDER INFORMATION
+   -------------------------------------------------------------------------- */
+.flr-col-info {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.flr-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.folder-list-row:hover .flr-icon-box {
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+.flr-folder-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.flr-info-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+
+.flr-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.flr-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.folder-list-row:hover .flr-title {
+  color: #ffffff;
+}
+
+.flr-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Badges */
+.flr-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  line-height: 1.25;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.flr-status-dot {
+  font-size: 13px;
+  line-height: 0;
+  margin-top: -1px;
+}
+
+.flr-status-badge.badge-new {
+  background: rgba(255, 77, 109, 0.12);
+  color: #ff4d6d;
+  border: 1px solid rgba(255, 77, 109, 0.28);
+}
+
+.flr-status-badge.badge-in-progress {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+}
+
+.flr-status-badge.badge-completed {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+}
+
+.flr-status-badge.badge-shared {
+  background: rgba(192, 132, 252, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(192, 132, 252, 0.28);
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 2: STUDY PROGRESS
+   -------------------------------------------------------------------------- */
+.flr-col-progress {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.flr-progress-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  line-height: 1.2;
+  min-width: 0;
+}
+
+.flr-progress-pct {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.flr-progress-ratio {
+  font-size: 11.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  text-align: right;
+}
+
+.flr-progress-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.flr-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 3: STUDY MATERIALS / STATISTICS
+   -------------------------------------------------------------------------- */
+.flr-col-materials {
+  /* Fixed-height 3-line stack (3 × 18px + 2 × 4px gap = 62px).
+     Lines fill from the top; a missing "members" line leaves empty space
+     instead of re-centering, so the icons line up across every row. */
+  height: 62px;
+  align-self: center;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.flr-material-item {
+  height: 18px;
+  line-height: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.flr-material-placeholder {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.flr-material-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.flr-material-val {
+  color: #e2e8f0;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.flr-member-item .flr-material-val {
+  color: #c084fc;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 4: LAST STUDIED
+   -------------------------------------------------------------------------- */
+.flr-col-time {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.flr-time-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.flr-time-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.flr-time-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.25;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.flr-time-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #64748b;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flr-time-value {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 5: ACTIONS
+   -------------------------------------------------------------------------- */
+.flr-col-actions {
+  height: 100%;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.flr-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Fixed width so "Start Studying →", "Continue →" and "Review Again →"
+     are identical and the "…" button always lands in the same spot. */
+  width: 136px;
+  min-width: 136px;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 42, 68, 0.45);
+  background: linear-gradient(135deg, #ff3a52 0%, #e3162f 100%);
+  color: #ffffff;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(255, 42, 68, 0.32);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.flr-primary-btn:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 20px rgba(255, 42, 68, 0.5);
+  border-color: #ff5268;
+}
+
+.flr-primary-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Three-dot menu button & popover */
+.flr-menu-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.flr-dots-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.flr-dots-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.flr-popover-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 175px;
+  background: #0f131f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 6px 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+}
+
+.flr-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.flr-menu-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.flr-menu-item.is-danger {
+  color: #ff4d6d;
+}
+
+.flr-menu-item.is-danger:hover {
+  background: rgba(255, 77, 109, 0.12);
+}
+
+.flr-menu-icon {
+  font-size: 12px;
+}
+
+.flr-menu-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  margin: 4px 0;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN FOR LIST VIEW
+   -------------------------------------------------------------------------- */
+
+/* Tablet (max-width: 1024px) – hide stats & last studied.
+   Still one shared template, so progress bars stay aligned across rows. */
+@media (max-width: 1024px) {
+  .folder-list-row {
+    --flr-columns: minmax(160px, 1.3fr) minmax(180px, 2fr) 182px;
+    gap: 16px;
+    padding: 0 18px;
+  }
+
+  .flr-col-materials,
+  .flr-col-time {
+    display: none;
+  }
+}
+
+/* Mobile (max-width: 640px) – stack each card vertically */
+@media (max-width: 640px) {
+  .student-folders-container.layout-list {
+    gap: 10px;
+  }
+
+  .folder-list-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .flr-col-info,
+  .flr-col-progress {
+    width: 100%;
+    height: auto;
+  }
+
+  .flr-col-materials,
+  .flr-col-time {
+    display: none;
+  }
+
+  .flr-col-actions {
+    width: 100%;
+    height: auto;
+    justify-self: stretch;
+    margin-top: 4px;
+  }
+
+  .flr-primary-btn {
+    flex: 1;
+    width: auto;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .flr-dots-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ==========================================================================
+   AURA MOBILE MY FOLDERS – DEDICATED 2-COLUMN GRID VIEW (<= 768px)
+   Compact, consistent-height vertical cards for mobile devices
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Ensure page content container uses full mobile width with clean edge padding
+     and sufficient bottom clearance above the fixed bottom navigation bar */
+  .my-folders-content-container {
+    max-width: 100% !important;
+    padding: 14px 14px calc(104px + env(safe-area-inset-bottom, 16px)) 14px !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Mobile Search & Filter Toolbar adaptation */
+  .folders-redesign-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+  }
+
+  .frt-search-wrapper {
+    width: 100%;
+  }
+
+  .frt-filter-pills {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding-bottom: 2px;
+  }
+
+  .frt-pill-btn {
+    height: 30px;
+    padding: 0 11px;
+    font-size: 12px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .frt-controls-right {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .frt-sort-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .frt-sort-select {
+    width: 100%;
+    height: 34px;
+    font-size: 12px;
+    padding: 0 28px 0 10px;
+    border-radius: 8px;
+  }
+
+  .frt-view-toggle-group {
+    flex-shrink: 0;
+    padding: 3px;
+    border-radius: 9px;
+    background: rgba(10, 14, 24, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .frt-view-btn {
+    width: 32px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  .frt-view-btn.is-active {
+    background: linear-gradient(135deg, #ff3a52 0%, #e3162f 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 92, 112, 0.65);
+    box-shadow: 0 2px 10px rgba(255, 42, 68, 0.4);
+  }
+}
+
+/* 1. MOBILE GRID CONTAINER */
+.mobile-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.mobile-folder-grid-item {
+  display: flex;
+  min-width: 0;
+  width: 100%;
+}
+
+/* 2. SIMPLE & USER-FRIENDLY MOBILE FOLDER CARD */
+.mobile-folder-card {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 174px;
+  min-height: 174px;
+  max-height: 174px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #0d1017;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 15px 16px 13px;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.mobile-folder-card.is-menu-open {
+  z-index: 40;
+}
+
+.mobile-folder-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #10141d;
+}
+
+.mobile-folder-card:active {
+  transform: scale(0.985);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: #131824;
+}
+
+.mobile-folder-card:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.75);
+  outline-offset: 2px;
+}
+
+/* Top Section: Tinted Folder Icon Squircle (left) + Minimal 3-Dot Menu (right) */
+.mfc-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.mfc-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Three-dot menu & popover */
+.mfc-menu-wrap {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: -2px;
+  margin-right: -4px;
+}
+
+.mfc-dots-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #8b95a7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.mfc-dots-btn:hover,
+.mfc-dots-btn:active {
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.mfc-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 162px;
+  background: #0f1422;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 5px 0;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.72);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+}
+
+.mfc-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mfc-menu-item:hover,
+.mfc-menu-item:active {
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.mfc-menu-item.is-danger {
+  color: #ff4d6d;
+}
+
+.mfc-menu-item.is-danger:hover,
+.mfc-menu-item.is-danger:active {
+  background: rgba(255, 77, 109, 0.12);
+}
+
+.mfc-menu-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 0;
+}
+
+/* Title (Single line with ellipsis) */
+.mfc-title {
+  margin: 2px 0 4px;
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+  flex-shrink: 0;
+}
+
+/* Progress Section: Slim horizontal bar on top, Lessons & % below */
+.mfc-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.mfc-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mfc-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mfc-progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.mfc-lessons-text {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #8b95a7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.mfc-pct-text {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #8b95a7;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Footer Row: Status on left · Shared Members on right */
+.mfc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.mfc-status-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.mfc-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.mfc-check-icon {
+  flex-shrink: 0;
+}
+
+.mfc-status-text.status-new {
+  color: #f43f5e;
+}
+
+.mfc-status-text.status-in-progress {
+  color: #3b82f6;
+}
+
+.mfc-status-text.status-completed {
+  color: #22c55e;
+}
+
+.mfc-members {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #8b95a7;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Trailing Create Folder Card in Mobile Grid (matches 174px card height) */
+.mobile-create-folder-card {
+  width: 100%;
+  height: 174px;
+  min-height: 174px;
+  max-height: 174px;
+  border-radius: 16px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.12);
+  background: rgba(13, 16, 23, 0.6);
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 15px 16px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+}
+
+.mobile-create-folder-card:hover,
+.mobile-create-folder-card:active {
+  border-color: rgba(244, 63, 94, 0.45);
+  background: rgba(244, 63, 94, 0.05);
+  transform: scale(0.985);
+}
+
+.mcfc-plus {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(244, 63, 94, 0.14);
+  color: #f43f5e;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mcfc-title {
+  font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mcfc-sub {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* 3. MOBILE RESPONSIVE BREAKPOINTS */
+
+/* Small mobile screens (320px – 375px) */
+@media (max-width: 375px) {
+  .mobile-folder-grid {
+    gap: 10px;
+  }
+
+  .mobile-folder-card,
+  .mobile-create-folder-card {
+    padding: 13px 13px 11px;
+    border-radius: 14px;
+    height: 162px;
+    min-height: 162px;
+    max-height: 162px;
+  }
+
+  .mfc-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+  }
+
+  .mfc-title {
+    font-size: 13.5px;
+  }
+
+  .mfc-lessons-text,
+  .mfc-pct-text,
+  .mfc-status-text,
+  .mfc-members {
+    font-size: 11px;
+  }
+}
+
+/* Larger mobile screens (620px – 768px): expand to 3 columns when space allows */
+@media (min-width: 620px) and (max-width: 768px) {
+  .mobile-folder-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+
+
+
