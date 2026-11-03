@@ -3,13 +3,16 @@ import React from 'react';
 /**
  * FolderHeader - Clean, student-friendly top header for My Folders
  * Matches reference design:
- * - Title: "My Folders"
- * - Subtitle: "[Count] folders. Last studied: [Last Studied Folder]."
- * - Top-right button: "+ New folder" (coral/red)
+ * - Desktop Title: "My Folders"
+ * - Mobile Title: "My Study"
+ * - Subtitle: "[Count] folders ▪ [InProgress] in progress ▪ Last studied: [Last Studied Folder]"
+ * - Desktop Top-right button: "+ New folder" (coral/red)
+ * - Mobile uses bottom-right Floating Action Button (+ New folder)
  *
  * @param {Object} props
  * @param {Function} props.onCreateFolder - Callback when "+ New folder" is clicked
  * @param {number} [props.folderCount=0] - Number of active folders
+ * @param {number} [props.inProgressCount=3] - Number of in-progress folders
  * @param {string} [props.lastStudiedName='Business Strategy'] - Title of the last studied folder
  * @param {boolean} [props.isArchiveView=false] - Whether archive vault is active
  * @param {Function} [props.onToggleArchive] - Toggle archive view
@@ -19,6 +22,7 @@ import React from 'react';
 export default function FolderHeader({
   onCreateFolder,
   folderCount = 6,
+  inProgressCount = 3,
   lastStudiedName = 'Business Strategy',
   isArchiveView = false,
   onToggleArchive,
@@ -70,10 +74,16 @@ export default function FolderHeader({
   return (
     <div className="folders-redesign-header">
       <div className="frh-left">
-        <h1 className="frh-title">My Folders</h1>
-        <p className="frh-subtitle">
+        <h1 className="frh-title">
+          <span className="frh-title-desktop">My Folders</span>
+          <span className="frh-title-mobile">My Study</span>
+        </h1>
+        <p className="frh-subtitle frh-subtitle-desktop">
           {folderCount} {folderCount === 1 ? 'folder' : 'folders'}.
           {lastStudiedName ? ` Last studied: ${lastStudiedName}.` : ''}
+        </p>
+        <p className="frh-subtitle frh-subtitle-mobile">
+          {folderCount} folders ▪ {inProgressCount} in progress{lastStudiedName ? ` ▪ Last studied: ${lastStudiedName}` : ''}
         </p>
       </div>
 

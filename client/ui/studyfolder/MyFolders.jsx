@@ -878,6 +878,7 @@ export default function MyFolders({
         <FolderHeader
           onCreateFolder={() => setIsCreateModalOpen(true)}
           folderCount={activeFolders.length}
+          inProgressCount={filterCounts.inProgress}
           lastStudiedName={heroFolder?.title || 'Business Strategy'}
           isArchiveView={isArchiveView}
           onToggleArchive={() => {
@@ -1084,6 +1085,19 @@ export default function MyFolders({
         </div>
         <div className="mobile-home-indicator" aria-hidden="true" />
       </nav>
+
+      {/* Floating Action Button: Add Folder (Mobile view, hidden during creation workflow or subpages) */}
+      {!isCreateModalOpen && !isStudyTypeModalOpen && !isArchiveView && currentView === 'grid' && (
+        <button
+          type="button"
+          className="mobile-fab-new-folder"
+          onClick={() => setIsCreateModalOpen(true)}
+          aria-label="Add Folder"
+        >
+          <span className="fab-plus-icon">+</span>
+          <span>Add Folder</span>
+        </button>
+      )}
     </div>
   );
 }
