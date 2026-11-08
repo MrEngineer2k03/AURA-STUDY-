@@ -666,6 +666,16 @@ export default function StudyMode({
     ? 'correct'
     : 'wrong';
 
+  const progressPercent = totalCards > 0
+    ? Math.round(((currentIndex + (isAnswered ? 1 : 0)) / totalCards) * 100)
+    : 0;
+  const correctPercent = totalCards > 0
+    ? (correctCount / totalCards) * 100
+    : 0;
+  const incorrectPercent = totalCards > 0
+    ? (incorrectCount / totalCards) * 100
+    : 0;
+
   // Trigger fit whenever currentIndex, question text or feedbackState changes
   useEffect(() => {
     scheduleFit();
@@ -698,108 +708,135 @@ export default function StudyMode({
   }, [scheduleFit]);
 
   return (
-    <div className="study-redesign-root" role="region" aria-label="Flashcard Study Session">
+    <div className="study-quiz-root" role="region" aria-label="Practice Quiz">
+      {/* Ambient Cyber Red Glow */}
+      <div className="study-quiz-ambient-glow" aria-hidden="true" />
+
       {/* ========================================================
-          1. TOP NAVIGATION BARS (Responsive Desktop & Mobile)
+          1. TOP NAVIGATION HEADER (Flip Cards Style)
           ======================================================== */}
-      {/* Desktop Top Bar matching Web Image */}
-      <header className="study-web-top-bar" aria-label="Desktop Session Header">
-        <button
-          type="button"
-          className="btn-study-web-exit"
-          onClick={onExit}
-          title="Exit study session and return to folder"
-        >
-          <span className="exit-icon" aria-hidden="true">✕</span>
-          <span>Exit</span>
-        </button>
-
-        <div className="study-web-progress-container">
-          <SegmentedProgressBar currentIndex={currentIndex} total={totalCards} />
-        </div>
-
-        <div className="study-web-top-right">
-          <span className="study-brand-aura">AURA</span>
-          <div className="study-coins-badge">
-            <span className="coins-icon">🪙</span>
-            <span className="coins-amount">2,450</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Mobile Top Bar matching Mobile Image */}
-      <header className="study-mobile-top-bar" aria-label="Mobile Session Header">
-        <div className="study-mobile-brand-row">
-          <span className="study-brand-aura">AURA</span>
-          <div className="study-mobile-header-right">
-            <div className="study-coins-badge">
-              <span className="coins-icon">🪙</span>
-              <span className="coins-amount">2,450</span>
-            </div>
-            <div className="mobile-user-avatar-wrap" title="User Profile">
-              <img src="/user_avatar.jpg" alt="Carl" className="mobile-user-avatar-img" />
-              <span className="mobile-user-avatar-status" aria-hidden="true" />
-            </div>
-          </div>
-        </div>
-
-        <div className="study-mobile-subbar">
+      <header className="study-quiz-top-bar" aria-label="Practice Quiz Header">
+        {/* Left: Exit button */}
+        <div className="study-quiz-top-left">
           <button
             type="button"
-            className="btn-study-mobile-close"
+            className="btn-quiz-exit"
             onClick={onExit}
-            aria-label="Exit session"
+            aria-label="Exit Practice Quiz"
           >
-            ✕
+            <span className="quiz-exit-icon" aria-hidden="true">✕</span>
+            <span>Exit</span>
           </button>
-          <div className="study-mobile-progress-wrap">
-            <SegmentedProgressBar currentIndex={currentIndex} total={totalCards} />
+        </div>
+
+        {/* Center: PRACTICE QUIZ + Question pill */}
+        <div className="study-quiz-top-center">
+          <h1 className="study-quiz-title">PRACTICE QUIZ</h1>
+          <span className="study-quiz-question-pill">
+            Question {currentIndex + 1} of {totalCards}
+          </span>
+        </div>
+
+        {/* Right: +10 XP chip, Countdown Timer, Coin balance */}
+        <div className="study-quiz-top-right">
+          <div className="quiz-xp-chip" title="+10 XP for correct answer">
+            <span className="quiz-xp-bolt" aria-hidden="true">⚡</span>
+            <span>+10 XP</span>
+          </div>
+
+          <div className="quiz-timer-pill" title={isAnswered && selectedOptionIndex === -1 ? "Time's Up!" : `${timeLeft}s remaining`}>
+            <TimerRing
+              timeLeft={timeLeft}
+              totalTime={10}
+              isTimedOut={isAnswered && selectedOptionIndex === -1}
+            />
+          </div>
+
+          <div className="quiz-coins-badge" title="Coin Balance">
+            <span className="quiz-coins-icon" aria-hidden="true">🪙</span>
+            <span className="quiz-coins-val">2,450</span>
           </div>
         </div>
       </header>
 
       {/* ========================================================
-          2. MAIN STUDY GRID (2-Column on Web, 1-Column on Mobile)
+          2. PROGRESS ROW (Flip Cards Progress Style with Right Stats)
           ======================================================== */}
-      <div className="study-redesign-grid">
-        {/* ---------------- LEFT / MAIN QUIZ AREA ---------------- */}
-        <main className="study-main-quiz-col">
-          {/* Question Meta Row: Counter (Left) + XP Badge & Timer (Right) */}
-          <div className="study-question-meta-row">
-            <h1 className="study-question-counter-text">
-              Question {currentIndex + 1} of {totalCards}
-            </h1>
-
-            <div className="study-meta-right-group">
-              <div className="study-xp-chip" title="+10 XP for correct answer">
-                <span className="xp-bolt" aria-hidden="true">⚡</span>
-                <span>+10 XP</span>
-              </div>
-
-              <TimerRing
-                timeLeft={timeLeft}
-                totalTime={10}
-                isTimedOut={isAnswered && selectedOptionIndex === -1}
-              />
-            </div>
+      <section className="study-quiz-progress-section" aria-label="Quiz Progress and Live Stats">
+        <div className="study-quiz-progress-meta-row">
+          <div className="study-quiz-progress-stats">
+            <span className="quiz-meta-stat">
+              <span className="quiz-meta-dot is-correct" aria-hidden="true">●</span>
+              <span className="quiz-meta-label">Correct</span>
+              <span className="quiz-meta-val">{correctCount}</span>
+            </span>
+            <span className="quiz-meta-stat">
+              <span className="quiz-meta-dot is-streak" aria-hidden="true">●</span>
+              <span className="quiz-meta-label">Streak</span>
+              <span className="quiz-meta-val">{streak}</span>
+            </span>
+            <span className="quiz-meta-pct">{progressPercent}% complete</span>
           </div>
+        </div>
 
-          {/* Flashcard Question Card with State-Adaptive Accent Lighting */}
+        <div className="study-quiz-progress-track">
           <div
-            className={`study-question-hero-card ${feedbackState ? `feedback-${feedbackState} has-feedback` : ''}`}
+            className="study-quiz-progress-fill is-correct"
+            style={{ width: `${correctPercent}%` }}
+            aria-hidden="true"
+          />
+          <div
+            className="study-quiz-progress-fill is-incorrect"
+            style={{ width: `${incorrectPercent}%` }}
+            aria-hidden="true"
+          />
+        </div>
+      </section>
+
+      {/* ========================================================
+          3. MAIN TWO-COLUMN WORKSPACE (Main Quiz + 320px Right Column)
+          ======================================================== */}
+      <div className="study-quiz-workspace-grid">
+        {/* ---------------- LEFT / MAIN QUIZ AREA ---------------- */}
+        <main className="study-quiz-main-col">
+          {/* Question Card */}
+          <div
+            className={`quiz-question-hero-card ${feedbackState ? `feedback-${feedbackState} has-feedback` : ''}`}
             ref={cardRef}
           >
+            {/* Faint decorative concentric-ring pattern in top-right corner */}
+            <svg className="quiz-card-radar-rings" width="220" height="220" viewBox="0 0 220 220" fill="none" aria-hidden="true">
+              <circle cx="220" cy="0" r="50" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
+              <circle cx="220" cy="0" r="95" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
+              <circle cx="220" cy="0" r="140" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
+              <circle cx="220" cy="0" r="185" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
+            </svg>
+
+            {/* Glowing notch */}
             <div
-              className={`study-card-glowing-notch ${feedbackState ? `notch-${feedbackState}` : ''}`}
+              className={`quiz-card-glowing-notch ${feedbackState ? `notch-${feedbackState}` : ''}`}
               aria-hidden="true"
             />
-            <div className="study-card-content-center" ref={containerRef}>
-              <span className="study-card-question-text" ref={textRef}>
-                {questionText}
-              </span>
+
+            {/* Card Header: QUESTION 01 / 05 tag + status chip */}
+            <div className="quiz-card-header">
+              <div className="quiz-card-tag">
+                <span>QUESTION {String(currentIndex + 1).padStart(2, '0')} / {String(totalCards).padStart(2, '0')}</span>
+              </div>
+
+              <div className="quiz-card-status-chip">
+                <span>{currentCard?.lessonTag || 'Practice'}</span>
+              </div>
             </div>
 
-            {/* Answer Feedback Notification (State-Adaptive Notification Component) */}
+            {/* Card Body with Question text */}
+            <div className="quiz-card-body" ref={containerRef}>
+              <h2 className="quiz-card-question-text" ref={textRef}>
+                {questionText}
+              </h2>
+            </div>
+
+            {/* Answer Feedback Notification (if answered) */}
             {isAnswered && (
               <AnswerFeedbackNotification
                 feedbackState={feedbackState}
@@ -809,10 +846,29 @@ export default function StudyMode({
                 onNext={handleNext}
               />
             )}
+
+            {/* Card Footer: Tap hint pill */}
+            <div className="quiz-card-footer">
+              {!isAnswered ? (
+                <div className="quiz-card-bottom-pill">
+                  <span className="quiz-pill-cue" aria-hidden="true">⏱</span>
+                  <span>Tap an answer before time runs out</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="quiz-card-bottom-pill is-action"
+                  onClick={handleNext}
+                >
+                  <span className="quiz-pill-cue" aria-hidden="true">➔</span>
+                  <span>Press Enter or tap for {currentIndex === totalCards - 1 ? 'Results' : 'Next Question'}</span>
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Multiple-Choice Answer Choices (2x2 on Desktop, 1 Col on Mobile) */}
-          <div className="study-choices-grid" role="radiogroup" aria-label="Answer Choices">
+          {/* Multiple-Choice Answer Choices (2x2 Grid) */}
+          <div className="quiz-choices-grid" role="radiogroup" aria-label="Answer Choices">
             {optionsData.options.map((optionText, optIdx) => {
               const letter = ['A', 'B', 'C', 'D'][optIdx];
               const isSelected = selectedOptionIndex === optIdx;
@@ -833,32 +889,32 @@ export default function StudyMode({
                 <button
                   key={`choice-${cardKey(currentCard?.id)}-${optIdx}`}
                   type="button"
-                  className={`study-choice-card ${choiceState}`}
+                  className={`quiz-choice-card ${choiceState}`}
                   onClick={() => handleSelectOption(optIdx)}
                   disabled={isAnswered}
                   role="radio"
                   aria-checked={isSelected}
                 >
-                  <div className="choice-letter-badge">
+                  <div className="quiz-choice-letter-badge">
                     {letter}
                   </div>
-                  <span className="choice-text-content">{optionText}</span>
+                  <span className="quiz-choice-text">{optionText}</span>
 
-                  {/* Right Status Icon Indicator */}
+                  {/* Status Indicator */}
                   {isAnswered && (isCorrectChoice || isSelected) && (
                     <div
-                      className={`choice-status-icon ${
+                      className={`quiz-choice-status-icon ${
                         isCorrectChoice ? 'icon-correct' : 'icon-wrong'
                       }`}
                       aria-hidden="true"
                     >
                       {isCorrectChoice ? (
                         <svg
-                          width="20"
-                          height="20"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#00D69A"
+                          stroke="#10b981"
                           strokeWidth="3.2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -867,11 +923,11 @@ export default function StudyMode({
                         </svg>
                       ) : (
                         <svg
-                          width="20"
-                          height="20"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#FF405C"
+                          stroke="#ff405c"
                           strokeWidth="3.2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -886,75 +942,67 @@ export default function StudyMode({
               );
             })}
           </div>
-
-          {/* Bottom Guidance Hint (Mobile/Desktop) */}
-          <div className="study-quiz-footer-row">
-            {!isAnswered ? (
-              <p className="study-tap-hint-text">Tap an answer before time runs out</p>
-            ) : (
-              <p className="study-tap-hint-text is-answered-hint">
-                Press <kbd className="study-footer-kbd">Enter</kbd> or tap <strong>{currentIndex === totalCards - 1 ? 'View Results' : 'Next Question'}</strong> to continue
-              </p>
-            )}
-          </div>
         </main>
 
-        {/* ---------------- RIGHT SIDEBAR (DESKTOP ONLY) ---------------- */}
-        <aside className="study-sidebar-col" aria-label="Session Overview and Shortcuts">
-          {/* 1. Folder Info Card */}
-          <div className="study-sidebar-card study-folder-info-card">
-            <div className="study-sidebar-folder-icon-box" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="#ef4444">
-                <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
-              </svg>
+        {/* ---------------- RIGHT COLUMN (320px) ---------------- */}
+        <aside className="study-quiz-right-col" aria-label="Session Overview and Shortcuts">
+          <div className="quiz-sidebar-panel">
+            {/* 1. Folder Info Row (compact) */}
+            <div className="quiz-sidebar-folder-row">
+              <div className="quiz-sidebar-folder-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#ef4444">
+                  <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
+                </svg>
+              </div>
+              <div className="quiz-sidebar-folder-meta">
+                <h2 className="quiz-sidebar-folder-name">{folder?.title || 'Test'}</h2>
+                <p className="quiz-sidebar-folder-sub">Flashcard study session</p>
+              </div>
             </div>
-            <div className="study-sidebar-folder-text">
-              <h2 className="study-sidebar-folder-name">{folder?.title || 'Test'}</h2>
-              <p className="study-sidebar-folder-sub">Flashcard study session</p>
-            </div>
-          </div>
 
-          {/* 2. "This session" Stats Card */}
-          <div className="study-sidebar-card study-session-stats-card">
-            <h3 className="study-sidebar-card-title">This session</h3>
-            <div className="study-sidebar-stats-grid">
-              <div className="study-sidebar-stat-box">
-                <span className="study-stat-number is-correct">{correctCount}</span>
-                <span className="study-stat-label">Correct</span>
-              </div>
-              <div className="study-sidebar-stat-box">
-                <span className="study-stat-number is-xp">{xpEarned}</span>
-                <span className="study-stat-label">XP earned</span>
-              </div>
-              <div className="study-sidebar-stat-box">
-                <span className="study-stat-number is-streak">{streak}</span>
-                <span className="study-stat-label">Streak</span>
-              </div>
-              <div className="study-sidebar-stat-box">
-                <span className="study-stat-number is-best">{bestStreak}</span>
-                <span className="study-stat-label">Best streak</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 3. "Shortcuts" Card */}
-          <div className="study-sidebar-card study-shortcuts-card">
-            <h3 className="study-sidebar-card-title">Shortcuts</h3>
-            <div className="study-shortcuts-list">
-              <div className="study-shortcut-item">
-                <div className="study-kbd-group">
-                  <kbd className="study-kbd">A</kbd>
-                  <kbd className="study-kbd">B</kbd>
-                  <kbd className="study-kbd">C</kbd>
-                  <kbd className="study-kbd">D</kbd>
+            {/* 2. Session Stats (Compact 2x2 Grid) */}
+            <div className="quiz-sidebar-stats-section">
+              <h3 className="quiz-sidebar-section-title">Session Stats</h3>
+              <div className="quiz-sidebar-stats-grid">
+                <div className="quiz-stat-tile">
+                  <span className="quiz-stat-val is-correct">{correctCount}</span>
+                  <span className="quiz-stat-label">Correct</span>
                 </div>
-                <span className="study-shortcut-label">pick an answer</span>
-              </div>
-              <div className="study-shortcut-item">
-                <kbd className="study-kbd is-wide">Enter</kbd>
-                <span className="study-shortcut-label">next card</span>
+                <div className="quiz-stat-tile">
+                  <span className="quiz-stat-val is-xp">+{xpEarned}</span>
+                  <span className="quiz-stat-label">XP earned</span>
+                </div>
+                <div className="quiz-stat-tile">
+                  <span className="quiz-stat-val is-streak">{streak}</span>
+                  <span className="quiz-stat-label">Streak</span>
+                </div>
+                <div className="quiz-stat-tile">
+                  <span className="quiz-stat-val is-best">{bestStreak}</span>
+                  <span className="quiz-stat-label">Best streak</span>
+                </div>
               </div>
             </div>
+
+            {/* 3. Keyboard Shortcuts */}
+            <div className="quiz-sidebar-shortcuts-section">
+              <h3 className="quiz-sidebar-section-title">Keyboard shortcuts</h3>
+              <div className="quiz-shortcuts-list">
+                <div className="quiz-shortcut-row">
+                  <span className="quiz-shortcut-desc">pick an answer</span>
+                  <div className="quiz-keycap-cluster">
+                    <kbd className="quiz-keycap">A</kbd>
+                    <kbd className="quiz-keycap">B</kbd>
+                    <kbd className="quiz-keycap">C</kbd>
+                    <kbd className="quiz-keycap">D</kbd>
+                  </div>
+                </div>
+                <div className="quiz-shortcut-row">
+                  <span className="quiz-shortcut-desc">next card</span>
+                  <kbd className="quiz-keycap is-enter">Enter</kbd>
+                </div>
+              </div>
+            </div>
+
           </div>
         </aside>
       </div>

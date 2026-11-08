@@ -12,3 +12,4 @@ export { default as StudyResults } from './StudyResults';
 export { default as ReviewMistakes } from './ReviewMistakes';
 export { default as StudyCompletionModal } from './StudyCompletionModal';
 export { default as FlashcardPreviewModal } from './FlashcardPreviewModal';
+export { FlipCard, FlipCardsStudy } from '../Flipcards';

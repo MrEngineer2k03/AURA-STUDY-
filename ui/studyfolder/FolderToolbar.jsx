@@ -3,10 +3,10 @@ import React, { useState, useRef, useEffect } from 'react';
 /**
  * FolderToolbar - Modern Student-Friendly Search & Filter Toolbar
  *
- * Mobile Design:
- * - Row 1: Search input on left + View mode toggle group on right (Grid/List icons preserved)
- * - Row 2: Sole "All" dropdown filter button (with live count, glowing dot indicator, and dropdown menu)
- *   Other pills are displayed on desktop only.
+ * Features:
+ * - Search input with magnifying glass
+ * - Streamlined Dropdown Filter Button (with live count, glowing dot indicator, and custom floating popover menu)
+ * - View mode toggle group (Grid/List)
  *
  * @param {Object} props
  * @param {string} props.searchQuery - Current search text
@@ -118,7 +118,7 @@ export default function FolderToolbar({
           )}
         </div>
 
-        {/* View Mode Toggle: displayed in top row on mobile */}
+        {/* View Mode Toggle (rendered in top row on mobile screens) */}
         <div className="frt-view-toggle-group frt-view-toggle-mobile" role="group" aria-label="View layout">
           <button
             type="button"
@@ -154,9 +154,8 @@ export default function FolderToolbar({
         </div>
       </div>
 
-      {/* ROW 2: FILTER DROPDOWN (Mobile sole filter) & DESKTOP PILLS */}
+      {/* FILTER DROPDOWN TRIGGER & POPOVER (Sole clean filter control on both desktop and mobile) */}
       <div className="frt-filter-pills" role="tablist" aria-label="Filter folders by status">
-        {/* DROPDOWN FILTER BUTTON (Always visible; on mobile this is the sole filter control) */}
         <div className="frt-all-pill-container" ref={dropdownRef}>
           <button
             type="button"
@@ -167,7 +166,7 @@ export default function FolderToolbar({
             onClick={() => setIsDropdownOpen((prev) => !prev)}
             aria-label={`Filter folders. Current filter: ${activeTab.label}`}
           >
-            <span>{activeTab.label}</span>
+            <span className="frt-pill-label">{activeTab.label}</span>
             {typeof activeTab.count === 'number' && (
               <span className="frt-pill-count">{activeTab.count}</span>
             )}
@@ -256,26 +255,6 @@ export default function FolderToolbar({
             </div>
           )}
         </div>
-
-        {/* DESKTOP-ONLY PILLS (hidden on mobile) */}
-        {filterTabs.slice(1).map((tab) => {
-          const isActive = activeFilter === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              className={`frt-pill-btn frt-desktop-pill ${isActive ? 'is-active' : ''}`}
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => onFilterChange && onFilterChange(tab.id)}
-            >
-              <span>{tab.label}</span>
-              {typeof tab.count === 'number' && (
-                <span className="frt-pill-count">{tab.count}</span>
-              )}
-            </button>
-          );
-        })}
       </div>
 
       {/* CONTROLS ON RIGHT (Desktop only) */}

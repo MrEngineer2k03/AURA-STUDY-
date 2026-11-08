@@ -4,11 +4,12 @@ import { useState, useRef } from 'react';
  * StudyTypeModal - Step 2: "How do you want to study?"
  * 
  * Displays study type options for the newly created study folder.
- * Desktop: 3 equal, full-sized balanced cards.
- * Mobile: Horizontal swipeable cards carousel (no vertical scrolling needed to choose mode).
- * 1. FLASHCARDS (Active)
- * 2. AI REVIEWER (Upcoming)
- * 3. QUIZ BATTLE (Upcoming)
+ * Desktop: 4 equal, full-sized balanced cards.
+ * Mobile: Horizontal swipeable cards carousel.
+ * 1. FLIP CARDS (Active & Interactive 3D)
+ * 2. FLASHCARDS (Active)
+ * 3. AI REVIEWER (Upcoming)
+ * 4. QUIZ BATTLE (Upcoming)
  * 
  * @param {Object} props
  * @param {boolean} props.isOpen - Whether modal is displayed
@@ -22,11 +23,15 @@ export default function StudyTypeModal({
   onClose,
   onSelectType,
 }) {
-  const [hoveredType, setHoveredType] = useState('flashcards');
+  const [hoveredType, setHoveredType] = useState('flipcards');
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const cardsGridRef = useRef(null);
 
   if (!isOpen || !folder) return null;
+
+  const handleStartFlipCards = () => {
+    onSelectType('flipcards', folder);
+  };
 
   const handleStartFlashcards = () => {
     onSelectType('flashcards', folder);
@@ -38,12 +43,13 @@ export default function StudyTypeModal({
     const cardEl = el.firstElementChild;
     const cardWidth = cardEl ? cardEl.offsetWidth + 12 : 260;
     const index = Math.round(el.scrollLeft / cardWidth);
-    const clamped = Math.min(Math.max(index, 0), 2);
+    const clamped = Math.min(Math.max(index, 0), 3);
     if (clamped !== activeCardIndex) {
       setActiveCardIndex(clamped);
-      if (clamped === 0) setHoveredType('flashcards');
-      else if (clamped === 1) setHoveredType('ai');
-      else if (clamped === 2) setHoveredType('quiz');
+      if (clamped === 0) setHoveredType('flipcards');
+      else if (clamped === 1) setHoveredType('flashcards');
+      else if (clamped === 2) setHoveredType('ai');
+      else if (clamped === 3) setHoveredType('quiz');
     }
   };
 
@@ -57,9 +63,10 @@ export default function StudyTypeModal({
           block: 'nearest',
         });
         setActiveCardIndex(index);
-        if (index === 0) setHoveredType('flashcards');
-        else if (index === 1) setHoveredType('ai');
-        else if (index === 2) setHoveredType('quiz');
+        if (index === 0) setHoveredType('flipcards');
+        else if (index === 1) setHoveredType('flashcards');
+        else if (index === 2) setHoveredType('ai');
+        else if (index === 3) setHoveredType('quiz');
       }
     }
   };
@@ -113,19 +120,68 @@ export default function StudyTypeModal({
           )}
         </div>
 
-        {/* STUDY TYPE CARDS CONTAINER (3 COLUMNS ON DESKTOP, HORIZONTAL SWIPEABLE CAROUSEL ON MOBILE) */}
+        {/* STUDY TYPE CARDS CONTAINER (4 COLUMNS ON DESKTOP, HORIZONTAL SWIPEABLE CAROUSEL ON MOBILE) */}
         <div className="study-type-cards-wrapper">
           <div
             ref={cardsGridRef}
             className="study-type-cards-grid"
             onScroll={handleCardsScroll}
           >
-            {/* 1. FLASHCARDS (ACTIVE & PROMINENT) */}
+            {/* 1. FLIP CARDS (ACTIVE & INTERACTIVE 3D) */}
             <div
-              className={`study-type-card active-method ${hoveredType === 'flashcards' || activeCardIndex === 0 ? 'is-hovered' : ''}`}
-              onMouseEnter={() => setHoveredType('flashcards')}
+              className={`study-type-card active-method ${hoveredType === 'flipcards' || activeCardIndex === 0 ? 'is-hovered' : ''}`}
+              onMouseEnter={() => setHoveredType('flipcards')}
               onClick={() => {
                 scrollToCard(0);
+                handleStartFlipCards();
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleStartFlipCards();
+                }
+              }}
+            >
+              <div className="study-card-glow-halo glow-red" aria-hidden="true" />
+              <div className="study-card-laser-notch notch-red" aria-hidden="true" />
+
+              <div className="study-card-center-icon">
+                <div className="large-icon-wrapper halo-red">
+                  <span className="icon-emoji">🎴</span>
+                  <span className="icon-sparkle">✦</span>
+                </div>
+              </div>
+
+              <div className="study-card-info">
+                <h3 className="study-card-title">FLIP CARDS</h3>
+                <p className="study-card-desc">
+                  Interactive 3D learning cards. Tap to flip between questions and revealed answers with realistic depth.
+                </p>
+              </div>
+
+              <div className="study-card-action-wrap">
+                <button
+                  type="button"
+                  className="study-card-start-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleStartFlipCards();
+                  }}
+                >
+                  <span>Start</span>
+                  <span className="btn-arrow-icon">→</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 2. FLASHCARDS (ACTIVE) */}
+            <div
+              className={`study-type-card active-method ${hoveredType === 'flashcards' || activeCardIndex === 1 ? 'is-hovered' : ''}`}
+              onMouseEnter={() => setHoveredType('flashcards')}
+              onClick={() => {
+                scrollToCard(1);
                 handleStartFlashcards();
               }}
               role="button"
@@ -169,11 +225,11 @@ export default function StudyTypeModal({
               </div>
             </div>
 
-            {/* 2. AI REVIEWER (BALANCED EQUAL SIZE) */}
+            {/* 3. AI REVIEWER (BALANCED EQUAL SIZE) */}
             <div
-              className={`study-type-card preview-method theme-ai ${hoveredType === 'ai' || activeCardIndex === 1 ? 'is-hovered' : ''}`}
+              className={`study-type-card preview-method theme-ai ${hoveredType === 'ai' || activeCardIndex === 2 ? 'is-hovered' : ''}`}
               onMouseEnter={() => setHoveredType('ai')}
-              onClick={() => scrollToCard(1)}
+              onClick={() => scrollToCard(2)}
             >
               <div className="study-card-glow-halo glow-purple" aria-hidden="true" />
               <div className="study-card-laser-notch notch-purple" aria-hidden="true" />
@@ -203,11 +259,11 @@ export default function StudyTypeModal({
               </div>
             </div>
 
-            {/* 3. QUIZ BATTLE (BALANCED EQUAL SIZE) */}
+            {/* 4. QUIZ BATTLE (BALANCED EQUAL SIZE) */}
             <div
-              className={`study-type-card preview-method theme-pvp ${hoveredType === 'quiz' || activeCardIndex === 2 ? 'is-hovered' : ''}`}
+              className={`study-type-card preview-method theme-pvp ${hoveredType === 'quiz' || activeCardIndex === 3 ? 'is-hovered' : ''}`}
               onMouseEnter={() => setHoveredType('quiz')}
-              onClick={() => scrollToCard(2)}
+              onClick={() => scrollToCard(3)}
             >
               <div className="study-card-glow-halo glow-gold" aria-hidden="true" />
               <div className="study-card-laser-notch notch-gold" aria-hidden="true" />
@@ -240,7 +296,7 @@ export default function StudyTypeModal({
 
           {/* Right Edge Fade Cue for Mobile Swipeability */}
           <div
-            className={`study-cards-fade-right ${activeCardIndex === 2 ? 'is-hidden' : ''}`}
+            className={`study-cards-fade-right ${activeCardIndex === 3 ? 'is-hidden' : ''}`}
             aria-hidden="true"
           />
         </div>
@@ -251,24 +307,32 @@ export default function StudyTypeModal({
             type="button"
             role="tab"
             aria-selected={activeCardIndex === 0}
-            className={`carousel-dot ${activeCardIndex === 0 ? 'active' : ''} dot-flashcards`}
+            className={`carousel-dot ${activeCardIndex === 0 ? 'active' : ''} dot-flipcards`}
             onClick={() => scrollToCard(0)}
-            aria-label="Flashcards mode (Active)"
+            aria-label="Flip Cards mode (Active)"
           />
           <button
             type="button"
             role="tab"
             aria-selected={activeCardIndex === 1}
-            className={`carousel-dot ${activeCardIndex === 1 ? 'active' : ''} dot-ai`}
+            className={`carousel-dot ${activeCardIndex === 1 ? 'active' : ''} dot-flashcards`}
             onClick={() => scrollToCard(1)}
-            aria-label="AI Reviewer mode"
+            aria-label="Flashcards mode (Active)"
           />
           <button
             type="button"
             role="tab"
             aria-selected={activeCardIndex === 2}
-            className={`carousel-dot ${activeCardIndex === 2 ? 'active' : ''} dot-quiz`}
+            className={`carousel-dot ${activeCardIndex === 2 ? 'active' : ''} dot-ai`}
             onClick={() => scrollToCard(2)}
+            aria-label="AI Reviewer mode"
+          />
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeCardIndex === 3}
+            className={`carousel-dot ${activeCardIndex === 3 ? 'active' : ''} dot-quiz`}
+            onClick={() => scrollToCard(3)}
             aria-label="Quiz Battle mode"
           />
         </div>
@@ -285,9 +349,9 @@ export default function StudyTypeModal({
           <button
             type="button"
             className="btn-modal-submit"
-            onClick={handleStartFlashcards}
+            onClick={hoveredType === 'flashcards' ? handleStartFlashcards : handleStartFlipCards}
           >
-            <span>Start with Flashcards</span>
+            <span>Start with {hoveredType === 'flashcards' ? 'Flashcards' : 'Flip Cards'}</span>
             <span className="modal-submit-arrow">→</span>
           </button>
         </div>

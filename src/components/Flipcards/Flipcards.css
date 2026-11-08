@@ -1,0 +1,1369 @@
+/* ==========================================================================
+   AURA 3D FLIP CARDS DESIGN SYSTEM
+   Interactive, Futuristic 3D Flip Card Component & Study Experience
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 3D FLIPCARD STAGE & PERSPECTIVE CONTAINER
+   -------------------------------------------------------------------------- */
+.aura-flipcard-stage {
+  perspective: 1400px;
+  -webkit-perspective: 1400px;
+  perspective-origin: center center;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.flashcard-modal-dialog .aura-flipcard-stage {
+  max-width: 620px;
+}
+
+.aura-flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  min-height: 380px;
+  max-height: 380px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.4, 0.2, 0.2, 1);
+  will-change: transform;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  outline: none;
+}
+
+/* Flipped 180° rotation on Y-axis */
+.aura-flipcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Subtle Interactive Hover Elevation & Shadow Enhancement (Non-excessive) */
+@media (hover: hover) and (pointer: fine) {
+  .aura-flipcard-inner:not(.is-disabled):hover {
+    transform: translateY(-4px);
+  }
+
+  .aura-flipcard-inner.is-flipped:not(.is-disabled):hover {
+    transform: rotateY(180deg) translateY(-4px);
+  }
+
+  .aura-flipcard-inner:hover .aura-flipcard-face {
+    border-color: rgba(255, 77, 109, 0.35);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75), 0 0 24px rgba(255, 77, 109, 0.12);
+  }
+}
+
+/* Keyboard focus ring */
+.aura-flipcard-inner:focus-visible {
+  outline: 2px solid #ff4d6d;
+  outline-offset: 4px;
+}
+
+.aura-flipcard-inner.is-disabled {
+  cursor: default;
+}
+
+/* --------------------------------------------------------------------------
+   2. CARD FACES (FRONT & BACK)
+   -------------------------------------------------------------------------- */
+.aura-flipcard-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  border-radius: 20px;
+  background: #0d111b;
+  background: linear-gradient(155deg, rgba(20, 26, 42, 0.95) 0%, rgba(10, 14, 24, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  padding: 26px 32px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Front Face */
+.aura-flipcard-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+/* Back Face */
+.aura-flipcard-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(155deg, rgba(16, 22, 36, 0.97) 0%, rgba(8, 12, 20, 0.98) 100%);
+  border-color: rgba(255, 77, 109, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   3. FUTURISTIC ACCENT DETAILS (LASER NOTCH & AMBIENT ORB)
+   -------------------------------------------------------------------------- */
+.aura-flipcard-laser-notch {
+  position: absolute;
+  top: 0;
+  left: 36px;
+  width: 56px;
+  height: 3px;
+  background: #ff4d6d;
+  background: linear-gradient(90deg, #ff4d6d 0%, #ff758f 100%);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+  pointer-events: none;
+}
+
+.aura-flipcard-laser-notch.is-answer {
+  background: #10b981;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.aura-flipcard-ambient-orb {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 77, 109, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.aura-flipcard-ambient-orb.is-answer {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+}
+
+/* --------------------------------------------------------------------------
+   4. CARD HEADER & BADGES
+   -------------------------------------------------------------------------- */
+.aura-flipcard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.aura-flipcard-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255, 77, 109, 0.12);
+  border: 1px solid rgba(255, 77, 109, 0.3);
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ff8fa3;
+  text-transform: uppercase;
+}
+
+.aura-flipcard-tag.is-answer-tag {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+.aura-tag-symbol {
+  font-size: 10px;
+  color: #ff4d6d;
+}
+
+.aura-tag-symbol.is-check {
+  font-size: 12px;
+  color: #34d399;
+}
+
+.aura-flipcard-badges-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aura-card-lesson-tag {
+  font-size: 11px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.aura-card-status-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.aura-card-status-pill.is-mastered {
+  background: rgba(16, 185, 129, 0.14);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.aura-card-status-pill.is-learning {
+  background: rgba(59, 130, 246, 0.14);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.28);
+}
+
+.aura-card-status-pill.is-new {
+  background: rgba(255, 77, 109, 0.14);
+  color: #ff8fa3;
+  border: 1px solid rgba(255, 77, 109, 0.28);
+}
+
+/* --------------------------------------------------------------------------
+   5. CARD CONTENT BODY & TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+.aura-card-radar-rings {
+  position: absolute;
+  top: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.aura-flipcard-type-sublabel {
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  text-transform: capitalize;
+}
+
+.aura-flipcard-type-sublabel.is-answer {
+  color: #34d399;
+}
+
+.aura-flipcard-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  padding: 16px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.aura-flipcard-content-scroller {
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.aura-flipcard-content-scroller::-webkit-scrollbar {
+  width: 5px;
+}
+
+.aura-flipcard-content-scroller::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+.aura-flipcard-question-text {
+  margin: 0;
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  word-break: break-word;
+}
+
+.aura-flipcard-answer-text {
+  margin: 0;
+  font-family: var(--font-body, 'Inter', -apple-system, sans-serif);
+  font-size: 21px;
+  font-weight: 500;
+  color: #f1f5f9;
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  word-break: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   6. CARD FOOTER & ROTATE / FLIP CUES
+   -------------------------------------------------------------------------- */
+.aura-flipcard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-shrink: 0;
+  padding-top: 6px;
+}
+
+.aura-flip-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.aura-flipcard-inner:hover .aura-flip-cue {
+  background: rgba(255, 77, 109, 0.1);
+  border-color: rgba(255, 77, 109, 0.3);
+  color: #ff8fa3;
+}
+
+.aura-flip-cue.is-flip-back {
+  color: #6ee7b7;
+}
+
+.aura-flipcard-inner:hover .aura-flip-cue.is-flip-back {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #a7f3d0;
+}
+
+.aura-flip-cue-icon {
+  display: flex;
+  align-items: center;
+  color: #ff4d6d;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aura-flip-cue.is-flip-back .aura-flip-cue-icon {
+  color: #10b981;
+}
+
+.aura-flipcard-inner:hover .aura-flip-cue-icon {
+  transform: rotate(-180deg);
+}
+
+/* --------------------------------------------------------------------------
+   7. FULL STUDY SESSION INTERFACE (FlipCardsStudy - Two-Column Desktop Workspace)
+   -------------------------------------------------------------------------- */
+.aura-flip-study-root {
+  position: relative;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 20px 28px 60px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 7.1 TOP NAVIGATION TOOLBAR (Full available content width) */
+.aura-study-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  background: rgba(14, 18, 28, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+
+.aura-study-top-left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.aura-btn-exit-study {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.aura-btn-exit-study:hover {
+  background: rgba(255, 77, 109, 0.12);
+  border-color: rgba(255, 77, 109, 0.35);
+  color: #ff8fa3;
+}
+
+.aura-exit-cross {
+  font-size: 12px;
+}
+
+.aura-study-top-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  min-width: 0;
+}
+
+.aura-study-folder-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+.aura-study-card-counter {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff8fa3;
+  letter-spacing: 0.5px;
+  background: rgba(255, 77, 109, 0.1);
+  border: 1px solid rgba(255, 77, 109, 0.25);
+  padding: 3px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.aura-study-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.aura-btn-tool-shuffle,
+.aura-btn-tool-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.aura-btn-tool-shuffle:hover,
+.aura-btn-tool-mode:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+.aura-btn-tool-shuffle.is-active {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #93c5fd;
+}
+
+/* 7.2 STUDY PROGRESS SECTION (Live stats on right + full-width thin progress track) */
+.aura-study-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.aura-study-progress-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.aura-study-progress-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12.5px;
+}
+
+.aura-meta-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.aura-meta-dot {
+  font-size: 9px;
+}
+
+.aura-meta-dot.is-learning {
+  color: #3b82f6;
+}
+
+.aura-meta-dot.is-mastered {
+  color: #10b981;
+}
+
+.aura-meta-val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.aura-meta-pct {
+  color: #ff4d6d;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.aura-study-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.aura-study-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d6d 0%, #f43f5e 100%);
+  border-radius: 9999px;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 7.3 MAIN STUDY AREA: TWO-COLUMN WORKSPACE */
+.aura-study-main-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 74fr) minmax(290px, 26fr);
+  gap: 28px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 7.4 LEFT COLUMN: LARGE FLASHCARD WORKSPACE + BOTTOM ACTION BUTTONS */
+.aura-study-left-col {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.aura-study-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.aura-study-left-col .aura-flipcard-inner {
+  height: 480px;
+  min-height: 480px;
+  max-height: 480px;
+  background: #0f1422;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.aura-study-left-col .aura-flipcard-face {
+  padding: 30px 36px 24px;
+  border-radius: 20px;
+}
+
+.aura-study-left-col .aura-flipcard-content-scroller {
+  max-height: 300px;
+}
+
+.aura-study-left-col .aura-flipcard-question-text {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.aura-study-left-col .aura-flipcard-answer-text {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #f1f5f9;
+}
+
+/* Bottom Action Row Underneath the Flashcard: [←] [Still learning] [I know this] [→] */
+.aura-study-card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.aura-btn-card-arrow {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.aura-btn-card-arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.aura-btn-card-arrow:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.aura-btn-card-action {
+  flex: 1;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.aura-btn-card-action.is-learning {
+  background: rgba(30, 42, 68, 0.65);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+.aura-btn-card-action.is-learning:hover {
+  background: rgba(35, 52, 85, 0.85);
+  border-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+}
+
+.aura-btn-card-action.is-mastered {
+  background: rgba(16, 42, 40, 0.65);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+.aura-btn-card-action.is-mastered:hover {
+  background: rgba(20, 54, 50, 0.85);
+  border-color: #10b981;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.15);
+}
+
+.aura-btn-card-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.aura-btn-card-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+.aura-btn-card-primary {
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.aura-btn-card-secondary {
+  font-size: 10.5px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+/* 7.5 RIGHT COLUMN: CARDS IN THIS DECK + KEYBOARD SHORTCUTS */
+.aura-study-right-col {
+  width: 100%;
+  min-width: 0;
+}
+
+.aura-study-sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 552px;
+  height: 100%;
+  gap: 24px;
+}
+
+/* Cards In This Deck Container */
+.aura-deck-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.aura-deck-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 2px;
+}
+
+.aura-deck-list-title {
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.aura-deck-list-count {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.aura-deck-list-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-height: 390px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.aura-deck-list-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.aura-deck-list-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.aura-deck-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  color: #94a3b8;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.aura-deck-row-item:hover:not(.is-active) {
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+
+.aura-deck-row-item.is-active {
+  background: rgba(255, 77, 109, 0.08);
+  border-color: #ff4d6d;
+  color: #ffffff;
+}
+
+.aura-deck-row-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.aura-deck-row-dot {
+  font-size: 8px;
+  flex-shrink: 0;
+}
+
+.aura-deck-row-dot.is-mastered {
+  color: #10b981;
+}
+
+.aura-deck-row-dot.is-learning {
+  color: #3b82f6;
+}
+
+.aura-deck-row-dot.is-unrated {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.aura-deck-row-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.aura-deck-row-item.is-active .aura-deck-row-text {
+  font-weight: 600;
+}
+
+.aura-deck-row-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.aura-deck-row-item.is-active .aura-deck-row-num {
+  color: #ff8fa3;
+}
+
+/* Keyboard Shortcuts Section */
+.aura-shortcuts-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding-top: 14px;
+}
+
+.aura-shortcuts-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.aura-shortcuts-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 8px;
+  column-gap: 16px;
+  width: 100%;
+}
+
+.aura-shortcut-pair {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.aura-shortcut-label {
+  color: #94a3b8;
+}
+
+.aura-keycap {
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+}
+
+.aura-keycap-cluster {
+  display: inline-flex;
+  gap: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   8. SESSION COMPLETE / SUMMARY SCREEN
+   -------------------------------------------------------------------------- */
+.aura-study-finish-card {
+  width: 100%;
+  max-width: 620px;
+  margin: 40px auto;
+  padding: 40px 32px;
+  border-radius: 24px;
+  background: #0d111b;
+  background: linear-gradient(160deg, #131929 0%, #0a0d18 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.aura-finish-trophy {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 77, 109, 0.12);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.aura-finish-headline {
+  margin: 0;
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.aura-finish-subtext {
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.5;
+  max-width: 440px;
+}
+
+.aura-finish-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.aura-finish-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.aura-finish-stat-num {
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.aura-finish-stat-num.is-mastered {
+  color: #34d399;
+}
+
+.aura-finish-stat-num.is-learning {
+  color: #60a5fa;
+}
+
+.aura-finish-stat-lbl {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.aura-finish-actions-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  margin-top: 8px;
+}
+
+.aura-btn-study-again {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 12px;
+  background: #ff4766;
+  background: linear-gradient(135deg, #ff4d6d 0%, #f43f5e 100%);
+  color: #ffffff;
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.aura-btn-study-again:hover {
+  background: linear-gradient(135deg, #ff3355 0%, #e11d48 100%);
+  transform: translateY(-1px);
+}
+
+.aura-btn-review-learning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #93c5fd;
+  font-family: var(--font-heading, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.aura-btn-review-learning:hover {
+  background: rgba(59, 130, 246, 0.22);
+  color: #ffffff;
+}
+
+.aura-btn-finish-return {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 11px 20px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.aura-btn-finish-return:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   9. RESPONSIVE BEHAVIOR ACROSS SCREEN SIZES
+   -------------------------------------------------------------------------- */
+
+/* 9.1 Large Desktop (1440px and above) */
+@media (min-width: 1440px) {
+  .aura-flip-study-root {
+    max-width: 1420px;
+    padding: 24px 36px 72px;
+    gap: 22px;
+  }
+
+  .aura-study-main-workspace {
+    grid-template-columns: minmax(0, 7fr) minmax(350px, 3fr);
+    gap: 32px;
+  }
+
+  .aura-study-left-col .aura-flipcard-inner {
+    height: 480px;
+    min-height: 480px;
+    max-height: 480px;
+  }
+
+  .aura-study-left-col .aura-flipcard-question-text {
+    font-size: 34px;
+  }
+
+  .aura-study-left-col .aura-flipcard-answer-text {
+    font-size: 25px;
+  }
+}
+
+/* 9.2 Standard Desktop & Laptop (1024px to 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .aura-flip-study-root {
+    max-width: 1240px;
+    padding: 20px 24px 60px;
+    gap: 18px;
+  }
+
+  .aura-study-main-workspace {
+    grid-template-columns: minmax(0, 6.6fr) minmax(310px, 3.4fr);
+    gap: 22px;
+  }
+
+  .aura-study-left-col .aura-flipcard-inner {
+    height: 430px;
+    min-height: 430px;
+    max-height: 430px;
+  }
+
+  .aura-study-left-col .aura-flipcard-face {
+    padding: 26px 32px 22px;
+  }
+
+  .aura-study-left-col .aura-flipcard-question-text {
+    font-size: 28px;
+  }
+
+  .aura-study-left-col .aura-flipcard-answer-text {
+    font-size: 22px;
+  }
+}
+
+/* 9.3 Tablet (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .aura-flip-study-root {
+    max-width: 840px;
+    padding: 18px 20px 48px;
+    gap: 18px;
+  }
+
+  .aura-study-main-workspace {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .aura-study-left-col .aura-flipcard-inner {
+    height: 420px;
+    min-height: 420px;
+    max-height: 420px;
+  }
+
+  .aura-study-sidebar-panel {
+    min-height: auto;
+    gap: 18px;
+  }
+
+  .aura-deck-list-scroll {
+    max-height: 260px;
+  }
+}
+
+/* 9.4 Mobile (below 768px) */
+@media (max-width: 767px) {
+  .aura-flip-study-root {
+    padding: 12px 14px 44px;
+    gap: 14px;
+  }
+
+  .aura-study-top-bar {
+    padding: 10px 12px;
+  }
+
+  .aura-study-top-center {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .aura-study-folder-title {
+    font-size: 13.5px;
+    max-width: 140px;
+  }
+
+  .aura-tool-label-text {
+    display: none;
+  }
+
+  .aura-study-top-tools {
+    gap: 6px;
+  }
+
+  .aura-btn-tool-shuffle,
+  .aura-btn-tool-mode {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .aura-study-progress-stats {
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .aura-study-main-workspace {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .aura-study-left-col .aura-flipcard-inner {
+    height: 340px;
+    min-height: 340px;
+    max-height: 340px;
+  }
+
+  .aura-study-left-col .aura-flipcard-face {
+    padding: 20px 18px 16px;
+    border-radius: 18px;
+  }
+
+  .aura-study-left-col .aura-flipcard-content-scroller {
+    max-height: 190px;
+  }
+
+  .aura-study-left-col .aura-flipcard-question-text {
+    font-size: 22px;
+    line-height: 1.35;
+  }
+
+  .aura-study-left-col .aura-flipcard-answer-text {
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  .aura-study-card-actions-row {
+    gap: 8px;
+  }
+
+  .aura-btn-card-arrow {
+    width: 48px;
+    height: 50px;
+  }
+
+  .aura-btn-card-action {
+    height: 50px;
+    padding: 0 10px;
+    gap: 6px;
+  }
+
+  .aura-btn-card-primary {
+    font-size: 12px;
+  }
+
+  .aura-btn-card-secondary {
+    display: none;
+  }
+
+  .aura-study-sidebar-panel {
+    min-height: auto;
+    gap: 16px;
+  }
+
+  .aura-deck-list-scroll {
+    max-height: 220px;
+  }
+
+  .aura-shortcuts-panel {
+    display: none;
+  }
+
+  .aura-finish-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .aura-study-left-col .aura-flipcard-inner {
+    height: 310px;
+    min-height: 310px;
+    max-height: 310px;
+  }
+
+  .aura-study-left-col .aura-flipcard-face {
+    padding: 16px 14px 14px;
+    border-radius: 16px;
+  }
+
+  .aura-study-left-col .aura-flipcard-question-text {
+    font-size: 19px;
+  }
+
+  .aura-study-left-col .aura-flipcard-answer-text {
+    font-size: 16px;
+  }
+
+  .aura-btn-card-arrow {
+    width: 42px;
+    height: 48px;
+  }
+
+  .aura-btn-card-action {
+    height: 48px;
+    padding: 0 8px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. ACCESSIBILITY: REDUCED MOTION PREFERENCE
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .aura-flipcard-inner {
+    transition: opacity 200ms ease;
+  }
+
+  .aura-flipcard-inner.is-flipped {
+    transform: none !important;
+  }
+
+  .aura-flipcard-inner.is-flipped .aura-flipcard-front {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .aura-flipcard-inner.is-flipped .aura-flipcard-back {
+    opacity: 1;
+    transform: none !important;
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .aura-flipcard-inner:not(.is-flipped) .aura-flipcard-back {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .aura-study-progress-fill {
+    transition: none !important;
+  }
+}
+
