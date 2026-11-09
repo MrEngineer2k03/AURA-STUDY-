@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './EventsPage.css';
-import characterImg from '../character/character.png';
 import auraLogo from '../dashboard/logoname.png';
+import { BigCircleAvatar, useSavedEquipment } from '../character';
 
 function renderCategoryIcon(icon) {
   switch (icon) {
@@ -96,6 +96,7 @@ function renderRewardIcon(type) {
 export default function EventsPage({ onNavigateHome, onTabChange }) {
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'EVENTS';
+  const savedEquipment = useSavedEquipment();
 
   // Live countdown timer state for Hero Event
   const [timeLeft, setTimeLeft] = useState({
@@ -492,7 +493,12 @@ export default function EventsPage({ onNavigateHome, onTabChange }) {
             title="View Profile"
           >
             <div className="user-avatar-circle">
-              <img src={characterImg} alt="Carl" className="user-avatar-img" />
+              <BigCircleAvatar
+                equipment={savedEquipment}
+                size={32}
+                level={12}
+                showFrame={false}
+              />
             </div>
             <div className="user-info-text">
               <span className="user-info-name">CARL_MONDIGO</span>

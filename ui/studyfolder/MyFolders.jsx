@@ -12,8 +12,8 @@ import ArchiveSection from './ArchiveSection';
 import FolderFilesModal from './FolderFilesModal';
 import './MyFolders.css';
 
-import characterImg from '../character/character.png';
 import auraLogo from '../dashboard/logoname.png';
+import { BigCircleAvatar, useSavedEquipment } from '../character';
 
 /**
  * MyFolders - Dedicated "MY FOLDERS" Page for AURA with Study Creation & Archive System
@@ -43,6 +43,7 @@ export default function MyFolders({
   // Navigation tabs
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'MY FOLDERS';
+  const savedEquipment = useSavedEquipment();
 
   // Realistic Example Study Folders matching exact reference design (media_1793596234655_f4b8a921.jpg)
   const initialFolders = [
@@ -815,10 +816,11 @@ export default function MyFolders({
             title="View Profile"
           >
             <div className="user-avatar-circle">
-              <img
-                src={characterImg}
-                alt="Carl"
-                className="user-avatar-img"
+              <BigCircleAvatar
+                equipment={savedEquipment}
+                size={32}
+                level={12}
+                showFrame={false}
               />
             </div>
             <div className="user-info-text">

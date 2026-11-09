@@ -1,0 +1,447 @@
+/* ==========================================================================
+   AURA Character Customization & Modular 14-Layer SVG Engine Styles
+   Supports all utility classes and layout structures in character.tsx
+   ========================================================================== */
+
+.aura-char-customizer-root {
+  background-color: #070A12;
+  color: #f1f5f9;
+  font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.aura-char-customizer-root.is-standalone {
+  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 4rem;
+}
+
+.aura-char-customizer-root.is-embedded {
+  background-color: transparent;
+  padding-bottom: 2rem;
+}
+
+.aura-char-customizer-root *,
+.aura-char-customizer-root *::before,
+.aura-char-customizer-root *::after,
+.aura-big-circle-avatar,
+.aura-big-circle-avatar * {
+  box-sizing: border-box;
+}
+
+.aura-char-customizer-root button {
+  font-family: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+}
+
+.aura-char-customizer-root ol {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.aura-char-customizer-root pre {
+  margin: 0;
+}
+
+/* Scoped Utility Classes for character.tsx */
+.aura-char-customizer-root .min-h-screen { min-height: 100vh; }
+.aura-char-customizer-root .w-full,
+.aura-big-circle-avatar .w-full,
+svg.w-full { width: 100%; }
+.aura-char-customizer-root .h-full,
+.aura-big-circle-avatar .h-full,
+svg.h-full { height: 100%; }
+.aura-char-customizer-root .max-w-7xl { max-width: 80rem; }
+.aura-char-customizer-root .mx-auto { margin-left: auto; margin-right: auto; }
+.aura-char-customizer-root .shrink-0,
+.aura-big-circle-avatar.shrink-0 { flex-shrink: 0; }
+.aura-char-customizer-root .flex-1 { flex: 1 1 0%; }
+.aura-char-customizer-root .min-w-0 { min-width: 0px; }
+
+/* Explicit Sizes */
+.aura-char-customizer-root .w-3 { width: 0.75rem; }
+.aura-char-customizer-root .h-3 { height: 0.75rem; }
+.aura-char-customizer-root .w-3\.5 { width: 0.875rem; }
+.aura-char-customizer-root .h-3\.5 { height: 0.875rem; }
+.aura-char-customizer-root .w-4 { width: 1rem; }
+.aura-char-customizer-root .h-4 { height: 1rem; }
+.aura-char-customizer-root .w-5 { width: 1.25rem; }
+.aura-char-customizer-root .h-5 { height: 1.25rem; }
+.aura-char-customizer-root .w-6 { width: 1.5rem; }
+.aura-char-customizer-root .h-6 { height: 1.5rem; }
+.aura-char-customizer-root .w-10 { width: 2.5rem; }
+.aura-char-customizer-root .h-10 { height: 2.5rem; }
+.aura-char-customizer-root .h-2 { height: 0.5rem; }
+.aura-char-customizer-root .h-32 { height: 8rem; }
+.aura-char-customizer-root .h-\[390px\] { height: 390px; }
+.aura-char-customizer-root .max-h-\[405px\] { max-height: 405px; }
+.aura-char-customizer-root .w-\[88\%\] { width: 88%; }
+
+/* Positioning */
+.aura-char-customizer-root .relative,
+.aura-big-circle-avatar.relative { position: relative; }
+.aura-char-customizer-root .absolute { position: absolute; }
+.aura-char-customizer-root .sticky { position: sticky; }
+.aura-char-customizer-root .top-0 { top: 0px; }
+.aura-char-customizer-root .z-30 { z-index: 30; }
+.aura-char-customizer-root .inset-0 { top: 0px; right: 0px; bottom: 0px; left: 0px; }
+.aura-char-customizer-root .inset-2 { top: 0.5rem; right: 0.5rem; bottom: 0.5rem; left: 0.5rem; }
+
+/* Overflow & Selection */
+.aura-char-customizer-root .select-none,
+svg.select-none { user-select: none; }
+.aura-char-customizer-root .overflow-hidden,
+.aura-big-circle-avatar.overflow-hidden { overflow: hidden; }
+.aura-char-customizer-root .overflow-y-auto { overflow-y: auto; }
+.aura-char-customizer-root .overflow-x-auto { overflow-x: auto; }
+.aura-char-customizer-root .truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aura-char-customizer-root .line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Flexbox & Grid */
+.aura-char-customizer-root .flex,
+.aura-big-circle-avatar.flex { display: flex; }
+.aura-char-customizer-root .flex-col { flex-direction: column; }
+.aura-char-customizer-root .flex-wrap { flex-wrap: wrap; }
+.aura-char-customizer-root .items-center,
+.aura-big-circle-avatar.items-center { align-items: center; }
+.aura-char-customizer-root .items-start { align-items: flex-start; }
+.aura-char-customizer-root .justify-center,
+.aura-big-circle-avatar.justify-center { justify-content: center; }
+.aura-char-customizer-root .justify-between { justify-content: space-between; }
+
+.aura-char-customizer-root .grid { display: grid; }
+.aura-char-customizer-root .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.aura-char-customizer-root .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Gaps */
+.aura-char-customizer-root .gap-1 { gap: 0.25rem; }
+.aura-char-customizer-root .gap-1\.5 { gap: 0.375rem; }
+.aura-char-customizer-root .gap-2 { gap: 0.5rem; }
+.aura-char-customizer-root .gap-2\.5 { gap: 0.625rem; }
+.aura-char-customizer-root .gap-3 { gap: 0.75rem; }
+.aura-char-customizer-root .gap-4 { gap: 1rem; }
+.aura-char-customizer-root .gap-6 { gap: 1.5rem; }
+
+/* Vertical Space */
+.aura-char-customizer-root .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem; }
+.aura-char-customizer-root .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.625rem; }
+.aura-char-customizer-root .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+.aura-char-customizer-root .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
+
+/* Padding */
+.aura-char-customizer-root .p-1 { padding: 0.25rem; }
+.aura-char-customizer-root .p-1\.5 { padding: 0.375rem; }
+.aura-char-customizer-root .p-2 { padding: 0.5rem; }
+.aura-char-customizer-root .p-2\.5 { padding: 0.625rem; }
+.aura-char-customizer-root .p-3 { padding: 0.75rem; }
+.aura-char-customizer-root .p-3\.5 { padding: 0.875rem; }
+.aura-char-customizer-root .p-4 { padding: 1rem; }
+.aura-char-customizer-root .p-5 { padding: 1.25rem; }
+.aura-char-customizer-root .p-6 { padding: 1.5rem; }
+
+.aura-char-customizer-root .px-1\.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+.aura-char-customizer-root .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.aura-char-customizer-root .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+.aura-char-customizer-root .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.aura-char-customizer-root .px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
+.aura-char-customizer-root .px-4 { padding-left: 1rem; padding-right: 1rem; }
+.aura-char-customizer-root .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+
+.aura-char-customizer-root .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+.aura-char-customizer-root .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.aura-char-customizer-root .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+.aura-char-customizer-root .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.aura-char-customizer-root .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.aura-char-customizer-root .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.aura-char-customizer-root .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+
+.aura-char-customizer-root .pl-1\.5 { padding-left: 0.375rem; }
+.aura-char-customizer-root .pr-3\.5 { padding-right: 0.875rem; }
+.aura-char-customizer-root .pb-2 { padding-bottom: 0.5rem; }
+.aura-char-customizer-root .pb-5 { padding-bottom: 1.25rem; }
+.aura-char-customizer-root .pb-16 { padding-bottom: 4rem; }
+.aura-char-customizer-root .pt-1 { padding-top: 0.25rem; }
+.aura-char-customizer-root .pt-2 { padding-top: 0.5rem; }
+.aura-char-customizer-root .pt-3 { padding-top: 0.75rem; }
+.aura-char-customizer-root .pt-6 { padding-top: 1.5rem; }
+
+/* Margin */
+.aura-char-customizer-root .mt-0\.5 { margin-top: 0.125rem; }
+.aura-char-customizer-root .mt-1 { margin-top: 0.25rem; }
+.aura-char-customizer-root .mt-2 { margin-top: 0.5rem; }
+.aura-char-customizer-root .mt-2\.5 { margin-top: 0.625rem; }
+.aura-char-customizer-root .mt-4 { margin-top: 1rem; }
+.aura-char-customizer-root .mt-10 { margin-top: 2.5rem; }
+.aura-char-customizer-root .mb-1 { margin-bottom: 0.25rem; }
+.aura-char-customizer-root .mb-2 { margin-bottom: 0.5rem; }
+.aura-char-customizer-root .mb-3 { margin-bottom: 0.75rem; }
+.aura-char-customizer-root .mb-6 { margin-bottom: 1.5rem; }
+.aura-char-customizer-root .mr-1 { margin-right: 0.25rem; }
+.aura-char-customizer-root .my-1 { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+
+/* Border Radius */
+.aura-char-customizer-root .rounded { border-radius: 0.25rem; }
+.aura-char-customizer-root .rounded-lg { border-radius: 0.5rem; }
+.aura-char-customizer-root .rounded-xl { border-radius: 0.75rem; }
+.aura-char-customizer-root .rounded-2xl { border-radius: 1rem; }
+.aura-char-customizer-root .rounded-full,
+.aura-big-circle-avatar.rounded-full { border-radius: 9999px; }
+
+/* Borders */
+.aura-char-customizer-root .border { border-width: 1px; border-style: solid; }
+.aura-char-customizer-root .border-2 { border-width: 2px; border-style: solid; }
+.aura-char-customizer-root .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+.aura-char-customizer-root .border-t { border-top-width: 1px; border-top-style: solid; }
+
+.aura-char-customizer-root .border-slate-600 { border-color: #475569; }
+.aura-char-customizer-root .border-slate-700 { border-color: #334155; }
+.aura-char-customizer-root .border-slate-700\/60 { border-color: rgba(51, 65, 85, 0.6); }
+.aura-char-customizer-root .border-slate-700\/80 { border-color: rgba(51, 65, 85, 0.8); }
+.aura-char-customizer-root .border-slate-800 { border-color: #1e293b; }
+.aura-char-customizer-root .border-slate-800\/80 { border-color: rgba(30, 41, 59, 0.8); }
+.aura-char-customizer-root .border-slate-800\/90 { border-color: rgba(30, 41, 59, 0.9); }
+
+.aura-char-customizer-root .border-indigo-400 { border-color: #818cf8; }
+.aura-char-customizer-root .border-indigo-400\/50 { border-color: rgba(129, 140, 248, 0.5); }
+.aura-char-customizer-root .border-indigo-500 { border-color: #6366f1; }
+.aura-char-customizer-root .border-indigo-500\/30 { border-color: rgba(99, 102, 241, 0.3); }
+.aura-char-customizer-root .border-indigo-500\/50 { border-color: rgba(99, 102, 241, 0.5); }
+
+.aura-char-customizer-root .border-sky-500\/40 { border-color: rgba(14, 165, 233, 0.4); }
+.aura-char-customizer-root .border-sky-500\/50 { border-color: rgba(14, 165, 233, 0.5); }
+.aura-char-customizer-root .border-purple-500\/40 { border-color: rgba(168, 85, 247, 0.4); }
+.aura-char-customizer-root .border-purple-500\/50 { border-color: rgba(168, 85, 247, 0.5); }
+.aura-char-customizer-root .border-amber-400\/50 { border-color: rgba(251, 191, 36, 0.5); }
+.aura-char-customizer-root .border-amber-400\/60 { border-color: rgba(251, 191, 36, 0.6); }
+.aura-char-customizer-root .border-amber-500\/30 { border-color: rgba(245, 158, 11, 0.3); }
+.aura-char-customizer-root .border-amber-500\/40 { border-color: rgba(245, 158, 11, 0.4); }
+
+.aura-char-customizer-root .border-cyan-500\/40 { border-color: rgba(6, 182, 212, 0.4); }
+.aura-char-customizer-root .border-emerald-500\/40 { border-color: rgba(16, 185, 129, 0.4); }
+.aura-char-customizer-root .border-emerald-500\/50 { border-color: rgba(16, 185, 129, 0.5); }
+.aura-char-customizer-root .border-rose-500\/40 { border-color: rgba(244, 63, 94, 0.4); }
+.aura-char-customizer-root .border-rose-500\/50 { border-color: rgba(244, 63, 94, 0.5); }
+.aura-char-customizer-root .border-white { border-color: #ffffff; }
+
+.aura-char-customizer-root .hover\:border-slate-500:hover { border-color: #64748b; }
+.aura-char-customizer-root .hover\:border-slate-700:hover { border-color: #334155; }
+.aura-char-customizer-root .hover\:border-sky-400:hover { border-color: #38bdf8; }
+.aura-char-customizer-root .hover\:border-purple-400:hover { border-color: #c084fc; }
+.aura-char-customizer-root .hover\:border-amber-300:hover { border-color: #fcd34d; }
+
+/* Rings */
+.aura-char-customizer-root .ring-2.ring-indigo-500\/40 {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+}
+.aura-char-customizer-root .ring-2.ring-indigo-500\/60 {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6);
+}
+
+/* Backgrounds */
+.aura-char-customizer-root .bg-\[\#070A12\] { background-color: #070A12; }
+.aura-char-customizer-root .bg-\[\#0B0F1C\]\/85 { background-color: rgba(11, 15, 28, 0.85); }
+.aura-char-customizer-root .bg-\[\#0D1322\] { background-color: #0D1322; }
+.aura-char-customizer-root .bg-\[\#0A0E1A\]\/90 { background-color: rgba(10, 14, 26, 0.9); }
+
+.aura-char-customizer-root .bg-slate-800 { background-color: #1e293b; }
+.aura-char-customizer-root .bg-slate-800\/80 { background-color: rgba(30, 41, 59, 0.8); }
+.aura-char-customizer-root .bg-slate-800\/90 { background-color: rgba(30, 41, 59, 0.9); }
+.aura-char-customizer-root .bg-slate-900 { background-color: #0f172a; }
+.aura-char-customizer-root .bg-slate-900\/60 { background-color: rgba(15, 23, 42, 0.6); }
+.aura-char-customizer-root .bg-slate-900\/90,
+.aura-big-circle-avatar.bg-slate-900\/90 { background-color: rgba(15, 23, 42, 0.9); }
+.aura-char-customizer-root .bg-slate-950 { background-color: #020617; }
+.aura-char-customizer-root .bg-slate-950\/50 { background-color: rgba(2, 6, 23, 0.5); }
+.aura-char-customizer-root .bg-slate-950\/60 { background-color: rgba(2, 6, 23, 0.6); }
+.aura-char-customizer-root .bg-slate-950\/70 { background-color: rgba(2, 6, 23, 0.7); }
+.aura-char-customizer-root .bg-slate-950\/80 { background-color: rgba(2, 6, 23, 0.8); }
+.aura-char-customizer-root .bg-slate-950\/90 { background-color: rgba(2, 6, 23, 0.9); }
+
+.aura-char-customizer-root .bg-indigo-600 { background-color: #4f46e5; }
+.aura-char-customizer-root .bg-indigo-500\/20 { background-color: rgba(99, 102, 241, 0.2); }
+.aura-char-customizer-root .bg-indigo-500\/25 { background-color: rgba(99, 102, 241, 0.25); }
+.aura-char-customizer-root .bg-indigo-600\/20 { background-color: rgba(79, 70, 229, 0.2); }
+.aura-char-customizer-root .bg-indigo-600\/30 { background-color: rgba(79, 70, 229, 0.3); }
+.aura-char-customizer-root .bg-indigo-950\/40 { background-color: rgba(30, 27, 75, 0.4); }
+.aura-char-customizer-root .bg-indigo-950\/70 { background-color: rgba(30, 27, 75, 0.7); }
+
+.aura-char-customizer-root .bg-sky-950\/90 { background-color: rgba(8, 47, 73, 0.9); }
+.aura-char-customizer-root .bg-purple-950\/90 { background-color: rgba(59, 7, 100, 0.9); }
+.aura-char-customizer-root .bg-amber-950\/90 { background-color: rgba(69, 26, 3, 0.9); }
+.aura-char-customizer-root .bg-emerald-950\/70 { background-color: rgba(2, 44, 34, 0.7); }
+.aura-char-customizer-root .bg-rose-950\/70 { background-color: rgba(76, 5, 25, 0.7); }
+.aura-char-customizer-root .bg-rose-950\/90 { background-color: rgba(76, 5, 25, 0.9); }
+
+.aura-char-customizer-root .bg-cyan-500\/20 { background-color: rgba(6, 182, 212, 0.2); }
+.aura-char-customizer-root .bg-amber-500\/15 { background-color: rgba(245, 158, 11, 0.15); }
+.aura-char-customizer-root .bg-amber-500\/20 { background-color: rgba(245, 158, 11, 0.2); }
+.aura-char-customizer-root .bg-purple-500\/20 { background-color: rgba(168, 85, 247, 0.2); }
+.aura-char-customizer-root .bg-emerald-500\/20 { background-color: rgba(16, 185, 129, 0.2); }
+.aura-char-customizer-root .bg-rose-500\/20 { background-color: rgba(244, 63, 94, 0.2); }
+
+.aura-char-customizer-root .hover\:bg-slate-700:hover { background-color: #334155; }
+
+/* Gradients */
+.aura-char-customizer-root .bg-gradient-to-br.from-indigo-500.via-purple-600.to-rose-500 {
+  background-image: linear-gradient(to bottom right, #6366f1, #9333ea, #f43f5e);
+}
+.aura-char-customizer-root .bg-gradient-to-b.from-\[\#131B31\].via-\[\#0E1424\].to-\[\#090D18\] {
+  background-image: linear-gradient(to bottom, #131B31, #0E1424, #090D18);
+}
+.aura-char-customizer-root .bg-gradient-to-r.from-indigo-600.to-purple-600 {
+  background-image: linear-gradient(to right, #4f46e5, #9333ea);
+}
+.aura-char-customizer-root .bg-gradient-to-r.from-indigo-600.to-purple-600:hover {
+  background-image: linear-gradient(to right, #6366f1, #a855f7);
+}
+.aura-char-customizer-root .bg-gradient-to-r.from-rose-950\/60.via-slate-900.to-slate-900 {
+  background-image: linear-gradient(to right, rgba(76, 5, 25, 0.6), #0f172a, #0f172a);
+}
+.aura-char-customizer-root .bg-gradient-to-r.from-emerald-500.to-teal-400 {
+  background-image: linear-gradient(to right, #10b981, #2dd4bf);
+}
+
+/* Typography */
+.aura-char-customizer-root .text-\[10px\] { font-size: 10px; line-height: 1.3; }
+.aura-char-customizer-root .text-\[11px\] { font-size: 11px; line-height: 1.35; }
+.aura-char-customizer-root .text-xs { font-size: 0.75rem; line-height: 1rem; }
+.aura-char-customizer-root .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.aura-char-customizer-root .text-base { font-size: 1rem; line-height: 1.5rem; }
+.aura-char-customizer-root .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+
+.aura-char-customizer-root .font-medium { font-weight: 500; }
+.aura-char-customizer-root .font-semibold { font-weight: 600; }
+.aura-char-customizer-root .font-bold { font-weight: 700; }
+.aura-char-customizer-root .font-extrabold { font-weight: 800; }
+.aura-char-customizer-root .font-black { font-weight: 900; }
+.aura-char-customizer-root .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+.aura-char-customizer-root .uppercase { text-transform: uppercase; }
+.aura-char-customizer-root .capitalize { text-transform: capitalize; }
+.aura-char-customizer-root .tracking-tight { letter-spacing: -0.025em; }
+.aura-char-customizer-root .tracking-wider { letter-spacing: 0.05em; }
+.aura-char-customizer-root .leading-tight { line-height: 1.25; }
+.aura-char-customizer-root .leading-relaxed { line-height: 1.625; }
+.aura-char-customizer-root .text-left { text-align: left; }
+.aura-char-customizer-root .text-center { text-align: center; }
+
+/* Text Colors */
+.aura-char-customizer-root .text-white { color: #ffffff; }
+.aura-char-customizer-root .text-slate-100 { color: #f1f5f9; }
+.aura-char-customizer-root .text-slate-200 { color: #e2e8f0; }
+.aura-char-customizer-root .text-slate-300 { color: #cbd5e1; }
+.aura-char-customizer-root .text-slate-400 { color: #94a3b8; }
+.aura-char-customizer-root .text-slate-500 { color: #64748b; }
+
+.aura-char-customizer-root .text-indigo-200 { color: #c7d2fe; }
+.aura-char-customizer-root .text-indigo-300 { color: #a5b4fc; }
+.aura-char-customizer-root .text-indigo-400 { color: #818cf8; }
+.aura-char-customizer-root .text-sky-300 { color: #7dd3fc; }
+.aura-char-customizer-root .text-cyan-200 { color: #a5f3fc; }
+.aura-char-customizer-root .text-cyan-300 { color: #67e8f9; }
+.aura-char-customizer-root .text-cyan-400 { color: #22d3ee; }
+.aura-char-customizer-root .text-purple-300 { color: #d8b4fe; }
+.aura-char-customizer-root .text-amber-300 { color: #fcd34d; }
+.aura-char-customizer-root .text-amber-400 { color: #fbbf24; }
+.aura-char-customizer-root .text-emerald-200 { color: #a7f3d0; }
+.aura-char-customizer-root .text-emerald-300 { color: #6ee7b7; }
+.aura-char-customizer-root .text-emerald-400 { color: #34d399; }
+.aura-char-customizer-root .text-rose-200 { color: #fecdd3; }
+.aura-char-customizer-root .text-rose-300 { color: #fda4af; }
+.aura-char-customizer-root .text-rose-400 { color: #fb7185; }
+
+.aura-char-customizer-root .hover\:text-white:hover { color: #ffffff; }
+.aura-char-customizer-root .hover\:text-slate-200:hover { color: #e2e8f0; }
+.aura-char-customizer-root .group:hover .group-hover\:text-indigo-300 { color: #a5b4fc; }
+.aura-char-customizer-root .group:hover .group-hover\:border-slate-700 { border-color: #334155; }
+
+/* Shadows & Glows */
+.aura-char-customizer-root .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25); }
+.aura-char-customizer-root .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.35); }
+.aura-char-customizer-root .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55); }
+.aura-char-customizer-root .shadow-\[0_0_15px_-3px_rgba\(56\,189\,248\,0\.2\)\] {
+  box-shadow: 0 0 15px -3px rgba(56, 189, 248, 0.2);
+}
+.aura-char-customizer-root .shadow-\[0_0_18px_-3px_rgba\(168\,85\,247\,0\.28\)\] {
+  box-shadow: 0 0 18px -3px rgba(168, 85, 247, 0.28);
+}
+.aura-char-customizer-root .shadow-\[0_0_22px_-3px_rgba\(251\,191\,36\,0\.35\)\] {
+  box-shadow: 0 0 22px -3px rgba(251, 191, 36, 0.35);
+}
+
+/* Blur, Opacity & Transforms */
+.aura-char-customizer-root .backdrop-blur-xl { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+.aura-char-customizer-root .backdrop-blur-md { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.aura-char-customizer-root .backdrop-blur-\[1px\] { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); }
+
+.aura-char-customizer-root .opacity-75 { opacity: 0.75; }
+.aura-char-customizer-root .hover\:opacity-100:hover { opacity: 1; }
+.aura-char-customizer-root button:disabled.disabled\:opacity-40 { opacity: 0.4; cursor: not-allowed; }
+
+.aura-char-customizer-root .scale-110 { transform: scale(1.1); }
+.aura-char-customizer-root .hover\:scale-105:hover { transform: scale(1.05); }
+
+.aura-char-customizer-root .transition,
+.aura-char-customizer-root .transition-all,
+svg.transition-all {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.aura-char-customizer-root .transition-transform {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aura-char-customizer-root .cursor-pointer { cursor: pointer; }
+.aura-char-customizer-root .cursor-not-allowed { cursor: not-allowed; }
+.aura-char-customizer-root .hidden { display: none; }
+
+/* Responsive Breakpoints */
+@media (min-width: 640px) {
+  .aura-char-customizer-root .sm\:inline { display: inline; }
+  .aura-char-customizer-root .sm\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+  .aura-char-customizer-root .sm\:h-\[430px\] { height: 430px; }
+  .aura-char-customizer-root .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aura-char-customizer-root .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .aura-char-customizer-root .sm\:flex-row { flex-direction: row; }
+  .aura-char-customizer-root .sm\:items-center { align-items: center; }
+}
+
+@media (min-width: 768px) {
+  .aura-char-customizer-root .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .aura-char-customizer-root .lg\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .aura-char-customizer-root .lg\:col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+  .aura-char-customizer-root .lg\:col-span-7 {
+    grid-column: span 7 / span 7;
+  }
+  .aura-char-customizer-root .lg\:sticky {
+    position: sticky;
+  }
+  .aura-char-customizer-root .lg\:top-20 {
+    top: 5rem;
+  }
+}
+

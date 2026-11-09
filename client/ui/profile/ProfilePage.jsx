@@ -1,23 +1,47 @@
 import React, { useState } from 'react';
 import './ProfilePage.css';
-import characterImg from '../character/character.png';
 import auraLogo from '../dashboard/logoname.png';
+import CharacterCustomizer, {
+  CharacterRenderer,
+  BigCircleAvatar,
+  useSavedEquipment,
+  getEquipmentItemById,
+} from '../character';
 
 export default function ProfilePage({
   onNavigateHome,
   onTabChange,
   userName = 'CARL_MONDIGO',
+  initialSubTab = 'overview',
 }) {
-  const [activeSubTab, setActiveSubTab] = useState('overview'); // 'overview' | 'rewards' | 'settings'
+  const [activeSubTab, setActiveSubTab] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const h = window.location.hash.toLowerCase();
+      if (h === '#customize' || h === '#character' || h === '#rewards') {
+        return 'rewards';
+      }
+    }
+    return initialSubTab;
+  }); // 'overview' | 'rewards' | 'settings'
   const [previewEmptyFolders, setPreviewEmptyFolders] = useState(false);
   const [showCustomizeModal, setShowCustomizeModal] = useState(false);
   const [showAllAchievementsModal, setShowAllAchievementsModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
+  // Live synced equipment from character.tsx
+  const savedEquipment = useSavedEquipment();
+  const equippedTopItem = getEquipmentItemById(savedEquipment.upperOutfit);
+  const equippedFrameItem = getEquipmentItemById(savedEquipment.frame);
+
   // Customization state
   const [currentTitle, setCurrentTitle] = useState('Senior Tactician');
-  const [currentOutfit, setCurrentOutfit] = useState('Data Architect Hoodie');
-  const [activeFrameRing, setActiveFrameRing] = useState('cyber-prism'); // 'cyber-prism' | 'crimson-crest' | 'golden-halo'
+  const currentOutfit = equippedTopItem ? equippedTopItem.name : 'Crimson Engineering Jacket';
+  const activeFrameRing =
+    savedEquipment.frame === 'frame-crimson-eng'
+      ? 'crimson-crest'
+      : savedEquipment.frame === 'frame-archon-mythic'
+      ? 'golden-halo'
+      : 'cyber-prism';
 
   // Achievements list (6 total, 4 equipped)
   const [achievements, setAchievements] = useState([
@@ -212,10 +236,11 @@ export default function ProfilePage({
             }}
           >
             <div className="user-avatar-circle">
-              <img
-                src={characterImg}
-                alt="Carl"
-                className="user-avatar-img"
+              <BigCircleAvatar
+                equipment={savedEquipment}
+                size={32}
+                level={12}
+                showFrame={false}
               />
             </div>
             <div className="user-info-text">
@@ -233,9 +258,13 @@ export default function ProfilePage({
         <div className="profile-page-header-row">
           <div className="prof-header-left">
             <span className="prof-eyebrow">YOUR STUDENT SPACE</span>
-            <h1 className="prof-title">My Profile</h1>
+            <h1 className="prof-title">
+              {activeSubTab === 'rewards' ? 'Avatar & Frame Customization' : 'My Profile'}
+            </h1>
             <p className="prof-subtitle">
-              Your progress, achievements, and personal identity in AURA.
+              {activeSubTab === 'rewards'
+                ? 'Customize your 14-layer modular student avatar, outfits, accessories, and frames.'
+                : 'Your progress, achievements, and personal identity in AURA.'}
             </p>
           </div>
 
@@ -251,10 +280,7 @@ export default function ProfilePage({
             <button
               type="button"
               className={`prof-subnav-btn ${activeSubTab === 'rewards' ? 'active' : ''}`}
-              onClick={() => {
-                setActiveSubTab('rewards');
-                setShowCustomizeModal(true);
-              }}
+              onClick={() => setActiveSubTab('rewards')}
             >
               <span className="prof-subnav-icon">👤</span>
               <span>Avatar & Frame Rewards</span>
@@ -263,7 +289,6 @@ export default function ProfilePage({
               type="button"
               className={`prof-subnav-btn ${activeSubTab === 'settings' ? 'active' : ''}`}
               onClick={() => {
-                setActiveSubTab('settings');
                 setShowSettingsModal(true);
               }}
             >
@@ -273,20 +298,37 @@ export default function ProfilePage({
           </div>
         </div>
 
-        {/* TWO-COLUMN GRID LAYOUT */}
+        {activeSubTab === 'rewards' ? (
+          <CharacterCustomizer
+            embedded={true}
+            userName="Carl Patrick Mondigo"
+            level={12}
+          />
+        ) : (
+        /* TWO-COLUMN GRID LAYOUT */
         <div className="profile-main-grid-layout">
           {/* =========================================
               LEFT COLUMN: IDENTITY & ACADEMIC CARD
              ========================================= */}
           <aside className="profile-identity-card">
             {/* Title Crown - Pure stylized text without a shape container */}
-            <div className="avatar-crown-title">
+            <div
+              className="avatar-crown-title"
+              onClick={() => setShowCustomizeModal(true)}
+              style={{ cursor: 'pointer' }}
+              title="Click to change equipped title"
+            >
               <span>👑</span>
               <span>{currentTitle}</span>
             </div>
 
             {/* Circular Avatar Bust with Glow Ring */}
-            <div className="avatar-bust-container">
+            <div
+              className="avatar-bust-container"
+              onClick={() => setActiveSubTab('rewards')}
+              style={{ cursor: 'pointer' }}
+              title="Click to customize character"
+            >
               <div
                 className="avatar-ring-outer"
                 style={{
@@ -299,9 +341,11 @@ export default function ProfilePage({
                 }}
               >
                 <div className="avatar-ring-inner">
-                  <img
-                    src={characterImg}
-                    alt="Carl Patrick Mondigo"
+                  <CharacterRenderer
+                    equipment={savedEquipment}
+                    cropMode="circle"
+                    showFrame={false}
+                    level={12}
                     className="avatar-img-bust"
                   />
                 </div>
@@ -315,13 +359,18 @@ export default function ProfilePage({
             {/* Wearing Subtitle */}
             <div className="avatar-wearing-text">
               Wearing <strong style={{ color: '#ffffff' }}>{currentOutfit}</strong>
+              {equippedFrameItem && (
+                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                  Frame: {equippedFrameItem.name}
+                </div>
+              )}
             </div>
 
             {/* Customize Button */}
             <button
               type="button"
               className="btn-customize-avatar"
-              onClick={() => setShowCustomizeModal(true)}
+              onClick={() => setActiveSubTab('rewards')}
             >
               <span>✏</span>
               <span>Customize Avatar & Frame</span>
@@ -667,16 +716,17 @@ export default function ProfilePage({
             </section>
           </div>
         </div>
+        )}
       </main>
 
       {/* =========================================
-          CUSTOMIZE AVATAR & FRAME MODAL
+          CUSTOMIZE TITLE MODAL
          ========================================= */}
       {showCustomizeModal && (
         <div className="prof-modal-backdrop" onClick={() => setShowCustomizeModal(false)}>
           <div className="prof-modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="prof-modal-header">
-              <h3 className="prof-modal-title">Customize Avatar & Identity</h3>
+              <h3 className="prof-modal-title">Customize Equipped Title</h3>
               <button
                 type="button"
                 className="prof-modal-close-btn"
@@ -686,39 +736,6 @@ export default function ProfilePage({
               </button>
             </div>
             <div className="prof-modal-body">
-              {/* Frame Ring Selection */}
-              <div>
-                <label style={{ fontSize: '13px', fontWeight: '700', color: '#94a3b8', display: 'block', marginBottom: '8px' }}>
-                  Aura Glow Frame
-                </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                  {[
-                    { id: 'cyber-prism', name: 'Cyber Prism (Triple Glow)' },
-                    { id: 'crimson-crest', name: 'Crimson Vanguard' },
-                    { id: 'golden-halo', name: 'Golden Scholar' },
-                  ].map((frame) => (
-                    <button
-                      key={frame.id}
-                      type="button"
-                      onClick={() => setActiveFrameRing(frame.id)}
-                      style={{
-                        background: activeFrameRing === frame.id ? '#1b2334' : '#131826',
-                        border: activeFrameRing === frame.id ? '2px solid #ff4d6d' : '1px solid #1e2638',
-                        borderRadius: '10px',
-                        padding: '12px 10px',
-                        color: '#ffffff',
-                        fontSize: '12px',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                      }}
-                    >
-                      {frame.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Title Selection */}
               <div>
                 <label style={{ fontSize: '13px', fontWeight: '700', color: '#94a3b8', display: 'block', marginBottom: '8px' }}>
@@ -752,58 +769,47 @@ export default function ProfilePage({
                 </div>
               </div>
 
-              {/* Outfit Selection */}
-              <div>
-                <label style={{ fontSize: '13px', fontWeight: '700', color: '#94a3b8', display: 'block', marginBottom: '8px' }}>
-                  Equipped Outfit
-                </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-                  {[
-                    'Data Architect Hoodie',
-                    'Crimson Cyber-Engineer Jacket',
-                    'Midnight Scholar Coat',
-                    'Academy Classic Blazer',
-                  ].map((outfit) => (
-                    <button
-                      key={outfit}
-                      type="button"
-                      onClick={() => setCurrentOutfit(outfit)}
-                      style={{
-                        background: currentOutfit === outfit ? '#1b2334' : '#131826',
-                        border: currentOutfit === outfit ? '2px solid #ff4d6d' : '1px solid #1e2638',
-                        borderRadius: '10px',
-                        padding: '10px',
-                        color: '#ffffff',
-                        fontSize: '12px',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      👕 {outfit}
-                    </button>
-                  ))}
-                </div>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCustomizeModal(false);
+                    setActiveSubTab('rewards');
+                  }}
+                  style={{
+                    flex: 1,
+                    background: '#1b2334',
+                    color: '#ffffff',
+                    border: '1px solid #2e3b52',
+                    padding: '10px 16px',
+                    borderRadius: '10px',
+                    fontFamily: 'var(--font-heading, Sora)',
+                    fontWeight: '700',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Open Full Character Customizer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowCustomizeModal(false)}
+                  style={{
+                    flex: 1,
+                    background: '#ff4d6d',
+                    color: '#ffffff',
+                    border: 'none',
+                    padding: '10px 16px',
+                    borderRadius: '10px',
+                    fontFamily: 'var(--font-heading, Sora)',
+                    fontWeight: '700',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Save Title
+                </button>
               </div>
-
-              <button
-                type="button"
-                onClick={() => setShowCustomizeModal(false)}
-                style={{
-                  marginTop: '12px',
-                  background: '#ff4d6d',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  fontFamily: 'var(--font-heading, Sora)',
-                  fontWeight: '700',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  width: '100%',
-                }}
-              >
-                Save Changes
-              </button>
             </div>
           </div>
         </div>

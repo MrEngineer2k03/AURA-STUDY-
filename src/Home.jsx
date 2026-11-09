@@ -4,6 +4,11 @@ import MyFolders from 'ui/studyfolder/MyFolders';
 import EventsPage from 'ui/events/EventsPage';
 import ProfilePage from 'ui/profile/ProfilePage';
 import {
+  CharacterRenderer,
+  BigCircleAvatar,
+  useSavedEquipment,
+} from 'ui/character';
+import {
   ContinueStudyingCard,
   HomeFoldersPanel,
   UpcomingEventsCard,
@@ -12,13 +17,14 @@ import {
   loadStoredFolders,
   sortByRecent,
 } from './components/HomeBottom';
-import characterImg from './assets/character.png';
 import auraLogo from './assets/logoname.png';
 import homeBg from './assets/homebackground.png';
 import eventBanner from './assets/event_banner.png';
 import engineeringLogo from './assets/engineeringlogo.png';
 
 export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
+  const savedEquipment = useSavedEquipment();
+
   const getInitialTab = () => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const h = window.location.hash.toLowerCase();
@@ -28,7 +34,7 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
       if (h === '#events') {
         return 'EVENTS';
       }
-      if (h === '#profile') {
+      if (h === '#profile' || h === '#customize' || h === '#character' || h === '#rewards') {
         return 'PROFILE';
       }
     }
@@ -45,7 +51,7 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
         setActiveTab('MY FOLDERS');
       } else if (h === '#events') {
         setActiveTab('EVENTS');
-      } else if (h === '#profile') {
+      } else if (h === '#profile' || h === '#customize' || h === '#character' || h === '#rewards') {
         setActiveTab('PROFILE');
       } else if (h === '#home' || h === '') {
         setActiveTab('HOME');
@@ -465,10 +471,11 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
             title="View Profile"
           >
             <div className="user-avatar-circle">
-              <img
-                src={characterImg}
-                alt="Carl"
-                className="user-avatar-img"
+              <BigCircleAvatar
+                equipment={savedEquipment}
+                size={32}
+                level={12}
+                showFrame={false}
               />
             </div>
             <div className="user-info-text">
@@ -527,9 +534,12 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
 
           {/* CENTER CHARACTER STAGE */}
           <div className="hero-center-character-stage">
-            <img
-              src={characterImg}
-              alt="Carl"
+            <CharacterRenderer
+              equipment={savedEquipment}
+              cropMode="full"
+              showFrame={false}
+              showEnvironment={false}
+              level={12}
               className="hero-character-sprite"
             />
             <div className="hero-character-ground-shadow"></div>

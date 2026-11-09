@@ -3,7 +3,7 @@ import './Home.css';
 import StudyCard from './components/StudyCard';
 import StudyFolders from '../studyfolder/StudyFolders';
 import MyFolders from '../studyfolder/MyFolders';
-import characterImg from '../character/character.png';
+import { CharacterRenderer, BigCircleAvatar, useSavedEquipment } from '../character';
 import auraLogo from './logoname.png';
 import homeBg from './homebackground.png';
 import eventBanner from './event_banner.png';
@@ -12,6 +12,7 @@ import engineeringLogo from './engineeringlogo.png';
 export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
   const [activeTab, setActiveTab] = useState('HOME');
   const [animated, setAnimated] = useState(false);
+  const savedEquipment = useSavedEquipment();
 
   useEffect(() => {
     const timer = requestAnimationFrame(() => {
@@ -207,10 +208,11 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
 
           <div className="user-profile-chip">
             <div className="user-avatar-circle">
-              <img
-                src={characterImg}
-                alt="Carl"
-                className="user-avatar-img"
+              <BigCircleAvatar
+                equipment={savedEquipment}
+                size={32}
+                level={12}
+                showFrame={false}
               />
             </div>
             <div className="user-info-text">
@@ -269,9 +271,12 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
 
           {/* CENTER CHARACTER STAGE */}
           <div className="hero-center-character-stage">
-            <img
-              src={characterImg}
-              alt="Carl"
+            <CharacterRenderer
+              equipment={savedEquipment}
+              cropMode="full"
+              showFrame={false}
+              showEnvironment={false}
+              level={12}
               className="hero-character-sprite"
             />
             <div className="hero-character-ground-shadow"></div>
