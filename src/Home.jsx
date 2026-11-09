@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './Home.css';
 import MyFolders from 'ui/studyfolder/MyFolders';
+import EventsPage from 'ui/events/EventsPage';
+import ProfilePage from 'ui/profile/ProfilePage';
 import {
   ContinueStudyingCard,
   HomeFoldersPanel,
@@ -23,6 +25,12 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
       if (h === '#study' || h === '#folders' || h === '#my-folders') {
         return 'MY FOLDERS';
       }
+      if (h === '#events') {
+        return 'EVENTS';
+      }
+      if (h === '#profile') {
+        return 'PROFILE';
+      }
     }
     return 'HOME';
   };
@@ -35,6 +43,10 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
       const h = window.location.hash.toLowerCase();
       if (h === '#study' || h === '#folders' || h === '#my-folders') {
         setActiveTab('MY FOLDERS');
+      } else if (h === '#events') {
+        setActiveTab('EVENTS');
+      } else if (h === '#profile') {
+        setActiveTab('PROFILE');
       } else if (h === '#home' || h === '') {
         setActiveTab('HOME');
       }
@@ -240,6 +252,41 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     );
   }
 
+  if (activeTab === 'EVENTS') {
+    return (
+      <EventsPage
+        onNavigateHome={() => {
+          setSelectedFolderForStudy(null);
+          setScrollToCreateFolder(false);
+          setActiveTab('HOME');
+        }}
+        onTabChange={(tab) => {
+          setSelectedFolderForStudy(null);
+          setScrollToCreateFolder(false);
+          setActiveTab(tab);
+        }}
+      />
+    );
+  }
+
+  if (activeTab === 'PROFILE') {
+    return (
+      <ProfilePage
+        onNavigateHome={() => {
+          setSelectedFolderForStudy(null);
+          setScrollToCreateFolder(false);
+          setActiveTab('HOME');
+        }}
+        onTabChange={(tab) => {
+          setSelectedFolderForStudy(null);
+          setScrollToCreateFolder(false);
+          setActiveTab(tab);
+        }}
+        userName={userName}
+      />
+    );
+  }
+
   // Helper to render Daily Missions card (used in hero right for desktop, in vertical stream for mobile)
   const renderDailyMissions = (extraClass = '') => (
     <div className={`daily-challenge-card ${extraClass}`}>
@@ -408,7 +455,15 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
             </svg>
           </button>
 
-          <div className="user-profile-chip">
+          <div
+            className="user-profile-chip"
+            onClick={() => {
+              window.location.hash = 'profile';
+              setActiveTab('PROFILE');
+            }}
+            style={{ cursor: 'pointer' }}
+            title="View Profile"
+          >
             <div className="user-avatar-circle">
               <img
                 src={characterImg}

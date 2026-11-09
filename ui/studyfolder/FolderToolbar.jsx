@@ -166,6 +166,13 @@ export default function FolderToolbar({
             onClick={() => setIsDropdownOpen((prev) => !prev)}
             aria-label={`Filter folders. Current filter: ${activeTab.label}`}
           >
+            <span
+              className="frt-pill-dot"
+              style={{
+                backgroundColor: activeTab.dotColor || '#ff4d6d',
+              }}
+              aria-hidden="true"
+            />
             <span className="frt-pill-label">{activeTab.label}</span>
             {typeof activeTab.count === 'number' && (
               <span className="frt-pill-count">{activeTab.count}</span>

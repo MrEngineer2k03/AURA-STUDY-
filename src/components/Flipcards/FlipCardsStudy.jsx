@@ -37,6 +37,9 @@ export default function FlipCardsStudy({
   const [sessionResults, setSessionResults] = useState([]);
   const [isSessionFinished, setIsSessionFinished] = useState(false);
 
+  // Mobile drawer state for viewing all cards in the deck
+  const [isDeckDrawerOpen, setIsDeckDrawerOpen] = useState(false);
+
   // Sync deck when cards prop changes
   useEffect(() => {
     setDeck([...cards]);
@@ -335,8 +338,23 @@ export default function FlipCardsStudy({
             onClick={onClose}
             aria-label="Exit Study Session"
           >
-            <span className="aura-exit-cross" aria-hidden="true">✕</span>
-            <span>Exit</span>
+            {/* Mobile borderless back icon */}
+            <svg
+              className="aura-exit-back-icon mobile-only"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            <span className="aura-exit-cross desktop-only" aria-hidden="true">✕</span>
+            <span className="desktop-only">Exit</span>
           </button>
         </div>
 
@@ -348,27 +366,44 @@ export default function FlipCardsStudy({
         </div>
 
         <div className="aura-study-top-right">
-          {onSwitchToQuiz && (
+          {/* Desktop Tools: Quiz Mode & Shuffle */}
+          <div className="desktop-study-tools">
+            {onSwitchToQuiz && (
+              <button
+                type="button"
+                className="aura-btn-tool-mode"
+                onClick={onSwitchToQuiz}
+                title="Switch to Multiple-Choice Quiz"
+              >
+                <span aria-hidden="true">⏱</span>
+                <span className="aura-tool-label-text">Quiz Mode</span>
+              </button>
+            )}
+
             <button
               type="button"
-              className="aura-btn-tool-mode"
-              onClick={onSwitchToQuiz}
-              title="Switch to Multiple-Choice Quiz"
+              className={`aura-btn-tool-shuffle ${isShuffled ? 'is-active' : ''}`}
+              onClick={handleToggleShuffle}
+              title={isShuffled ? 'Shuffled deck active' : 'Shuffle deck cards'}
+              aria-pressed={isShuffled}
             >
-              <span aria-hidden="true">⏱</span>
-              <span className="aura-tool-label-text">Quiz Mode</span>
+              <span aria-hidden="true">🔀</span>
+              <span className="aura-tool-label-text">{isShuffled ? 'Shuffled' : 'Shuffle'}</span>
             </button>
-          )}
+          </div>
 
+          {/* Mobile "Cards" button (replaces quiz & shuffle in header) */}
           <button
             type="button"
-            className={`aura-btn-tool-shuffle ${isShuffled ? 'is-active' : ''}`}
-            onClick={handleToggleShuffle}
-            title={isShuffled ? 'Shuffled deck active' : 'Shuffle deck cards'}
-            aria-pressed={isShuffled}
+            className="mobile-btn-deck-toggle"
+            onClick={() => setIsDeckDrawerOpen(true)}
+            aria-label="View cards in this deck"
           >
-            <span aria-hidden="true">🔀</span>
-            <span className="aura-tool-label-text">{isShuffled ? 'Shuffled' : 'Shuffle'}</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="14" height="14" rx="3" />
+              <path d="M7 21h12a2 2 0 0 0 2-2V7" />
+            </svg>
+            <span>Cards</span>
           </button>
         </div>
       </header>
@@ -417,7 +452,7 @@ export default function FlipCardsStudy({
             />
           </div>
 
-          {/* Action Row Underneath The Card: [←] [Still learning] [I know this] [→] */}
+          {/* Action Row Underneath The Card: [←] [Skip] [I know this] [→] */}
           <div className="aura-study-card-actions-row">
             <button
               type="button"
@@ -433,11 +468,13 @@ export default function FlipCardsStudy({
               type="button"
               className="aura-btn-card-action is-learning"
               onClick={handleStillLearning}
+              aria-label="Skip card"
             >
-              <span className="aura-btn-card-icon" aria-hidden="true">⚡</span>
+              <span className="aura-btn-card-icon desktop-only" aria-hidden="true">⚡</span>
               <div className="aura-btn-card-text">
-                <span className="aura-btn-card-primary">Still learning</span>
-                <span className="aura-btn-card-secondary">Review again</span>
+                <span className="aura-btn-card-primary desktop-only">Still learning</span>
+                <span className="aura-btn-card-primary mobile-only">Skip</span>
+                <span className="aura-btn-card-secondary desktop-only">Review again</span>
               </div>
             </button>
 
@@ -445,11 +482,12 @@ export default function FlipCardsStudy({
               type="button"
               className="aura-btn-card-action is-mastered"
               onClick={handleKnowThis}
+              aria-label="I know this card"
             >
-              <span className="aura-btn-card-icon" aria-hidden="true">✓</span>
+              <span className="aura-btn-card-icon desktop-only" aria-hidden="true">✓</span>
               <div className="aura-btn-card-text">
                 <span className="aura-btn-card-primary">I know this</span>
-                <span className="aura-btn-card-secondary">Mastered</span>
+                <span className="aura-btn-card-secondary desktop-only">Mastered</span>
               </div>
             </button>
 
@@ -461,6 +499,30 @@ export default function FlipCardsStudy({
               aria-label="Next card"
             >
               <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          {/* Mobile Bottom Utility Row: Quiz Mode and Shuffle */}
+          <div className="mobile-study-bottom-tools">
+            {onSwitchToQuiz && (
+              <button
+                type="button"
+                className="mobile-btn-bottom-tool is-quiz"
+                onClick={onSwitchToQuiz}
+              >
+                <span aria-hidden="true">⏱</span>
+                <span>Quiz Mode</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              className={`mobile-btn-bottom-tool is-shuffle ${isShuffled ? 'is-active' : ''}`}
+              onClick={handleToggleShuffle}
+              aria-pressed={isShuffled}
+            >
+              <span aria-hidden="true">🔀</span>
+              <span>{isShuffled ? 'Shuffled' : 'Shuffle'}</span>
             </button>
           </div>
         </section>
@@ -546,6 +608,71 @@ export default function FlipCardsStudy({
           </div>
         </aside>
       </main>
+
+      {/* Mobile Bottom Drawer: Cards in this deck (view & jump to questions) */}
+      {isDeckDrawerOpen && (
+        <div
+          className="mobile-deck-drawer-backdrop"
+          onClick={() => setIsDeckDrawerOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Cards in this deck"
+        >
+          <div className="mobile-deck-drawer-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-deck-drawer-header">
+              <div className="mobile-deck-drawer-title-wrap">
+                <h3 className="mobile-deck-drawer-title">Cards in this deck</h3>
+                <span className="mobile-deck-drawer-count">{sessionResults.length} / {totalInDeck} rated</span>
+              </div>
+              <button
+                type="button"
+                className="mobile-deck-drawer-close"
+                onClick={() => setIsDeckDrawerOpen(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="mobile-deck-drawer-content">
+              {deck.map((item, idx) => {
+                const isActive = idx === currentIndex;
+                const itemResult = sessionResults.find((r) => r.cardId === item.id)?.result;
+                const questionTitle = item.question || item.front || `Card ${idx + 1}`;
+
+                return (
+                  <button
+                    key={item.id || idx}
+                    type="button"
+                    className={`aura-deck-row-item ${isActive ? 'is-active' : ''}`}
+                    onClick={() => {
+                      setCurrentIndex(idx);
+                      setIsFlipped(false);
+                      setIsDeckDrawerOpen(false);
+                    }}
+                    aria-current={isActive ? 'true' : undefined}
+                  >
+                    <div className="aura-deck-row-left">
+                      {!isActive && (
+                        <span
+                          className={`aura-deck-row-dot ${itemResult ? `is-${itemResult}` : 'is-unrated'}`}
+                          aria-hidden="true"
+                        >
+                          ●
+                        </span>
+                      )}
+                      <span className="aura-deck-row-text">{questionTitle}</span>
+                    </div>
+                    <span className="aura-deck-row-num">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

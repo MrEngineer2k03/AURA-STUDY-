@@ -353,7 +353,17 @@ export default function FlashcardFolder({
   }, [cards, totalFlashcards, activeFilter, searchQuery]);
 
   return (
-    <div className="flashcard-folder-root" role="region" aria-label="Flashcard Folder Experience">
+    <div
+      className={`flashcard-folder-root ${
+        activeView === 'quiz'
+          ? 'is-quiz-view'
+          : activeView === 'study' || activeView === 'flipcards'
+          ? 'is-study-view'
+          : ''
+      }`}
+      role="region"
+      aria-label="Flashcard Folder Experience"
+    >
       {/* Cyber ambient background lighting */}
       <div className="folder-view-ambient-glow" aria-hidden="true" />
 

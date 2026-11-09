@@ -808,7 +808,12 @@ export default function MyFolders({
         </button>
 
         {!isFlashcardMode && (
-          <div className="user-profile-chip desktop-only-element">
+          <div
+            className="user-profile-chip desktop-only-element"
+            onClick={() => onTabChange && onTabChange('PROFILE')}
+            style={{ cursor: 'pointer' }}
+            title="View Profile"
+          >
             <div className="user-avatar-circle">
               <img
                 src={characterImg}

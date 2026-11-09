@@ -300,9 +300,15 @@ export default function StudyMode({
   const totalCards = sessionCards.length;
   const currentCard = sessionCards[currentIndex] || null;
 
+  // Options cache to ensure identical option order when navigating back and forth
+  const optionsCacheRef = useRef({});
+
   // Generate 4 randomized multiple-choice options (1 correct answer + 3 distinct distractors)
   const optionsData = useMemo(() => {
     if (!currentCard) return { options: [], correctIndex: 0 };
+    if (optionsCacheRef.current[currentCard.id]) {
+      return optionsCacheRef.current[currentCard.id];
+    }
 
     const correctAnswer = (currentCard.answer || currentCard.back || '').trim();
 
@@ -327,10 +333,12 @@ export default function StudyMode({
     const shuffledChoices = shuffleArray(rawChoices);
     const correctIndex = shuffledChoices.indexOf(correctAnswer);
 
-    return {
+    const generated = {
       options: shuffledChoices,
       correctIndex,
     };
+    optionsCacheRef.current[currentCard.id] = generated;
+    return generated;
   }, [currentCard?.id, sessionCards]);
 
   // Answer handler - prevents duplicate submissions and updates actual session data
@@ -414,13 +422,39 @@ export default function StudyMode({
     }
   }, [isAnswered, currentCard, optionsData, currentIndex, onRecordStudyResult]);
 
+  // Navigate to previous question
+  const handlePrevious = useCallback(() => {
+    if (currentIndex > 0) {
+      const prevIndex = currentIndex - 1;
+      setCurrentIndex(prevIndex);
+      const prevResult = sessionResults[prevIndex];
+      if (prevResult) {
+        setSelectedOptionIndex(prevResult.selectedOptionIndex);
+        setIsAnswered(true);
+        setTimeLeft(0);
+      } else {
+        setSelectedOptionIndex(null);
+        setIsAnswered(false);
+        setTimeLeft(10);
+      }
+    }
+  }, [currentIndex, sessionResults]);
+
   // Advance to next question or complete session
   const handleNext = useCallback(() => {
     if (currentIndex < totalCards - 1) {
-      setCurrentIndex((prev) => prev + 1);
-      setSelectedOptionIndex(null);
-      setIsAnswered(false);
-      setTimeLeft(10);
+      const nextIndex = currentIndex + 1;
+      setCurrentIndex(nextIndex);
+      const nextResult = sessionResults[nextIndex];
+      if (nextResult) {
+        setSelectedOptionIndex(nextResult.selectedOptionIndex);
+        setIsAnswered(true);
+        setTimeLeft(0);
+      } else {
+        setSelectedOptionIndex(null);
+        setIsAnswered(false);
+        setTimeLeft(10);
+      }
     } else {
       // Completed all questions in the session
       const total = totalCards;
@@ -452,7 +486,7 @@ export default function StudyMode({
       // Automatically display completion popup
       setIsCompletionModalOpen(true);
     }
-  }, [currentIndex, totalCards, onSessionComplete]);
+  }, [currentIndex, totalCards, sessionResults, onSessionComplete]);
 
   // Auto-advance / trigger completion popup on final question
   useEffect(() => {
@@ -565,6 +599,7 @@ export default function StudyMode({
 
   // Restart Study Session
   const handleStudyAgain = () => {
+    optionsCacheRef.current = {};
     const shuffled = [...cards].sort(() => Math.random() - 0.5);
     setSessionCards(shuffled);
     setCurrentIndex(0);
@@ -716,7 +751,7 @@ export default function StudyMode({
           1. TOP NAVIGATION HEADER (Flip Cards Style)
           ======================================================== */}
       <header className="study-quiz-top-bar" aria-label="Practice Quiz Header">
-        {/* Left: Exit button */}
+        {/* Left: Exit button (icon-only on mobile, not inside a button box) */}
         <div className="study-quiz-top-left">
           <button
             type="button"
@@ -724,8 +759,25 @@ export default function StudyMode({
             onClick={onExit}
             aria-label="Exit Practice Quiz"
           >
-            <span className="quiz-exit-icon" aria-hidden="true">✕</span>
-            <span>Exit</span>
+            {/* Mobile back icon */}
+            <svg
+              className="quiz-exit-icon-svg mobile-only"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+
+            {/* Desktop Exit icon + text */}
+            <span className="quiz-exit-icon desktop-only" aria-hidden="true">✕</span>
+            <span className="quiz-exit-label desktop-only">Exit</span>
           </button>
         </div>
 
@@ -745,11 +797,36 @@ export default function StudyMode({
           </div>
 
           <div className="quiz-timer-pill" title={isAnswered && selectedOptionIndex === -1 ? "Time's Up!" : `${timeLeft}s remaining`}>
-            <TimerRing
-              timeLeft={timeLeft}
-              totalTime={10}
-              isTimedOut={isAnswered && selectedOptionIndex === -1}
-            />
+            {/* Desktop TimerRing */}
+            <div className="desktop-only-timer">
+              <TimerRing
+                timeLeft={timeLeft}
+                totalTime={10}
+                isTimedOut={isAnswered && selectedOptionIndex === -1}
+              />
+            </div>
+
+            {/* Mobile Time Icon (Clean, no circle shape container) */}
+            <div
+              className="mobile-only-timer"
+              style={{
+                color: isAnswered && selectedOptionIndex === -1
+                  ? '#FFAA32'
+                  : timeLeft <= 2
+                  ? '#FF405C'
+                  : timeLeft <= 4
+                  ? '#FFAA32'
+                  : '#00D69A'
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              {!isAnswered && timeLeft > 0 && (
+                <span className="mobile-timer-num">{timeLeft}s</span>
+              )}
+            </div>
           </div>
 
           <div className="quiz-coins-badge" title="Coin Balance">
@@ -763,7 +840,7 @@ export default function StudyMode({
           2. PROGRESS ROW (Flip Cards Progress Style with Right Stats)
           ======================================================== */}
       <section className="study-quiz-progress-section" aria-label="Quiz Progress and Live Stats">
-        <div className="study-quiz-progress-meta-row">
+        <div className="study-quiz-progress-meta-row desktop-only-stats">
           <div className="study-quiz-progress-stats">
             <span className="quiz-meta-stat">
               <span className="quiz-meta-dot is-correct" aria-hidden="true">●</span>
@@ -790,6 +867,23 @@ export default function StudyMode({
             style={{ width: `${incorrectPercent}%` }}
             aria-hidden="true"
           />
+        </div>
+
+        {/* Mobile Stats Row (Shown on Mobile directly below track: 3 chips on left, % on right) */}
+        <div className="study-quiz-mobile-stats-row">
+          <div className="mobile-stats-chips">
+            <span className="mobile-stat-chip is-xp">
+              <span className="chip-bolt" aria-hidden="true">⚡</span>
+              <span>+{xpEarned} XP</span>
+            </span>
+            <span className="mobile-stat-chip">
+              Correct <strong className="stat-num">{correctCount}</strong>
+            </span>
+            <span className="mobile-stat-chip">
+              Streak <strong className="stat-num">{streak}</strong>
+            </span>
+          </div>
+          <span className="mobile-stats-pct">{progressPercent}%</span>
         </div>
       </section>
 
@@ -818,14 +912,15 @@ export default function StudyMode({
               aria-hidden="true"
             />
 
-            {/* Card Header: QUESTION 01 / 05 tag + status chip */}
+            {/* Card Header: (Question tag removed on mobile) + status chip */}
             <div className="quiz-card-header">
-              <div className="quiz-card-tag">
-                <span>QUESTION {String(currentIndex + 1).padStart(2, '0')} / {String(totalCards).padStart(2, '0')}</span>
+              <div className="quiz-card-tag desktop-only-card-tag">
+                <span>Question {String(currentIndex + 1).padStart(2, '0')} / {String(totalCards).padStart(2, '0')}</span>
               </div>
 
               <div className="quiz-card-status-chip">
-                <span>{currentCard?.lessonTag || 'Practice'}</span>
+                <span className="desktop-card-tag">{currentCard?.lessonTag || 'Practice'}</span>
+                <span className="mobile-card-tag">+10 XP</span>
               </div>
             </div>
 
@@ -847,7 +942,7 @@ export default function StudyMode({
               />
             )}
 
-            {/* Card Footer: Tap hint pill */}
+            {/* Card Footer: Tap hint or state pill */}
             <div className="quiz-card-footer">
               {!isAnswered ? (
                 <div className="quiz-card-bottom-pill">
@@ -857,17 +952,31 @@ export default function StudyMode({
               ) : (
                 <button
                   type="button"
-                  className="quiz-card-bottom-pill is-action"
+                  className={`quiz-card-bottom-pill is-action ${
+                    feedbackState === 'correct'
+                      ? 'is-correct'
+                      : feedbackState === 'timeout'
+                      ? 'is-timeout'
+                      : 'is-wrong'
+                  }`}
                   onClick={handleNext}
                 >
-                  <span className="quiz-pill-cue" aria-hidden="true">➔</span>
-                  <span>Press Enter or tap for {currentIndex === totalCards - 1 ? 'Results' : 'Next Question'}</span>
+                  <span className="quiz-pill-cue" aria-hidden="true">
+                    {feedbackState === 'correct' ? '✓' : feedbackState === 'timeout' ? '⏱' : '✕'}
+                  </span>
+                  <span>
+                    {feedbackState === 'correct'
+                      ? 'Correct! +10 XP'
+                      : feedbackState === 'timeout'
+                      ? `Time's up! Correct answer: ${['A', 'B', 'C', 'D'][optionsData.correctIndex] || 'A'}`
+                      : `Incorrect! Correct answer: ${['A', 'B', 'C', 'D'][optionsData.correctIndex] || 'A'}`}
+                  </span>
                 </button>
               )}
             </div>
           </div>
 
-          {/* Multiple-Choice Answer Choices (2x2 Grid) */}
+          {/* Multiple-Choice Answer Choices (2x2 Grid on Desktop, 1 Col on Mobile) */}
           <div className="quiz-choices-grid" role="radiogroup" aria-label="Answer Choices">
             {optionsData.options.map((optionText, optIdx) => {
               const letter = ['A', 'B', 'C', 'D'][optIdx];
@@ -941,6 +1050,31 @@ export default function StudyMode({
                 </button>
               );
             })}
+          </div>
+
+          {/* Mobile Bottom Action Buttons (Previous on Left, Next on Right) */}
+          <div className="study-quiz-mobile-bottom-actions">
+            <button
+              type="button"
+              className="btn-quiz-mobile-prev"
+              onClick={handlePrevious}
+              disabled={currentIndex === 0}
+              aria-label="Previous question"
+            >
+              <span className="mobile-btn-arrow" aria-hidden="true">←</span>
+              <span>Previous</span>
+            </button>
+
+            <button
+              type="button"
+              className="btn-quiz-mobile-next"
+              onClick={handleNext}
+              disabled={!isAnswered && !sessionResults[currentIndex]}
+              aria-label="Next question"
+            >
+              <span>{currentIndex === totalCards - 1 ? 'View results' : 'Next question'}</span>
+              <span className="mobile-btn-arrow" aria-hidden="true">→</span>
+            </button>
           </div>
         </main>
 

@@ -1,0 +1,1221 @@
+/* ==========================================================================
+   AURA Profile Page (ProfilePage.css)
+   Exact match to reference design:
+   - media_1794209966801_b7657a6b.jpg
+   - media_1794209978870_a6ba0958.jpg
+   Adheres to AURA theme colors, Sora/Inter typography, and cyber gaming styling.
+   ========================================================================== */
+
+.aura-profile-page-root {
+  height: 100vh;
+  max-height: 100vh;
+  width: 100%;
+  background-color: #080c14;
+  color: #f1f5f9;
+  font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  position: relative;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  padding-bottom: 80px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.aura-profile-page-root::-webkit-scrollbar {
+  width: 6px;
+}
+
+.aura-profile-page-root::-webkit-scrollbar-track {
+  background: rgba(10, 13, 20, 0.85);
+}
+
+.aura-profile-page-root::-webkit-scrollbar-thumb {
+  background: rgba(255, 42, 68, 0.35);
+  border-radius: 4px;
+}
+
+.aura-profile-page-root::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 42, 68, 0.65);
+}
+
+/* Ambient Cyber Glow & Background Layer */
+.profile-ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle 800px at 15% 10%, rgba(255, 42, 68, 0.1), transparent 70%),
+    radial-gradient(circle 700px at 85% 20%, rgba(251, 191, 36, 0.06), transparent 65%),
+    radial-gradient(circle 900px at 50% 90%, rgba(15, 23, 42, 0.9), transparent 80%),
+    linear-gradient(180deg, #090d16 0%, #07090f 100%);
+}
+
+/* ===================================================
+   MAIN CONTAINER & PAGE HEADER ROW
+   =================================================== */
+.profile-main-container {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 24px 32px 80px;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.profile-page-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.prof-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prof-eyebrow {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  color: #ff4d6d;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.prof-title {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.prof-subtitle {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 2px 0 0;
+}
+
+/* Top-Right Sub-navigation Pills */
+.profile-subnav-pills {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(13, 18, 29, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.prof-subnav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.prof-subnav-btn:hover:not(.active) {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.prof-subnav-btn.active {
+  background: #ff4d6d;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 77, 109, 0.4);
+}
+
+.prof-subnav-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ===================================================
+   MAIN TWO-COLUMN GRID LAYOUT
+   =================================================== */
+.profile-main-grid-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  width: 100%;
+  align-items: start;
+}
+
+/* ===================================================
+   LEFT SIDEBAR: IDENTITY & ACADEMIC CARD
+   =================================================== */
+.profile-identity-card {
+  background: #0f131f;
+  border: 1px solid #1e2638;
+  border-radius: 20px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* 1. Crown Title (Pure text, no shape container) */
+.avatar-crown-title {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fbbf24;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.4);
+}
+
+/* 2. Large Circular Avatar with Dual Gradient Ring */
+.avatar-bust-container {
+  align-self: center;
+  position: relative;
+  width: 136px;
+  height: 136px;
+  margin-bottom: 12px;
+}
+
+.avatar-ring-outer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, #ff4d6d 0%, #f59e0b 50%, #2dd4bf 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255, 77, 109, 0.35);
+}
+
+.avatar-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #0a0d16;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0f131f;
+}
+
+.avatar-img-bust {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-level-badge {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111726;
+  border: 1.5px solid #232d42;
+  border-radius: 999px;
+  padding: 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.level-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4d6d;
+  box-shadow: 0 0 6px #ff4d6d;
+}
+
+.avatar-wearing-text {
+  text-align: center;
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 10px 0 12px;
+}
+
+.btn-customize-avatar {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #141a27;
+  border: 1px solid #222c3d;
+  color: #ffffff;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.btn-customize-avatar:hover {
+  background: #1b2334;
+  border-color: #ff4d6d;
+  transform: translateY(-1px);
+}
+
+.prof-card-divider {
+  height: 1px;
+  background: #1a2233;
+  margin: 16px 0;
+  width: 100%;
+}
+
+/* User Name & Department Line */
+.user-identity-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.user-crest-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 77, 109, 0.12);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff4d6d;
+  flex-shrink: 0;
+}
+
+.user-identity-names {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-full-name {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.user-handle-dept {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Level Progress Block */
+.level-progress-block {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: #131826;
+  border: 1px solid #1c2436;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.level-progress-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.level-title-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.level-xp-value {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.level-progress-track {
+  height: 6px;
+  background: #1a2336;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.level-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d6d 0%, #ff2a44 100%);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+}
+
+.level-progress-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+}
+
+.level-needed-text {
+  color: #64748b;
+}
+
+.level-dept-rank {
+  color: #fbbf24;
+  font-weight: 700;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+}
+
+/* Academic Information Tiles */
+.academic-section-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.academic-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.academic-info-tile {
+  background: #131826;
+  border: 1px solid #1c2436;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.acad-tile-label {
+  font-size: 10.5px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.acad-tile-value {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+/* About Me */
+.about-me-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.about-me-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.about-me-text {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Buff Perks Text (Pure styled text, no shape container) */
+.profile-perks-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.prof-perk-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.prof-perk-text.perk-gold {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+}
+
+.prof-perk-text.perk-teal {
+  color: #2dd4bf;
+  text-shadow: 0 0 10px rgba(45, 212, 191, 0.35);
+}
+
+.prof-perk-text .perk-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* ===================================================
+   RIGHT MAIN COLUMN: STATS, FOLDERS, ACHIEVEMENTS
+   ================================================== */
+.profile-right-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 1. TOP 4 STAT CARDS GRID */
+.profile-stats-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.prof-stat-card {
+  background: #0f131f;
+  border: 1px solid #1e2638;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.prof-stat-card:hover {
+  border-color: rgba(255, 77, 109, 0.4);
+  transform: translateY(-1px);
+}
+
+.stat-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-card-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.stat-card-icon-tile {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card-icon-tile.icon-flame {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+
+.stat-card-icon-tile.icon-swords {
+  background: rgba(255, 77, 109, 0.12);
+  color: #ff4d6d;
+}
+
+.stat-card-icon-tile.icon-book {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+
+.stat-card-icon-tile.icon-coins {
+  background: rgba(45, 212, 191, 0.12);
+  color: #2dd4bf;
+}
+
+.stat-card-value {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+}
+
+.stat-card-subtext {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ===================================================
+   2. MY STUDY FOLDERS SECTION
+   =================================================== */
+.profile-section-card {
+  background: #0f131f;
+  border: 1px solid #1e2638;
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prof-section-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.prof-sec-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.prof-sec-title-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.prof-section-title {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 19px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.prof-sec-badge {
+  background: #141b29;
+  border: 1px solid #1e283d;
+  color: #94a3b8;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.prof-section-subtitle {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.btn-preview-empty {
+  background: #131826;
+  border: 1px solid #1e273a;
+  color: #cbd5e1;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-preview-empty:hover {
+  background: #1a2233;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.view-all-achievements-link {
+  background: transparent;
+  border: none;
+  color: #ff4d6d;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.view-all-achievements-link:hover {
+  opacity: 0.85;
+}
+
+/* 3 Study Folders Grid */
+.prof-folders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.prof-folder-card {
+  background: #131826;
+  border: 1px solid #1e273a;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.prof-folder-card:hover {
+  border-color: #2c3850;
+  transform: translateY(-2px);
+}
+
+.folder-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.folder-card-dept {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.folder-card-status-text {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.folder-card-status-text.status-progress-blue {
+  color: #60a5fa;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+.folder-card-status-text.status-progress-amber {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+.folder-card-status-text.status-completed-green {
+  color: #34d399;
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+}
+
+.folder-card-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.folder-card-title {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.folder-card-sub {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.folder-card-meta-counts {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.folder-card-completion-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.folder-completion-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 11.5px;
+}
+
+.folder-completion-meta .comp-label {
+  color: #94a3b8;
+}
+
+.folder-completion-meta .comp-pct {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-weight: 800;
+}
+
+.folder-completion-meta .comp-pct.pct-red {
+  color: #ff4d6d;
+}
+
+.folder-completion-meta .comp-pct.pct-amber {
+  color: #f59e0b;
+}
+
+.folder-completion-meta .comp-pct.pct-green {
+  color: #10b981;
+}
+
+.folder-progress-bar-track {
+  height: 4px;
+  background: #1c2436;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.folder-progress-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.folder-progress-bar-fill.fill-red {
+  background: #ff4d6d;
+}
+
+.folder-progress-bar-fill.fill-amber {
+  background: #f59e0b;
+}
+
+.folder-progress-bar-fill.fill-green {
+  background: #10b981;
+}
+
+.btn-folder-action {
+  width: 100%;
+  background: #161e2f;
+  border: 1px solid #232e44;
+  color: #ffffff;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-folder-action:hover {
+  background: #1f2b42;
+  border-color: #ff4d6d;
+}
+
+/* Empty State Placeholder */
+.prof-empty-state-box {
+  background: #131826;
+  border: 1.5px dashed #222d42;
+  border-radius: 14px;
+  padding: 40px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.empty-state-glyph {
+  font-size: 32px;
+}
+
+.empty-state-title {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.empty-state-sub {
+  font-size: 12.5px;
+  color: #94a3b8;
+  max-width: 380px;
+  margin: 0;
+}
+
+.btn-create-first-folder {
+  margin-top: 6px;
+  background: #ff4d6d;
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ===================================================
+   3. EARNED HONORS & ACHIEVEMENTS SECTION
+   =================================================== */
+.prof-achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.prof-achievement-card {
+  background: #131826;
+  border: 1px solid #1e273a;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rarity Card Designs: Distinct color styling applied directly to the card (No shape badge) */
+/* 1. Epic: Cyan */
+.prof-achievement-card.rarity-card-epic,
+.prof-modal-ach-card.rarity-card-epic {
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-left: 3.5px solid #38bdf8;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.09) 0%, #131826 45%);
+}
+
+.prof-achievement-card.rarity-card-epic:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 4px 22px rgba(56, 189, 248, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 2. Rare (Crimson Red) */
+.prof-achievement-card.rarity-card-rare-red,
+.prof-modal-ach-card.rarity-card-rare-red {
+  border: 1px solid rgba(255, 77, 109, 0.32);
+  border-left: 3.5px solid #ff4d6d;
+  background: linear-gradient(135deg, rgba(255, 77, 109, 0.09) 0%, #131826 45%);
+}
+
+.prof-achievement-card.rarity-card-rare-red:hover {
+  border-color: rgba(255, 77, 109, 0.6);
+  box-shadow: 0 4px 22px rgba(255, 77, 109, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 3. Uncommon (Gold / Amber) */
+.prof-achievement-card.rarity-card-uncommon,
+.prof-modal-ach-card.rarity-card-uncommon {
+  border: 1px solid rgba(251, 191, 36, 0.32);
+  border-left: 3.5px solid #fbbf24;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.09) 0%, #131826 45%);
+}
+
+.prof-achievement-card.rarity-card-uncommon:hover {
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 0 4px 22px rgba(251, 191, 36, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 4. Rare (Purple) */
+.prof-achievement-card.rarity-card-rare-purple,
+.prof-modal-ach-card.rarity-card-rare-purple {
+  border: 1px solid rgba(192, 132, 252, 0.32);
+  border-left: 3.5px solid #c084fc;
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.09) 0%, #131826 45%);
+}
+
+.prof-achievement-card.rarity-card-rare-purple:hover {
+  border-color: rgba(192, 132, 252, 0.6);
+  box-shadow: 0 4px 22px rgba(192, 132, 252, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 5. Legendary (Radiant Gold) */
+.prof-achievement-card.rarity-card-legendary,
+.prof-modal-ach-card.rarity-card-legendary {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-left: 3.5px solid #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, #131826 45%);
+}
+
+.prof-achievement-card.rarity-card-legendary:hover {
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 4px 24px rgba(245, 158, 11, 0.24);
+  transform: translateY(-2px);
+}
+
+.ach-icon-tile {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ach-icon-tile.tile-epic-cyan {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+.ach-icon-tile.tile-rare-red {
+  background: rgba(255, 77, 109, 0.12);
+  border: 1px solid rgba(255, 77, 109, 0.3);
+  color: #ff4d6d;
+}
+
+.ach-icon-tile.tile-uncommon-gold {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.ach-icon-tile.tile-rare-purple {
+  background: rgba(192, 132, 252, 0.12);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  color: #c084fc;
+}
+
+.ach-content-block {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ach-top-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ach-card-name {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.ach-card-desc {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.ach-footer-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.ach-earned-date {
+  color: #64748b;
+}
+
+.ach-displayed-flag {
+  color: #10b981;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ===================================================
+   INTERACTIVE MODAL OVERLAYS
+   =================================================== */
+.prof-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 13, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.prof-modal-dialog {
+  background: #0f131f;
+  border: 1px solid #1e2638;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 580px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.prof-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #1a2233;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prof-modal-title {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.prof-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.prof-modal-close-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.prof-modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* ===================================================
+   RESPONSIVE BREAKPOINTS (Mobile & Tablet)
+   =================================================== */
+@media (max-width: 1100px) {
+  .profile-main-grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-stats-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .prof-folders-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-main-container {
+    padding: 16px 14px 90px;
+  }
+
+  .profile-page-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .prof-title {
+    font-size: 24px;
+  }
+
+  .profile-subnav-pills {
+    width: 100%;
+    overflow-x: auto;
+    padding: 4px;
+  }
+
+  .prof-subnav-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 11.5px;
+    padding: 8px 10px;
+  }
+
+  .profile-stats-cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .stat-card-value {
+    font-size: 20px;
+  }
+
+  .prof-achievements-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-section-card {
+    padding: 18px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-stats-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .academic-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

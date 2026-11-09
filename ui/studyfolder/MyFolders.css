@@ -5211,9 +5211,9 @@
 .frt-search-input {
   width: 100%;
   height: 36px;
-  background: rgba(255, 255, 255, 0.04);
+  background: #0d121d;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9px;
+  border-radius: 10px;
   padding: 0 30px 0 36px;
   color: #ffffff;
   font-size: 13px;
@@ -5224,8 +5224,8 @@
 }
 
 .frt-search-input:focus {
-  border-color: rgba(255, 75, 96, 0.4);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 77, 109, 0.45);
+  background: #111726;
 }
 
 .frt-search-clear {
@@ -5256,46 +5256,69 @@
 .frt-pill-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   height: 36px;
-  padding: 0 16px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  color: #94a3b8;
-  font-size: 13px;
+  padding: 0 13px;
+  border-radius: 10px;
+  background: #0d121d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #8fa0b5;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
   user-select: none;
   box-sizing: border-box;
 }
 
 .frt-pill-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.06);
   color: #ffffff;
 }
 
 .frt-pill-btn.is-active,
 .frt-pill-btn.is-filtered {
-  background: rgba(255, 77, 109, 0.12);
-  color: #ff8fa3;
-  border: 1.5px solid rgba(255, 75, 96, 0.45);
+  background: rgba(255, 42, 68, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 77, 109, 0.45);
   font-weight: 600;
   box-shadow: none !important;
 }
 
 .frt-pill-btn.is-open {
   border-color: #ff4d6d;
+  background: rgba(255, 42, 68, 0.16);
   box-shadow: none !important;
 }
 
+.frt-pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #ff4d6d;
+  box-shadow: 0 0 5px rgba(255, 77, 109, 0.6);
+  transition: all 0.2s ease;
+}
+
 .frt-pill-count {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  color: inherit;
+  color: #8fa0b5;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
   margin-left: 2px;
+  line-height: 1.2;
+  transition: all 0.2s ease;
+}
+
+.frt-pill-btn.is-active .frt-pill-count,
+.frt-pill-btn.is-filtered .frt-pill-count {
+  background: rgba(255, 77, 109, 0.18);
+  color: #ff8fa3;
 }
 
 /* Controls Right */
@@ -5488,10 +5511,12 @@
 .frt-view-toggle-group {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 2px;
+  background: #0d121d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 3px;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 .frt-view-btn {
@@ -5499,9 +5524,9 @@
   align-items: center;
   justify-content: center;
   width: 30px;
-  height: 30px;
+  height: 28px;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
   background: transparent;
   color: #64748b;
   cursor: pointer;
@@ -5511,7 +5536,7 @@
 .frt-view-btn.is-active {
   background: rgba(255, 42, 68, 0.16);
   color: #ffffff;
-  border: 1px solid rgba(255, 42, 68, 0.38);
+  border: 1px solid rgba(255, 42, 68, 0.4);
   box-shadow: none;
 }
 
@@ -6664,7 +6689,7 @@
   .btn-continue-studying-primary {
     width: 100%;
     height: 44px;
-    border-radius: 9999px;
+    border-radius: 10px;
     background: linear-gradient(135deg, #ff4766 0%, #f43f5e 100%);
     box-shadow: none !important;
     display: flex;
@@ -6721,16 +6746,16 @@
   .frt-search-input {
     height: 38px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: #0d121d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 13px;
   }
 
   .frt-view-toggle-mobile {
     display: flex !important;
     align-items: center;
-    background: rgba(10, 14, 24, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #0d121d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     padding: 3px;
     flex-shrink: 0;
@@ -6764,48 +6789,56 @@
   .frt-pill-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     height: 36px;
-    padding: 0 14px;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    color: #94a3b8;
-    font-size: 13px;
+    padding: 0 13px;
+    border-radius: 10px;
+    background: #0d121d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #8fa0b5;
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: 12.5px;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     flex-shrink: 0;
   }
 
   .frt-pill-btn:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.06);
     color: #ffffff;
   }
 
   .frt-pill-btn.is-active,
   .frt-pill-btn.is-filtered {
-    background: rgba(255, 77, 109, 0.12);
-    border: 1.5px solid #ff4d6d;
+    background: rgba(255, 42, 68, 0.12);
+    border: 1px solid rgba(255, 77, 109, 0.45);
     color: #ffffff;
     box-shadow: none !important;
   }
 
   .frt-pill-btn.is-open {
     border-color: #ff4d6d;
+    background: rgba(255, 42, 68, 0.16);
     box-shadow: none !important;
   }
 
   .frt-pill-count {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    color: #cbd5e1;
+    color: #8fa0b5;
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
     margin-left: 2px;
+    line-height: 1.2;
+    transition: all 0.2s ease;
   }
 
   .frt-pill-btn.is-active .frt-pill-count,
   .frt-pill-btn.is-filtered .frt-pill-count {
+    background: rgba(255, 77, 109, 0.18);
     color: #ff8fa3;
   }
 
@@ -7012,21 +7045,21 @@
   .frt-view-toggle-group {
     flex-shrink: 0;
     padding: 3px;
-    border-radius: 9px;
-    background: rgba(10, 14, 24, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: #0d121d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .frt-view-btn {
     width: 32px;
     height: 28px;
-    border-radius: 6px;
+    border-radius: 7px;
   }
 
   .frt-view-btn.is-active {
-    background: linear-gradient(135deg, #ff3a52 0%, #e3162f 100%);
+    background: rgba(255, 42, 68, 0.16);
     color: #ffffff;
-    border: 1px solid rgba(255, 92, 112, 0.65);
+    border: 1px solid rgba(255, 42, 68, 0.4);
     box-shadow: none !important;
   }
 }
