@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './EventsPage.css';
 import auraLogo from '../dashboard/logoname.png';
-import { BigCircleAvatar, useSavedEquipment } from '../character';
+import { CharacterRenderer, useSavedEquipment } from '../character';
 
 function renderCategoryIcon(icon) {
   switch (icon) {
@@ -93,10 +93,16 @@ function renderRewardIcon(type) {
  * media_1794194238309_4dd05c52.jpg, media_1794194252113_31aa14c3.jpg)
  * adhering strictly to AURA theme colors, fonts, and full-width layout occupying left/right corners.
  */
-export default function EventsPage({ onNavigateHome, onTabChange }) {
+export default function EventsPage({ onNavigateHome, onTabChange, showNavbar = true }) {
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'EVENTS';
   const savedEquipment = useSavedEquipment();
+  const frameRingGradient =
+    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
+      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
+      : savedEquipment?.frame === 'frame-sql-champion'
+      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
+      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
 
   // Live countdown timer state for Hero Event
   const [timeLeft, setTimeLeft] = useState({
@@ -449,65 +455,102 @@ export default function EventsPage({ onNavigateHome, onTabChange }) {
       <div className="events-ambient-bg" aria-hidden="true" />
 
       {/* TOP NAVBAR */}
-      <header className="aura-navbar events-top-navbar">
-        <div className="navbar-left">
-          <img
-            src={auraLogo}
-            alt="AURA"
-            className="navbar-brand-logo"
-            onClick={() => handleNavClick('HOME')}
-          />
-          <span className="navbar-separator">·</span>
-          <nav className="navbar-nav-links" aria-label="Main Navigation">
-            {navTabs.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                className={`nav-tab-btn ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => handleNavClick(tab)}
+      {showNavbar && (
+        <header className="aura-navbar events-top-navbar">
+          <div className="navbar-left">
+            <img
+              src={auraLogo}
+              alt="AURA"
+              className="navbar-brand-logo"
+              onClick={() => handleNavClick('HOME')}
+            />
+            <span className="navbar-separator">·</span>
+            <nav className="navbar-nav-links" aria-label="Main Navigation">
+              {navTabs.map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  className={`nav-tab-btn ${activeTab === tab ? 'active' : ''}`}
+                  onClick={() => handleNavClick(tab)}
+                >
+                  {tab}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="navbar-right">
+            <div className="coins-badge">
+              <span className="coin-icon">🪙</span>
+              <span className="coin-val">2,450</span>
+            </div>
+
+            <button
+              type="button"
+              className="icon-btn-round desktop-only-element"
+              aria-label="Notifications"
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                {tab}
-              </button>
-            ))}
-          </nav>
-        </div>
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+            </button>
 
-        <div className="navbar-right">
-          <div className="coins-badge">
-            <span className="coin-icon">🪙</span>
-            <span className="coin-val">2,450</span>
-          </div>
-
-          <button
-            type="button"
-            className="icon-btn-round desktop-only-element"
-            aria-label="Notifications"
-          >
-            🔔
-          </button>
-
-          <div
-            className="user-profile-chip desktop-only-element"
-            onClick={() => handleNavClick('PROFILE')}
-            style={{ cursor: 'pointer' }}
-            title="View Profile"
-          >
-            <div className="user-avatar-circle">
-              <BigCircleAvatar
-                equipment={savedEquipment}
-                size={32}
-                level={12}
-                showFrame={false}
-              />
+            <div
+              className="user-profile-chip desktop-only-element"
+              onClick={() => handleNavClick('PROFILE')}
+              style={{ cursor: 'pointer' }}
+              title="View Profile"
+            >
+              <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+                <div className="user-avatar-inner">
+                  <CharacterRenderer
+                    equipment={savedEquipment}
+                    cropMode="circle"
+                    showFrame={false}
+                    level={12}
+                    className="user-avatar-bust"
+                  />
+                </div>
+              </div>
+              <div className="user-info-text">
+                <span className="user-info-name">Carl Patrick Mondigo</span>
+                <span className="user-info-dept">Lv. 12 · Engineering</span>
+              </div>
+              <span className="user-chevron">▾</span>
             </div>
-            <div className="user-info-text">
-              <span className="user-info-name">CARL_MONDIGO</span>
-              <span className="user-info-dept">Lv. 12 · Engineering</span>
-            </div>
-            <span className="user-chevron">▾</span>
+
+            <button
+              type="button"
+              className="user-profile-mobile-btn mobile-only-element"
+              onClick={() => handleNavClick('PROFILE')}
+              aria-label="View Profile"
+              title="View Profile"
+            >
+              <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+                <div className="user-avatar-inner">
+                  <CharacterRenderer
+                    equipment={savedEquipment}
+                    cropMode="circle"
+                    showFrame={false}
+                    level={12}
+                    className="user-avatar-bust"
+                  />
+                </div>
+              </div>
+            </button>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* MAIN FULL-WIDTH CONTAINER OCCUPYING LEFT & RIGHT CORNERS */}
       <main className="events-main-container">

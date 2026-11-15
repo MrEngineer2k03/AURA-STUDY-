@@ -1,0 +1,314 @@
+/* ==========================================================================
+   AURA GLOBAL PERSISTENT NAVBAR STYLING
+   Standardized layout and dimensions across all sections
+   ========================================================================== */
+
+.aura-global-navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(10, 14, 24, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  z-index: 50;
+}
+
+.aura-global-navbar .navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.aura-global-navbar .navbar-brand-logo {
+  height: 27px;
+  width: auto;
+  cursor: pointer;
+  object-fit: contain;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.aura-global-navbar .navbar-brand-logo:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.aura-global-navbar .navbar-separator {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 15px;
+  user-select: none;
+}
+
+.aura-global-navbar .navbar-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aura-global-navbar .nav-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.aura-global-navbar .nav-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.aura-global-navbar .nav-tab-btn.active {
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.2);
+}
+
+.aura-global-navbar .navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.aura-global-navbar .coins-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fbbf24;
+  box-shadow: none;
+  user-select: none;
+}
+
+.aura-global-navbar .icon-btn-round {
+  width: auto;
+  height: auto;
+  padding: 4px;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  color: #cbd5e1;
+}
+
+.aura-global-navbar .icon-btn-round:hover {
+  background: transparent;
+  border-color: transparent;
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+.aura-global-navbar .user-profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 3px 6px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.aura-global-navbar .user-profile-chip:hover {
+  opacity: 0.85;
+}
+
+.aura-global-navbar .user-profile-chip.active {
+  opacity: 1;
+}
+
+.aura-global-navbar .user-avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 1.5px;
+  box-shadow: 0 0 8px rgba(255, 77, 109, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.aura-global-navbar .user-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #0a0d16;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-global-navbar .user-avatar-bust {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.aura-global-navbar .user-info-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.aura-global-navbar .user-info-name {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.aura-global-navbar .user-info-dept {
+  font-size: 10.5px;
+  color: #94a3b8;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.aura-global-navbar .user-chevron {
+  color: #64748b;
+  font-size: 11px;
+  margin-left: 1px;
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile Profile Icon Button (Hidden on Desktop) */
+.aura-global-navbar .mobile-only-element {
+  display: none !important;
+}
+
+.aura-global-navbar .user-profile-mobile-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.aura-global-navbar .user-profile-mobile-btn:active {
+  transform: scale(0.92);
+  opacity: 0.85;
+}
+
+.aura-global-navbar .user-profile-mobile-btn.active .user-avatar-circle {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.7), 0 0 0 1.5px rgba(239, 68, 68, 0.9);
+}
+
+/* ==========================================================================
+   APP SHELL LAYOUT (Stationary Navbar + Scrollable Content Viewports)
+   ========================================================================== */
+.aura-app-layout {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #080c14;
+}
+
+.aura-app-page-container {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  height: calc(100vh - 54px);
+  height: calc(100dvh - 54px);
+  overflow: hidden;
+}
+
+/* Ensure child pages fit cleanly under the stationary global navbar */
+.aura-app-page-container > .aura-dashboard-root,
+.aura-app-page-container > .my-folders-page-root,
+.aura-app-page-container > .aura-events-page-root,
+.aura-app-page-container > .aura-profile-page-root {
+  height: 100% !important;
+  max-height: 100% !important;
+  width: 100% !important;
+  position: relative;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .aura-global-navbar {
+    height: 54px;
+    padding: 0 16px;
+    z-index: 60;
+  }
+
+  .aura-app-page-container {
+    height: calc(100vh - 54px);
+    height: calc(100dvh - 54px);
+  }
+
+  .aura-global-navbar .navbar-separator,
+  .aura-global-navbar .navbar-nav-links,
+  .aura-global-navbar .desktop-only-element {
+    display: none !important;
+  }
+
+  .aura-global-navbar .mobile-only-element {
+    display: flex !important;
+  }
+
+  .aura-global-navbar .navbar-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .aura-global-navbar .user-profile-mobile-btn {
+    display: flex !important;
+  }
+
+  .aura-global-navbar .user-profile-mobile-btn .user-avatar-circle {
+    width: 32px;
+    height: 32px;
+  }
+}
+

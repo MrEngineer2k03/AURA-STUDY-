@@ -1,118 +1,147 @@
 import HbIcon from './HomeBottomIcons';
-import HbSectionHeader from './HbSectionHeader';
-import { accentStyle } from './homeBottomUtils';
-
-function EventThumb({ event }) {
-  return (
-    <span className="hb-event-thumb" aria-hidden="true">
-      {event.thumbnail ? <img src={event.thumbnail} alt="" /> : <HbIcon name="calendar" size={18} />}
-    </span>
-  );
-}
-
-function RewardChips({ rewards }) {
-  if (!rewards || rewards.length === 0) return null;
-  return (
-    <div className="hb-rewards">
-      <span className="hb-rewards-label">Rewards</span>
-      <ul className="hb-reward-list">
-        {rewards.map((reward) => (
-          <li key={reward.label} className={`hb-reward hb-reward--${reward.tone || 'neutral'}`}>
-            <HbIcon name={reward.icon || 'gift'} size={11} />
-            <span>{reward.label}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+import defaultPoster from '../../assets/engineering_week_bg.png';
 
 /**
- * UpcomingEventsCard – featured next event plus a compact scrollable list of the rest.
+ * UpcomingEventsCard – redesigned featured event card matching the AURA design reference.
+ * Supports side-by-side desktop view and responsive stacked mobile view.
  *
- * @param {Array}    props.events       [{ id, title, dateLabel, timeLabel, description, category, color, rewards, thumbnail }]
- * @param {Function} props.onOpenEvent  Opens an event's details
+ * @param {Array}    props.events       [{ id, title, dateLabel, timeLabel, description, category, poster, thumbnail, hasBakedBadges, rewards }]
+ * @param {Function} props.onOpenEvent  Opens the event details
  * @param {Function} props.onViewAll    Navigates to the events page
  */
 export default function UpcomingEventsCard({ events = [], onOpenEvent, onViewAll }) {
-  const [featured, ...others] = events;
+  const [featured] = events;
+
+  const currentEvent = featured || {
+    id: 'event-engineering-week',
+    title: 'Engineering Week',
+    dateLabel: 'Sep 30 – Oct 7',
+    timeLabel: 'All week · Engineering Department',
+    description: 'Join department challenges and study battles to earn limited-time rewards.',
+    category: 'Department',
+    poster: defaultPoster,
+    bgImage: '/Engineering Week BG.png',
+    hasBakedBadges: false,
+    rewards: [
+      { icon: 'shirt', label: 'Exclusive outfit', tone: 'purple' },
+      { icon: 'bolt', label: '2x XP', tone: 'gold' },
+      { icon: 'coin', label: 'Bonus coins', tone: 'green' },
+    ],
+  };
+
+  const handleAction = () => {
+    if (onOpenEvent) {
+      onOpenEvent(currentEvent);
+    } else {
+      window.location.hash = 'events';
+    }
+  };
+
+  const handleViewAll = () => {
+    if (onViewAll) {
+      onViewAll();
+    } else {
+      window.location.hash = 'events';
+    }
+  };
+
+  const posterImg =
+    currentEvent.poster ||
+    currentEvent.thumbnail ||
+    currentEvent.bgImage ||
+    defaultPoster ||
+    '/Engineering Week BG.png';
 
   return (
-    <section className="hb-card hb-events" aria-label="Upcoming events">
-      <HbSectionHeader
-        icon="calendar"
-        title="Upcoming Events"
-        actionLabel="View all"
-        actionAriaLabel="View all events"
-        onAction={onViewAll}
-      />
-
-      {!featured ? (
-        <div className="hb-empty">
-          <span className="hb-empty-icon" aria-hidden="true">
-            <HbIcon name="calendar" size={20} />
+    <section className="hb-card hb-events hb-events--redesign" aria-label="Upcoming events">
+      {/* 1. TOP HEADER ROW */}
+      <div className="hb-events-header">
+        <div className="hb-events-header-left">
+          <span className="hb-events-header-icon" aria-hidden="true">
+            <HbIcon name="calendar" size={15} />
           </span>
-          <p className="hb-empty-title">No upcoming events</p>
-          <p className="hb-empty-text">New campus events and challenges will show up here. Check back soon!</p>
+          <h2 className="hb-events-header-title">UPCOMING EVENTS</h2>
         </div>
-      ) : (
-        <>
-          <div className="hb-event-scroll">
-            <button
-              type="button"
-              className="hb-event-featured"
-              style={accentStyle(featured.color)}
-              onClick={() => onOpenEvent(featured)}
-              aria-label={`Open event: ${featured.title}`}
-            >
-              <div className="hb-event-head">
-                <EventThumb event={featured} />
-                <div className="hb-event-info">
-                  {featured.category && <span className="hb-event-category">{featured.category}</span>}
-                  <span className="hb-event-title">{featured.title}</span>
-                  <span className="hb-event-date">
-                    <HbIcon name="calendar" size={11} />
-                    {featured.dateLabel}
+
+        <button
+          type="button"
+          className="hb-events-view-all-btn"
+          onClick={handleViewAll}
+          aria-label="View all events"
+        >
+          <span>View all</span>
+          <span className="hb-events-arrow-glyph">→</span>
+        </button>
+      </div>
+
+      {/* 2. CARD CONTENT BODY */}
+      <div className="hb-events-body">
+        {/* Left: Poster Column */}
+        <div className="hb-events-poster-col">
+          {/* Event Poster (Artwork Unobstructed) */}
+          <div className="hb-events-poster-card">
+            <img
+              src={posterImg}
+              alt={currentEvent.title}
+              className="hb-events-poster-image"
+              onError={(e) => {
+                if (!e.currentTarget.dataset.retried) {
+                  e.currentTarget.dataset.retried = 'true';
+                  e.currentTarget.src = encodeURI('/Engineering Week BG.png');
+                }
+              }}
+            />
+          </div>
+
+          {/* Date Information (Below Image) */}
+          <div className="hb-events-poster-date-row">
+            <HbIcon name="calendar" size={12} className="hb-events-date-icon" />
+            <span className="hb-events-date-text">
+              {currentEvent.dateLabel || 'Sep 30 – Oct 7'}
+            </span>
+          </div>
+        </div>
+
+        {/* Right: Event Information & Action */}
+        <div className="hb-events-info-col">
+          <div className="hb-events-info-top">
+            {/* Category / Department Badge (Positioned at Top of Title) */}
+            <div className="hb-events-category-wrap">
+              <span className="hb-events-dept-badge">
+                {(currentEvent.category || 'DEPARTMENT').toUpperCase()}
+              </span>
+            </div>
+            <h3 className="hb-events-title">{currentEvent.title}</h3>
+            <p className="hb-events-meta">{currentEvent.timeLabel || 'All week · Engineering Department'}</p>
+            <p className="hb-events-desc">
+              {currentEvent.description || 'Join department challenges and study battles to earn limited-time rewards.'}
+            </p>
+          </div>
+
+          <div className="hb-events-rewards-block">
+            <div className="hb-events-rewards-label">REWARDS</div>
+            <div className="hb-events-rewards-list">
+              {(currentEvent.rewards || []).map((reward, i) => (
+                <div key={reward.label || i} className="hb-events-reward-pill">
+                  <span className={`hb-events-reward-icon-circle hb-events-reward-icon--${reward.tone || 'purple'}`}>
+                    <HbIcon name={reward.icon || 'gift'} size={15} />
                   </span>
+                  <span className="hb-events-reward-name">{reward.label}</span>
                 </div>
-              </div>
-              {featured.timeLabel && <span className="hb-event-time">{featured.timeLabel}</span>}
-              {featured.description && <span className="hb-event-desc">{featured.description}</span>}
-              <RewardChips rewards={featured.rewards} />
-            </button>
-
-            {others.length > 0 && (
-              <ul className="hb-event-list" aria-label="More events">
-                {others.map((event) => (
-                  <li key={event.id}>
-                    <button
-                      type="button"
-                      className="hb-event-row"
-                      style={accentStyle(event.color)}
-                      onClick={() => onOpenEvent(event)}
-                    >
-                      <EventThumb event={event} />
-                      <span className="hb-event-row-text">
-                        <span className="hb-event-row-title">{event.title}</span>
-                        <span className="hb-event-row-date">{event.dateLabel}</span>
-                      </span>
-                      <HbIcon name="arrow" size={12} strokeWidth={2.4} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
+              ))}
+            </div>
           </div>
 
-          <div className="hb-actions hb-actions--single">
-            <button type="button" className="hb-btn hb-btn--ghost-red" onClick={() => onOpenEvent(featured)}>
-              <span>View Event</span>
-              <HbIcon name="arrow" size={12} strokeWidth={2.4} />
-            </button>
-          </div>
-        </>
-      )}
+          <button
+            type="button"
+            className="hb-events-primary-btn"
+            onClick={handleAction}
+          >
+            <span>View Event</span>
+            <span className="hb-events-btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
     </section>
   );
 }
-

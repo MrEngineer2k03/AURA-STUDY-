@@ -13,7 +13,7 @@ import FolderFilesModal from './FolderFilesModal';
 import './MyFolders.css';
 
 import auraLogo from '../dashboard/logoname.png';
-import { BigCircleAvatar, useSavedEquipment } from '../character';
+import { CharacterRenderer, useSavedEquipment } from '../character';
 
 /**
  * MyFolders - Dedicated "MY FOLDERS" Page for AURA with Study Creation & Archive System
@@ -44,6 +44,12 @@ export default function MyFolders({
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'MY FOLDERS';
   const savedEquipment = useSavedEquipment();
+  const frameRingGradient =
+    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
+      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
+      : savedEquipment?.frame === 'frame-sql-champion'
+      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
+      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
 
   // Realistic Example Study Folders matching exact reference design (media_1793596234655_f4b8a921.jpg)
   const initialFolders = [
@@ -752,7 +758,7 @@ export default function MyFolders({
 
   // Navbar Component
   const renderNavbar = (isFlashcardMode = false) => (
-    <header className={`aura-navbar ${isFlashcardMode ? 'is-flashcard-navbar' : ''}`}>
+    <header className={`aura-navbar events-top-navbar ${isFlashcardMode ? 'is-flashcard-navbar' : ''}`}>
       <div className="navbar-left">
         {isFlashcardMode ? (
           <div
@@ -790,14 +796,8 @@ export default function MyFolders({
 
       <div className="navbar-right">
         <div className="coins-badge">
-          <span>🪙</span>
-          <span>2,450</span>
-        </div>
-
-        {/* Mobile user profile avatar circle with neon red glowing ring */}
-        <div className="mobile-user-avatar-wrap" title="User Profile">
-          <img src="/user_avatar.jpg" alt="Carl" className="mobile-user-avatar-img" />
-          <span className="mobile-user-avatar-status" aria-hidden="true" />
+          <span className="coin-icon">🪙</span>
+          <span className="coin-val">2,450</span>
         </div>
 
         <button
@@ -805,7 +805,19 @@ export default function MyFolders({
           className="icon-btn-round desktop-only-element"
           aria-label="Notifications"
         >
-          🔔
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
         </button>
 
         {!isFlashcardMode && (
@@ -815,21 +827,44 @@ export default function MyFolders({
             style={{ cursor: 'pointer' }}
             title="View Profile"
           >
-            <div className="user-avatar-circle">
-              <BigCircleAvatar
-                equipment={savedEquipment}
-                size={32}
-                level={12}
-                showFrame={false}
-              />
+            <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+              <div className="user-avatar-inner">
+                <CharacterRenderer
+                  equipment={savedEquipment}
+                  cropMode="circle"
+                  showFrame={false}
+                  level={12}
+                  className="user-avatar-bust"
+                />
+              </div>
             </div>
             <div className="user-info-text">
-              <span className="user-info-name">CARL_MONDIGO</span>
+              <span className="user-info-name">Carl Patrick Mondigo</span>
               <span className="user-info-dept">Lv. 12 · Engineering</span>
             </div>
             <span className="user-chevron">▾</span>
           </div>
         )}
+
+        <button
+          type="button"
+          className="user-profile-mobile-btn mobile-only-element"
+          onClick={() => onTabChange && onTabChange('PROFILE')}
+          aria-label="View Profile"
+          title="View Profile"
+        >
+          <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+            <div className="user-avatar-inner">
+              <CharacterRenderer
+                equipment={savedEquipment}
+                cropMode="circle"
+                showFrame={false}
+                level={12}
+                className="user-avatar-bust"
+              />
+            </div>
+          </div>
+        </button>
       </div>
     </header>
   );

@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import './Home.css';
 import MyFolders from 'ui/studyfolder/MyFolders';
 import EventsPage from 'ui/events/EventsPage';
+import FriendsPage from 'ui/friends/FriendsPage';
 import ProfilePage from 'ui/profile/ProfilePage';
+import GlobalNavbar from './components/GlobalNavbar';
 import {
   CharacterRenderer,
   BigCircleAvatar,
@@ -20,10 +22,22 @@ import {
 import auraLogo from './assets/logoname.png';
 import homeBg from './assets/homebackground.png';
 import eventBanner from './assets/event_banner.png';
+import upcomingEventPoster from './assets/engineering_week_bg.png';
 import engineeringLogo from './assets/engineeringlogo.png';
 
-export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
+export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
+  const cleanUserName = (!userName || userName === 'CARL_MONDIGO')
+    ? 'Carl Patrick Mondigo'
+    : userName.includes('_')
+      ? userName.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+      : userName;
   const savedEquipment = useSavedEquipment();
+  const frameRingGradient =
+    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
+      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
+      : savedEquipment?.frame === 'frame-sql-champion'
+      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
+      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
 
   const getInitialTab = () => {
     if (typeof window !== 'undefined' && window.location.hash) {
@@ -33,6 +47,9 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
       }
       if (h === '#events') {
         return 'EVENTS';
+      }
+      if (h === '#friends' || h === '#friend') {
+        return 'FRIENDS';
       }
       if (h === '#profile' || h === '#customize' || h === '#character' || h === '#rewards') {
         return 'PROFILE';
@@ -51,6 +68,8 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
         setActiveTab('MY FOLDERS');
       } else if (h === '#events') {
         setActiveTab('EVENTS');
+      } else if (h === '#friends' || h === '#friend') {
+        setActiveTab('FRIENDS');
       } else if (h === '#profile' || h === '#customize' || h === '#character' || h === '#rewards') {
         setActiveTab('PROFILE');
       } else if (h === '#home' || h === '') {
@@ -174,7 +193,10 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
       description: 'Join department challenges and study battles to earn limited-time rewards.',
       category: 'Department',
       color: 'red',
-      thumbnail: eventBanner,
+      thumbnail: upcomingEventPoster,
+      poster: upcomingEventPoster,
+      bgImage: '/Engineering Week BG.png',
+      hasBakedBadges: false,
       rewards: [
         { icon: 'shirt', label: 'Exclusive outfit', tone: 'purple' },
         { icon: 'bolt', label: '2x XP', tone: 'gold' },
@@ -233,65 +255,15 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
     setActiveTab('MY FOLDERS');
   };
 
-  const handleViewAllFolders = () => {
+  const handleTabChange = (tab) => {
     setSelectedFolderForStudy(null);
     setScrollToCreateFolder(false);
-    setActiveTab('MY FOLDERS');
+    setActiveTab(tab);
   };
 
-  if (activeTab === 'MY FOLDERS') {
-    return (
-      <MyFolders
-        onNavigateHome={() => {
-          setSelectedFolderForStudy(null);
-          setScrollToCreateFolder(false);
-          setActiveTab('HOME');
-        }}
-        onTabChange={(tab) => {
-          setSelectedFolderForStudy(null);
-          setScrollToCreateFolder(false);
-          setActiveTab(tab);
-        }}
-        scrollToCreate={scrollToCreateFolder}
-        initialActiveFolder={selectedFolderForStudy}
-      />
-    );
-  }
-
-  if (activeTab === 'EVENTS') {
-    return (
-      <EventsPage
-        onNavigateHome={() => {
-          setSelectedFolderForStudy(null);
-          setScrollToCreateFolder(false);
-          setActiveTab('HOME');
-        }}
-        onTabChange={(tab) => {
-          setSelectedFolderForStudy(null);
-          setScrollToCreateFolder(false);
-          setActiveTab(tab);
-        }}
-      />
-    );
-  }
-
-  if (activeTab === 'PROFILE') {
-    return (
-      <ProfilePage
-        onNavigateHome={() => {
-          setSelectedFolderForStudy(null);
-          setScrollToCreateFolder(false);
-          setActiveTab('HOME');
-        }}
-        onTabChange={(tab) => {
-          setSelectedFolderForStudy(null);
-          setScrollToCreateFolder(false);
-          setActiveTab(tab);
-        }}
-        userName={userName}
-      />
-    );
-  }
+  const handleViewAllFolders = () => {
+    handleTabChange('MY FOLDERS');
+  };
 
   // Helper to render Daily Missions card (used in hero right for desktop, in vertical stream for mobile)
   const renderDailyMissions = (extraClass = '') => (
@@ -350,144 +322,111 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
   );
 
   return (
-    <div className="aura-dashboard-root">
-      {/* 1. CINEMATIC BACKGROUND LAYERS */}
-      <div className="campus-bg-container">
-        <img
-          src={homeBg}
-          alt="Academy Courtyard"
-          className="campus-bg-image"
-        />
-        <div className="campus-gradient-overlay"></div>
+    <div className="aura-app-layout">
+      {/* 1. SINGLE PERSISTENT GLOBAL NAVBAR (Remains mounted across all sections) */}
+      <GlobalNavbar
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        userName={cleanUserName}
+      />
 
-        {/* Dynamic Red Cyber Angular Speedline Overlay */}
-        <svg
-          className="cyber-speedline-overlay"
-          viewBox="0 0 1920 800"
-          preserveAspectRatio="none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Left Red Angle Wedge */}
-          <polygon
-            points="0,0 480,0 320,620 0,720"
-            fill="url(#leftCyberGrad)"
-            opacity="0.32"
+      {/* 2. PERSISTENT ROUTE CONTENT VIEWPORT */}
+      <div className="aura-app-page-container">
+        {activeTab === 'MY FOLDERS' && (
+          <MyFolders
+            showNavbar={false}
+            onNavigateHome={() => handleTabChange('HOME')}
+            onTabChange={handleTabChange}
+            scrollToCreate={scrollToCreateFolder}
+            initialActiveFolder={selectedFolderForStudy}
           />
-          <polygon
-            points="0,0 260,0 120,440 0,520"
-            fill="url(#leftCyberGrad2)"
-            opacity="0.25"
+        )}
+
+        {activeTab === 'EVENTS' && (
+          <EventsPage
+            showNavbar={false}
+            onNavigateHome={() => handleTabChange('HOME')}
+            onTabChange={handleTabChange}
           />
-          {/* Right Red Angle Wedge */}
-          <polygon
-            points="1480,0 1920,0 1920,580 1620,440"
-            fill="url(#rightCyberGrad)"
-            opacity="0.28"
+        )}
+
+        {activeTab === 'FRIENDS' && (
+          <FriendsPage
+            onNavigateHome={() => handleTabChange('HOME')}
+            onTabChange={handleTabChange}
+            userName={cleanUserName}
           />
+        )}
 
-          <defs>
-            <linearGradient id="leftCyberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ff2a44" stopOpacity="0.8" />
-              <stop offset="60%" stopColor="#991b1b" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#0a0d14" stopOpacity="0" />
-            </linearGradient>
-            <linearGradient id="leftCyberGrad2" x1="0%" y1="0%" x2="100%" y2="80%">
-              <stop offset="0%" stopColor="#dc2626" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#0a0d14" stopOpacity="0" />
-            </linearGradient>
-            <linearGradient id="rightCyberGrad" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ff2a44" stopOpacity="0.75" />
-              <stop offset="60%" stopColor="#b91c1c" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#0a0d14" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        {/* Giant Watermark Typography in Sky */}
-        <div className="aura-sky-watermark">ENGINEERING</div>
-      </div>
-
-      {/* 2. TOP NAVBAR */}
-      <header className="aura-navbar">
-        <div className="navbar-left">
-          <img
-            src={auraLogo}
-            alt="AURA"
-            className="navbar-brand-logo"
-            onClick={() => setActiveTab('HOME')}
+        {activeTab === 'PROFILE' && (
+          <ProfilePage
+            showNavbar={false}
+            onNavigateHome={() => handleTabChange('HOME')}
+            onTabChange={handleTabChange}
+            userName={userName}
           />
-          <span className="navbar-separator">·</span>
-          <nav className="navbar-nav-links" aria-label="Main Navigation">
-            {navTabs.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                className={`nav-tab-btn ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => {
-                  setScrollToCreateFolder(false);
-                  setActiveTab(tab);
-                }}
-              >
-                {tab}
-              </button>
-            ))}
-          </nav>
-        </div>
+        )}
 
-        <div className="navbar-right">
-          <div className="coins-badge">
-            <span>🪙</span>
-            <span>2,450</span>
-          </div>
-
-          <button
-            type="button"
-            className="icon-btn-round"
-            aria-label="Notifications"
-          >
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-          </button>
-
-          <div
-            className="user-profile-chip"
-            onClick={() => {
-              window.location.hash = 'profile';
-              setActiveTab('PROFILE');
-            }}
-            style={{ cursor: 'pointer' }}
-            title="View Profile"
-          >
-            <div className="user-avatar-circle">
-              <BigCircleAvatar
-                equipment={savedEquipment}
-                size={32}
-                level={12}
-                showFrame={false}
+        {activeTab === 'HOME' && (
+          <div className="aura-dashboard-root">
+            {/* 1. CINEMATIC BACKGROUND LAYERS */}
+            <div className="campus-bg-container">
+              <img
+                src={homeBg}
+                alt="Academy Courtyard"
+                className="campus-bg-image"
               />
-            </div>
-            <div className="user-info-text">
-              <span className="user-info-name">{userName}</span>
-              <span className="user-info-dept">Lv. 12 · Engineering</span>
-            </div>
-            <span className="user-chevron">▾</span>
-          </div>
-        </div>
-      </header>
+              <div className="campus-gradient-overlay"></div>
 
-      {/* 3. HERO STAGE CONTENT */}
+              {/* Dynamic Red Cyber Angular Speedline Overlay */}
+              <svg
+                className="cyber-speedline-overlay"
+                viewBox="0 0 1920 800"
+                preserveAspectRatio="none"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Left Red Angle Wedge */}
+                <polygon
+                  points="0,0 480,0 320,620 0,720"
+                  fill="url(#leftCyberGrad)"
+                  opacity="0.32"
+                />
+                <polygon
+                  points="0,0 260,0 120,440 0,520"
+                  fill="url(#leftCyberGrad2)"
+                  opacity="0.25"
+                />
+                {/* Right Red Angle Wedge */}
+                <polygon
+                  points="1480,0 1920,0 1920,580 1620,440"
+                  fill="url(#rightCyberGrad)"
+                  opacity="0.28"
+                />
+
+                <defs>
+                  <linearGradient id="leftCyberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff2a44" stopOpacity="0.8" />
+                    <stop offset="60%" stopColor="#991b1b" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#0a0d14" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="leftCyberGrad2" x1="0%" y1="0%" x2="100%" y2="80%">
+                    <stop offset="0%" stopColor="#dc2626" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#0a0d14" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="rightCyberGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ff2a44" stopOpacity="0.75" />
+                    <stop offset="60%" stopColor="#b91c1c" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#0a0d14" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              {/* Giant Watermark Typography in Sky */}
+              <div className="aura-sky-watermark">ENGINEERING</div>
+            </div>
+
+            {/* 2. HERO STAGE CONTENT */}
       <div className="hero-stage-layout">
         {/* UPPER VIEWPORT: GREETING, CHARACTER, HUD, AND FLOATING ACTION CARDS */}
         <div className="hero-upper-viewport">
@@ -495,7 +434,7 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
           <div className="hero-left-column">
             <div className="hero-greetings-block">
               <div className="hero-greeting-tag">
-                <span className="red-slant-icon">/</span> GOOD EVENING, {userName.includes('_') ? userName.split('_')[0] : userName}
+                <span className="red-slant-icon">/</span> GOOD EVENING, {cleanUserName.split(' ')[0].toUpperCase()}
               </div>
               <h1 className="hero-main-headline">
                 Ready to <br className="mobile-br" />continue <br className="desktop-br" />your{' '}
@@ -519,7 +458,7 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
                   <span className="engineering-level-tag">Lv. 12</span>
                 </div>
                 <div className="engineering-xp-line">
-                  <span className="engineering-xp-user-name">{userName}</span>
+                  <span className="engineering-xp-user-name">{cleanUserName}</span>
                   <span className="engineering-xp-numbers">820 / 1000 XP</span>
                 </div>
                 <div className="engineering-xp-bar-track">
@@ -722,6 +661,9 @@ export default function Home({ userName = 'CARL_MONDIGO' } = {}) {
         {/* iOS Home Indicator Bar */}
         <div className="ios-home-indicator-bar" />
       </nav>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

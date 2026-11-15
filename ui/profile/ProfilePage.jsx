@@ -11,8 +11,9 @@ import CharacterCustomizer, {
 export default function ProfilePage({
   onNavigateHome,
   onTabChange,
-  userName = 'CARL_MONDIGO',
+  userName = 'Carl Patrick Mondigo',
   initialSubTab = 'overview',
+  showNavbar = true,
 }) {
   const [activeSubTab, setActiveSubTab] = useState(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
@@ -42,6 +43,13 @@ export default function ProfilePage({
       : savedEquipment.frame === 'frame-archon-mythic'
       ? 'golden-halo'
       : 'cyber-prism';
+
+  const frameRingGradient =
+    activeFrameRing === 'crimson-crest'
+      ? 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)'
+      : activeFrameRing === 'golden-halo'
+      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
+      : 'linear-gradient(135deg, #ff4d6d 0%, #f59e0b 50%, #2dd4bf 100%)';
 
   // Achievements list (6 total, 4 equipped)
   const [achievements, setAchievements] = useState([
@@ -178,79 +186,98 @@ export default function ProfilePage({
       <div className="profile-ambient-bg" aria-hidden="true" />
 
       {/* TOP NAVBAR (Matching standard AURA styling) */}
-      <header className="aura-navbar" style={{ position: 'sticky', top: 0, zIndex: 50, width: '100%', boxSizing: 'border-box' }}>
-        <div className="navbar-left">
-          <img
-            src={auraLogo}
-            alt="AURA"
-            className="navbar-brand-logo"
-            onClick={() => handleNavClick('HOME')}
-            style={{ cursor: 'pointer' }}
-          />
-          <span className="navbar-separator">·</span>
-          <nav className="navbar-nav-links" aria-label="Main Navigation">
-            {navTabs.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                className="nav-tab-btn"
-                onClick={() => handleNavClick(tab)}
-              >
-                {tab}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        <div className="navbar-right">
-          <div className="coins-badge">
-            <span>🪙</span>
-            <span>2,450</span>
+      {showNavbar && (
+        <header className="aura-navbar events-top-navbar">
+          <div className="navbar-left">
+            <img
+              src={auraLogo}
+              alt="AURA"
+              className="navbar-brand-logo"
+              onClick={() => handleNavClick('HOME')}
+              style={{ cursor: 'pointer' }}
+            />
+            <span className="navbar-separator">·</span>
+            <nav className="navbar-nav-links" aria-label="Main Navigation">
+              {navTabs.map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  className="nav-tab-btn"
+                  onClick={() => handleNavClick(tab)}
+                >
+                  {tab}
+                </button>
+              ))}
+            </nav>
           </div>
 
-          <button
-            type="button"
-            className="icon-btn-round"
-            aria-label="Notifications"
-          >
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="navbar-right">
+            <div className="coins-badge">
+              <span className="coin-icon">🪙</span>
+              <span className="coin-val">2,450</span>
+            </div>
+
+            <button
+              type="button"
+              className="icon-btn-round desktop-only-element"
+              aria-label="Notifications"
             >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-          </button>
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+            </button>
 
-          <div
-            className="user-profile-chip active"
-            style={{
-              borderColor: 'rgba(255, 77, 109, 0.6)',
-              background: 'rgba(255, 77, 109, 0.1)',
-            }}
-          >
-            <div className="user-avatar-circle">
-              <BigCircleAvatar
-                equipment={savedEquipment}
-                size={32}
-                level={12}
-                showFrame={false}
-              />
+            <div className="user-profile-chip desktop-only-element active">
+              <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+                <div className="user-avatar-inner">
+                  <CharacterRenderer
+                    equipment={savedEquipment}
+                    cropMode="circle"
+                    showFrame={false}
+                    level={12}
+                    className="user-avatar-bust"
+                  />
+                </div>
+              </div>
+              <div className="user-info-text">
+                <span className="user-info-name">Carl Patrick Mondigo</span>
+                <span className="user-info-dept">Lv. 12 · Engineering</span>
+              </div>
+              <span className="user-chevron">▾</span>
             </div>
-            <div className="user-info-text">
-              <span className="user-info-name">{userName}</span>
-              <span className="user-info-dept">Lv. 12 · Engineering</span>
-            </div>
-            <span className="user-chevron">▾</span>
+
+            <button
+              type="button"
+              className="user-profile-mobile-btn mobile-only-element active"
+              onClick={() => handleTabClick('PROFILE')}
+              aria-label="View Profile"
+              title="View Profile"
+            >
+              <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+                <div className="user-avatar-inner">
+                  <CharacterRenderer
+                    equipment={savedEquipment}
+                    cropMode="circle"
+                    showFrame={false}
+                    level={12}
+                    className="user-avatar-bust"
+                  />
+                </div>
+              </div>
+            </button>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* MAIN CONTAINER */}
       <main className="profile-main-container">
@@ -388,7 +415,7 @@ export default function ProfilePage({
               <div className="user-identity-names">
                 <h2 className="user-full-name">Carl Patrick Mondigo</h2>
                 <span className="user-handle-dept">
-                  @{userName} · College of Engineering
+                  @carl_mondigo · College of Engineering
                 </span>
               </div>
             </div>
@@ -481,10 +508,10 @@ export default function ProfilePage({
                 <p className="stat-card-subtext">Study battle performance</p>
               </div>
 
-              {/* Stat 3: Cards Mastered */}
+              {/* Stat 3: Lessons Mastered */}
               <div className="prof-stat-card">
                 <div className="stat-card-top-row">
-                  <span className="stat-card-label">Cards Mastered</span>
+                  <span className="stat-card-label">Lessons Mastered</span>
                   <div className="stat-card-icon-tile icon-book">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -492,25 +519,26 @@ export default function ProfilePage({
                     </svg>
                   </div>
                 </div>
-                <div className="stat-card-value">412 Cards</div>
-                <p className="stat-card-subtext">Flashcards mastered</p>
+                <div className="stat-card-value">412 Lessons</div>
+                <p className="stat-card-subtext">Lessons mastered</p>
               </div>
 
-              {/* Stat 4: Balance */}
+              {/* Stat 4: Total Matches */}
               <div className="prof-stat-card">
                 <div className="stat-card-top-row">
-                  <span className="stat-card-label">Balance</span>
-                  <div className="stat-card-icon-tile icon-coins">
+                  <span className="stat-card-label">Total Matches</span>
+                  <div className="stat-card-icon-tile icon-matches">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="8" cy="8" r="6" />
-                      <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
-                      <path d="M7 6h1v4" />
-                      <path d="m16.71 13.88.7.71-2.82 2.82" />
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                      <path d="M4 22h16" />
+                      <path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34" />
+                      <path d="M6 4h12v7a6 6 0 0 1-12 0V4z" />
                     </svg>
                   </div>
                 </div>
-                <div className="stat-card-value">2,450 Coins</div>
-                <p className="stat-card-subtext">Available balance</p>
+                <div className="stat-card-value">128 Matches</div>
+                <p className="stat-card-subtext">Total matches played</p>
               </div>
             </div>
 
