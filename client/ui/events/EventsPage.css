@@ -11,7 +11,7 @@
   height: 100vh;
   max-height: 100vh;
   width: 100%;
-  background-color: #080c14;
+  background-color: #07090f;
   color: #f1f5f9;
   font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
   position: relative;
@@ -39,17 +39,40 @@
   background: rgba(255, 42, 68, 0.65);
 }
 
-/* Ambient Cyber Glow & Background Layer */
+/* Ambient Cyber Atmosphere, Glows & Dot-Matrix Layer */
 .events-ambient-bg {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background:
-    radial-gradient(circle 800px at 15% 10%, rgba(255, 42, 68, 0.12), transparent 70%),
-    radial-gradient(circle 700px at 85% 20%, rgba(239, 68, 68, 0.08), transparent 65%),
-    radial-gradient(circle 900px at 50% 90%, rgba(15, 23, 42, 0.9), transparent 80%),
-    linear-gradient(180deg, #090d16 0%, #07090f 100%);
+  overflow: hidden;
+  background-color: #07090f;
+  background-image:
+    radial-gradient(1100px circle at 10% 8%, rgba(255, 42, 68, 0.12) 0%, transparent 60%),
+    radial-gradient(900px circle at 88% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 55%),
+    radial-gradient(850px circle at 80% 80%, rgba(255, 42, 68, 0.07) 0%, transparent 50%),
+    radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: auto, auto, auto, 24px 24px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+}
+
+/* Background Decorative Tactical Combat HUD & Raid Grid */
+.events-bg-decorations {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 780px;
+  height: 850px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.events-tactical-svg,
+.events-constellation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 /* ==========================================

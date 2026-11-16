@@ -286,6 +286,14 @@
   border-radius: 2px;
 }
 
+.tab-label-desktop {
+  display: inline;
+}
+
+.tab-label-mobile {
+  display: none;
+}
+
 .friends-tab-count {
   font-size: 12px;
   color: inherit;
@@ -413,6 +421,39 @@
   min-width: 0;
 }
 
+.friend-avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.friend-status-dot {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 9.5px;
+  height: 9.5px;
+  border-radius: 50%;
+  border: 2px solid #0d111c;
+  box-sizing: content-box;
+  z-index: 2;
+}
+
+.friend-status-dot.dot-studying,
+.friend-status-dot.dot-online {
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.65);
+}
+
+.friend-status-dot.dot-battle {
+  background-color: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.65);
+}
+
+.friend-status-dot.dot-offline {
+  background-color: #64748b;
+}
+
 .friend-avatar-circle {
   width: 36px;
   height: 36px;
@@ -517,8 +558,16 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #cbd5e1;
+  color: #94a3b8;
   font-weight: 600;
+}
+
+.friend-streak.has-streak {
+  color: #fbbf24;
+}
+
+.friend-streak.no-streak {
+  color: #94a3b8;
 }
 
 .friend-streak-flame {
@@ -839,44 +888,45 @@
 }
 
 .leaderboard-rank {
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
+  background: rgba(255, 255, 255, 0.08);
   color: #94a3b8;
   flex-shrink: 0;
 }
 
 .leaderboard-rank--1 {
-  background: #f59e0b;
-  color: #000000;
-}
-
-.leaderboard-rank--2 {
-  background: rgba(255, 255, 255, 0.2);
+  background: #b45309;
   color: #ffffff;
 }
 
-.leaderboard-rank--3 {
-  background: #ea580c;
-  color: #ffffff;
+.leaderboard-rank--2,
+.leaderboard-rank--3,
+.leaderboard-rank--4,
+.leaderboard-rank--5 {
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
 }
 
 .leaderboard-avatar {
-  width: 24px;
-  height: 24px;
+  width: 58px;
+  height: 26px;
   border-radius: 6px;
-  background: #1e293b;
-  color: #cbd5e1;
+  background: #172033;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9.5px;
+  font-size: 11px;
   font-weight: 800;
+  letter-spacing: 0.02em;
   flex-shrink: 0;
 }
 
@@ -1159,6 +1209,10 @@
   }
 }
 
+.mobile-friends-bottom-section {
+  display: none;
+}
+
 /* --------------------------------------------------------------------------
    8. RESPONSIVE MEDIA QUERIES
    -------------------------------------------------------------------------- */
@@ -1175,40 +1229,274 @@
 
 @media (max-width: 768px) {
   .aura-friends-page {
-    padding: 16px 16px 140px;
+    padding: 16px 14px 130px;
+    background-size: auto, auto, auto, 22px 22px;
   }
 
-  .friends-cards-grid {
-    grid-template-columns: 1fr;
+  /* Scaled background constellation / radar graphic visible on mobile */
+  .friends-bg-decorations {
+    width: 380px;
+    height: 480px;
+    right: -40px;
+    top: -45px;
+    opacity: 0.85;
+    display: block;
+    pointer-events: none !important;
   }
 
+  /* Hide header, metric banner, and desktop sidebar on mobile */
+  .friends-page-header,
+  .friends-metric-banner,
   .friends-right-col {
-    grid-template-columns: 1fr;
+    display: none !important;
   }
 
-  .friends-metric-banner {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-  }
-
-  .friends-metric-stats-group {
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .friends-metric-actions-group {
-    justify-content: space-between;
-  }
-
+  /* Search box on top, horizontal pill tabs below */
   .friends-nav-search-row {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
+    border-bottom: none;
+    padding-bottom: 0;
   }
 
   .friends-search-box {
+    order: 1;
     width: 100%;
+    height: 44px;
+    background: rgba(15, 19, 31, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     box-sizing: border-box;
+    padding: 0 14px;
+  }
+
+  .friends-search-input {
+    font-size: 13.5px;
+  }
+
+  .friends-tabs-list {
+    order: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 2px 4px;
+    margin: 0;
+  }
+
+  .friends-tabs-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-label-desktop {
+    display: none;
+  }
+
+  .tab-label-mobile {
+    display: inline;
+  }
+
+  .friends-tab-btn {
+    border-radius: 9999px;
+    padding: 7px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+  }
+
+  .friends-tab-btn::after {
+    display: none;
+  }
+
+  .friends-tab-btn.active {
+    background: #ffffff;
+    color: #07090f;
+    border-color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  .friends-tab-btn.active .friends-tab-count {
+    color: #07090f;
+    opacity: 0.9;
+  }
+
+  .friends-tab-btn:not(.active) .friends-tab-count {
+    color: #94a3b8;
+  }
+
+  .friends-tab-badge {
+    background: #ff3b56;
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    min-width: 17px;
+    height: 17px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* Section header row */
+  .friends-col-header {
+    margin-top: 4px;
+    padding: 4px 2px 2px;
+  }
+
+  .friends-col-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .friends-col-count {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  /* Cards list & layout */
+  .friends-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .friend-card {
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(13, 17, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  .friend-avatar-circle {
+    width: 42px;
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .friend-status-dot {
+    width: 10px;
+    height: 10px;
+    border-width: 2.2px;
+  }
+
+  .friend-name {
+    font-size: 15px;
+  }
+
+  .friend-sub {
+    font-size: 12px;
+  }
+
+  .friend-level-val {
+    font-size: 15px;
+  }
+
+  .friend-level-lbl {
+    font-size: 10.5px;
+  }
+
+  .friend-status-row {
+    font-size: 12.5px;
+    gap: 7px;
+  }
+
+  .friend-stats-row {
+    font-size: 12px;
+    gap: 12px;
+  }
+
+  .friend-actions-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .friend-btn-primary {
+    flex: 1;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    background: #ff3b56;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  .friend-btn-soft {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    flex: 0 0 44px;
+    padding: 0;
+    border-radius: 10px;
+    background: #141926;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+    justify-content: center;
+  }
+
+  .friend-btn-soft-label {
+    display: none;
+  }
+
+  /* Mobile bottom segmented section (Leaderboard / Activity / Invite) */
+  .mobile-friends-bottom-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  .mobile-segmented-control {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: #0f1422;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .mobile-seg-btn {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.16s ease;
+  }
+
+  .mobile-seg-btn.active {
+    background: #1a2235;
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .mobile-widget-display .friends-widget-card {
+    background: rgba(13, 17, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px;
   }
 }

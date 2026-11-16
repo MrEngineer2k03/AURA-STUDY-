@@ -216,6 +216,7 @@ export default function FriendsPage({
   const [friends, setFriends] = useState(INITIAL_FRIENDS);
   const [requests, setRequests] = useState(INITIAL_REQUESTS);
   const [activeSubTab, setActiveSubTab] = useState('ALL'); // 'ALL' | 'ONLINE' | 'REQUESTS' | 'SUGGESTED'
+  const [mobileBottomTab, setMobileBottomTab] = useState('leaderboard'); // 'leaderboard' | 'activity' | 'invite'
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -307,6 +308,139 @@ export default function FriendsPage({
 
   const onlineCount = useMemo(() => friends.filter((f) => f.isOnline).length, [friends]);
   const studyingCount = useMemo(() => friends.filter((f) => f.isStudying).length, [friends]);
+
+  const renderRequestsWidget = () => (
+    <div className="friends-widget-card">
+      <div className="friends-widget-head">
+        <h3 className="friends-widget-title">Friend requests</h3>
+        <span className="friends-widget-meta">{requests.length} pending</span>
+      </div>
+      <div className="friend-requests-list">
+        {requests.length === 0 ? (
+          <p style={{ color: '#94a3b8', fontSize: '12px', margin: '4px 0' }}>No pending requests.</p>
+        ) : (
+          requests.map((req) => (
+            <div key={req.id} className="friend-req-item">
+              <div className="friend-req-avatar-info">
+                <div className="friend-req-avatar" style={{ background: req.avatarBg || '#1f293d' }}>
+                  {req.initials}
+                </div>
+                <div className="friend-req-text">
+                  <span className="friend-req-name">{req.name}</span>
+                  <span className="friend-req-meta">
+                    {req.department} · {req.mutualText}
+                  </span>
+                </div>
+              </div>
+              <div className="friend-req-actions">
+                <button
+                  type="button"
+                  className="friend-req-btn friend-req-btn--accept"
+                  onClick={() => handleAcceptRequest(req)}
+                  title="Accept request"
+                >
+                  ✓
+                </button>
+                <button
+                  type="button"
+                  className="friend-req-btn friend-req-btn--decline"
+                  onClick={() => handleDeclineRequest(req)}
+                  title="Decline request"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+
+  const renderLeaderboardWidget = () => (
+    <div className="friends-widget-card">
+      <div className="friends-widget-head">
+        <h3 className="friends-widget-title">Weekly leaderboard</h3>
+        <span className="friends-widget-meta">XP this week</span>
+      </div>
+      <div className="leaderboard-list">
+        {LEADERBOARD_DATA.map((row) => (
+          <div
+            key={row.rank}
+            className={`leaderboard-row ${row.isUser ? 'is-current-user' : ''}`}
+          >
+            <div className="leaderboard-left">
+              <span className={`leaderboard-rank leaderboard-rank--${row.rank}`}>
+                {row.rank}
+              </span>
+              <span className="leaderboard-avatar">{row.initials}</span>
+              <span className="leaderboard-name">
+                <span>{row.isUser ? userName.split(' ')[0] : row.name}</span>
+                {row.isUser && <span className="leaderboard-you-badge">You</span>}
+              </span>
+            </div>
+            <span className="leaderboard-xp">{row.xp}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderActivityWidget = () => (
+    <div className="friends-widget-card">
+      <div className="friends-widget-head">
+        <h3 className="friends-widget-title">Activity</h3>
+      </div>
+      <div className="activity-feed-list">
+        {ACTIVITY_FEED.map((act) => (
+          <div key={act.id} className="activity-feed-item">
+            <div className="activity-avatar">{act.initials}</div>
+            <div className="activity-text-wrap">
+              <p className="activity-desc">
+                {act.text} <span className="activity-highlight">{act.highlight}</span>
+              </p>
+              <span className="activity-time">{act.time}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderInviteWidget = () => (
+    <div className="friends-widget-card invite-classmates-card">
+      <h3 className="friends-widget-title">Invite classmates</h3>
+      <p className="invite-desc">You and a friend each get 200 coins when they join.</p>
+      <div className="invite-copy-row">
+        <input
+          type="text"
+          readOnly
+          value="aura.app/join/carl-mondigo"
+          className="invite-link-input"
+        />
+        <button
+          type="button"
+          className={`invite-btn-copy ${isCopied ? 'copied' : ''}`}
+          onClick={handleCopyInvite}
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+          <span>{isCopied ? 'Copied!' : 'Copy'}</span>
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="aura-friends-page aura-page-content" aria-label="AURA Friends Section">
@@ -436,7 +570,8 @@ export default function FriendsPage({
               className={`friends-tab-btn ${activeSubTab === 'ALL' ? 'active' : ''}`}
               onClick={() => setActiveSubTab('ALL')}
             >
-              <span>All friends</span>
+              <span className="tab-label-desktop">All friends</span>
+              <span className="tab-label-mobile">All</span>
               <span className="friends-tab-count">{friends.length}</span>
             </button>
 
@@ -648,8 +783,11 @@ export default function FriendsPage({
                     <article key={f.id} className="friend-card">
                       <div className="friend-card-head">
                         <div className="friend-avatar-info">
-                          <div className="friend-avatar-circle" style={{ background: f.avatarBg }}>
-                            {f.initials}
+                          <div className="friend-avatar-wrap">
+                            <div className="friend-avatar-circle" style={{ background: f.avatarBg }}>
+                              {f.initials}
+                            </div>
+                            <span className={`friend-status-dot dot-${f.statusType}`} aria-hidden="true" />
                           </div>
                           <div className="friend-user-text">
                             <span className="friend-name">{f.name}</span>
@@ -671,11 +809,8 @@ export default function FriendsPage({
                           </svg>
                         )}
                         {f.statusType === 'battle' && (
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="friend-status-icon">
-                            <path d="M14.5 17.5L3 6V3h3l11.5 11.5" />
-                            <path d="M13 19l6-6" />
-                            <path d="M16 16l4 4" />
-                            <path d="M19 21l2-2" />
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="friend-status-icon">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                           </svg>
                         )}
                         {f.statusType === 'online' && (
@@ -694,7 +829,7 @@ export default function FriendsPage({
 
                       {/* Streak and XP row */}
                       <div className="friend-stats-row">
-                        <span className="friend-streak">
+                        <span className={`friend-streak ${f.streak > 0 ? 'has-streak' : 'no-streak'}`}>
                           <span className="friend-streak-flame">🔥</span>
                           <span>{f.streak} day streak</span>
                         </span>
@@ -708,9 +843,8 @@ export default function FriendsPage({
                           className="friend-btn friend-btn-primary"
                           onClick={() => showToast(`Challenge sent to ${f.name}!`)}
                         >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14.5 17.5L3 6V3h3l11.5 11.5" />
-                            <path d="M13 19l6-6" />
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                           </svg>
                           <span>{f.actionPrimary}</span>
                         </button>
@@ -718,14 +852,16 @@ export default function FriendsPage({
                         <button
                           type="button"
                           className="friend-btn friend-btn-soft"
+                          title={f.actionSecondary}
                           onClick={() => showToast(`Study invite sent to ${f.name}!`)}
                         >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                            <line x1="8" y1="21" x2="16" y2="21" />
-                            <line x1="12" y1="17" x2="12" y2="21" />
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" />
+                            <line x1="8" y1="6" x2="16" y2="6" />
+                            <line x1="8" y1="10" x2="16" y2="10" />
+                            <line x1="8" y1="14" x2="12" y2="14" />
                           </svg>
-                          <span>{f.actionSecondary}</span>
+                          <span className="friend-btn-soft-label">{f.actionSecondary}</span>
                         </button>
                       </div>
                     </article>
@@ -733,125 +869,53 @@ export default function FriendsPage({
                 )}
               </div>
             )}
+
+            {/* Mobile bottom segmented section (Leaderboard / Activity / Invite) */}
+            <div className="mobile-friends-bottom-section" aria-label="Additional friend details">
+              <div className="mobile-segmented-control" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mobileBottomTab === 'leaderboard'}
+                  className={`mobile-seg-btn ${mobileBottomTab === 'leaderboard' ? 'active' : ''}`}
+                  onClick={() => setMobileBottomTab('leaderboard')}
+                >
+                  Leaderboard
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mobileBottomTab === 'activity'}
+                  className={`mobile-seg-btn ${mobileBottomTab === 'activity' ? 'active' : ''}`}
+                  onClick={() => setMobileBottomTab('activity')}
+                >
+                  Activity
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mobileBottomTab === 'invite'}
+                  className={`mobile-seg-btn ${mobileBottomTab === 'invite' ? 'active' : ''}`}
+                  onClick={() => setMobileBottomTab('invite')}
+                >
+                  Invite
+                </button>
+              </div>
+
+              <div className="mobile-widget-display">
+                {mobileBottomTab === 'leaderboard' && renderLeaderboardWidget()}
+                {mobileBottomTab === 'activity' && renderActivityWidget()}
+                {mobileBottomTab === 'invite' && renderInviteWidget()}
+              </div>
+            </div>
           </section>
 
           {/* Right Sidebar Widgets */}
           <aside className="friends-right-col" aria-label="Friends Sidebar Info">
-            {/* Widget 1: Friend Requests */}
-            <div className="friends-widget-card">
-              <div className="friends-widget-head">
-                <h3 className="friends-widget-title">Friend requests</h3>
-                <span className="friends-widget-meta">{requests.length} pending</span>
-              </div>
-              <div className="friend-requests-list">
-                {requests.length === 0 ? (
-                  <p style={{ color: '#94a3b8', fontSize: '12px', margin: '4px 0' }}>No pending requests.</p>
-                ) : (
-                  requests.map((req) => (
-                    <div key={req.id} className="friend-req-item">
-                      <div className="friend-req-avatar-info">
-                        <div className="friend-req-avatar" style={{ background: req.avatarBg || '#1f293d' }}>{req.initials}</div>
-                        <div className="friend-req-text">
-                          <span className="friend-req-name">{req.name}</span>
-                          <span className="friend-req-meta">{req.department} · {req.mutualText}</span>
-                        </div>
-                      </div>
-                      <div className="friend-req-actions">
-                        <button
-                          type="button"
-                          className="friend-req-btn friend-req-btn--accept"
-                          onClick={() => handleAcceptRequest(req)}
-                          title="Accept request"
-                        >
-                          ✓
-                        </button>
-                        <button
-                          type="button"
-                          className="friend-req-btn friend-req-btn--decline"
-                          onClick={() => handleDeclineRequest(req)}
-                          title="Decline request"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            {/* Widget 2: Weekly Leaderboard */}
-            <div className="friends-widget-card">
-              <div className="friends-widget-head">
-                <h3 className="friends-widget-title">Weekly leaderboard</h3>
-                <span className="friends-widget-meta">XP this week</span>
-              </div>
-              <div className="leaderboard-list">
-                {LEADERBOARD_DATA.map((row) => (
-                  <div
-                    key={row.rank}
-                    className={`leaderboard-row ${row.isUser ? 'is-current-user' : ''}`}
-                  >
-                    <div className="leaderboard-left">
-                      <span className={`leaderboard-rank leaderboard-rank--${row.rank}`}>
-                        {row.rank}
-                      </span>
-                      <span className="leaderboard-avatar">{row.initials}</span>
-                      <span className="leaderboard-name">
-                        <span>{row.isUser ? userName.split(' ')[0] : row.name}</span>
-                        {row.isUser && <span className="leaderboard-you-badge">You</span>}
-                      </span>
-                    </div>
-                    <span className="leaderboard-xp">{row.xp}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Widget 3: Activity Feed */}
-            <div className="friends-widget-card">
-              <div className="friends-widget-head">
-                <h3 className="friends-widget-title">Activity</h3>
-              </div>
-              <div className="activity-feed-list">
-                {ACTIVITY_FEED.map((act) => (
-                  <div key={act.id} className="activity-feed-item">
-                    <div className="activity-avatar">{act.initials}</div>
-                    <div className="activity-text-wrap">
-                      <p className="activity-desc">
-                        {act.text} <span className="activity-highlight">{act.highlight}</span>
-                      </p>
-                      <span className="activity-time">{act.time}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Widget 4: Invite Classmates */}
-            <div className="friends-widget-card invite-classmates-card">
-              <h3 className="friends-widget-title">Invite classmates</h3>
-              <p className="invite-desc">You and a friend each get 200 coins when they join.</p>
-              <div className="invite-copy-row">
-                <input
-                  type="text"
-                  readOnly
-                  value="aura.app/join/carl-mondigo"
-                  className="invite-link-input"
-                />
-                <button
-                  type="button"
-                  className={`invite-btn-copy ${isCopied ? 'copied' : ''}`}
-                  onClick={handleCopyInvite}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                  </svg>
-                  <span>{isCopied ? 'Copied!' : 'Copy'}</span>
-                </button>
-              </div>
-            </div>
+            {renderRequestsWidget()}
+            {renderLeaderboardWidget()}
+            {renderActivityWidget()}
+            {renderInviteWidget()}
           </aside>
         </main>
       </div>

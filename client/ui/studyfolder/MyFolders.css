@@ -36,16 +36,40 @@
   background: rgba(255, 42, 68, 0.65);
 }
 
-/* Page Background Ambient Atmosphere */
+/* Page Background Ambient Atmosphere, Glows & Dot-Matrix Layer */
 .my-folders-ambient-bg {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background: 
-    radial-gradient(ellipse at 15% 15%, rgba(255, 42, 68, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse at 85% 25%, rgba(59, 130, 246, 0.05) 0%, transparent 60%),
-    radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
+  overflow: hidden;
+  background-color: #07090f;
+  background-image: 
+    radial-gradient(1100px circle at 8% 5%, rgba(255, 42, 68, 0.1) 0%, transparent 60%),
+    radial-gradient(900px circle at 88% 18%, rgba(99, 102, 241, 0.08) 0%, transparent 55%),
+    radial-gradient(800px circle at 80% 75%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+    radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: auto, auto, auto, 24px 24px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+}
+
+/* Background Decorative Digital Knowledge Vault & Isometric Circuit Elements */
+.my-folders-bg-decorations {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 780px;
+  height: 850px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.my-folders-circuit-svg,
+.my-folders-constellation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 /* ==========================================================================

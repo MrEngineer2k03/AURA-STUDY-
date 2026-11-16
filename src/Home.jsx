@@ -9,6 +9,7 @@ import {
   CharacterRenderer,
   BigCircleAvatar,
   useSavedEquipment,
+  getFrameConfig,
 } from 'ui/character';
 import {
   ContinueStudyingCard,
@@ -32,12 +33,8 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
       ? userName.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
       : userName;
   const savedEquipment = useSavedEquipment();
-  const frameRingGradient =
-    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
-      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
-      : savedEquipment?.frame === 'frame-sql-champion'
-      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
-      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
+  const frameConfig = getFrameConfig(savedEquipment?.frame);
+  const frameRingGradient = frameConfig.gradient;
 
   const getInitialTab = () => {
     if (typeof window !== 'undefined' && window.location.hash) {
@@ -258,6 +255,17 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
   const handleTabChange = (tab) => {
     setSelectedFolderForStudy(null);
     setScrollToCreateFolder(false);
+    if (tab === 'EVENTS') {
+      window.location.hash = 'events';
+    } else if (tab === 'PROFILE') {
+      window.location.hash = 'profile';
+    } else if (tab === 'MY FOLDERS') {
+      window.location.hash = 'my-folders';
+    } else if (tab === 'FRIENDS') {
+      window.location.hash = 'friends';
+    } else if (tab === 'HOME') {
+      window.location.hash = 'home';
+    }
     setActiveTab(tab);
   };
 
@@ -531,14 +539,17 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
           />
         </section>
       </div>
+    </div>
+  )}
+</div>
 
-      {/* 5. MOBILE BOTTOM NAVIGATION BAR */}
+      {/* 3. PERSISTENT MOBILE BOTTOM NAVIGATION BAR (Anchored across all pages on mobile) */}
       <nav className="mobile-bottom-nav" aria-label="Mobile Navigation">
         <div className="mobile-bottom-nav-inner">
           <button
             type="button"
             className={`mobile-nav-item ${activeTab === 'HOME' ? 'active' : ''}`}
-            onClick={() => setActiveTab('HOME')}
+            onClick={() => handleTabChange('HOME')}
           >
             <div className="mobile-nav-icon-wrap">
               <svg
@@ -561,7 +572,7 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
           <button
             type="button"
             className={`mobile-nav-item ${activeTab === 'MY FOLDERS' ? 'active' : ''}`}
-            onClick={() => setActiveTab('MY FOLDERS')}
+            onClick={() => handleTabChange('MY FOLDERS')}
           >
             <div className="mobile-nav-icon-wrap">
               <svg
@@ -583,7 +594,7 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
           <button
             type="button"
             className={`mobile-nav-item ${activeTab === 'BATTLES' ? 'active' : ''}`}
-            onClick={() => setActiveTab('BATTLES')}
+            onClick={() => handleTabChange('BATTLES')}
           >
             <div className="mobile-nav-icon-wrap">
               <svg
@@ -610,7 +621,7 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
           <button
             type="button"
             className={`mobile-nav-item ${activeTab === 'FRIENDS' ? 'active' : ''}`}
-            onClick={() => setActiveTab('FRIENDS')}
+            onClick={() => handleTabChange('FRIENDS')}
           >
             <div className="mobile-nav-icon-wrap">
               <svg
@@ -635,7 +646,7 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
           <button
             type="button"
             className={`mobile-nav-item ${activeTab === 'EVENTS' ? 'active' : ''}`}
-            onClick={() => setActiveTab('EVENTS')}
+            onClick={() => handleTabChange('EVENTS')}
           >
             <div className="mobile-nav-icon-wrap">
               <svg
@@ -661,9 +672,6 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
         {/* iOS Home Indicator Bar */}
         <div className="ios-home-indicator-bar" />
       </nav>
-          </div>
-        )}
-      </div>
     </div>
   );
 }

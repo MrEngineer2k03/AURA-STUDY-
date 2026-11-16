@@ -640,6 +640,49 @@ export function getEquipmentItemById(id) {
   return EQUIPMENT_REGISTRY.find(i => i.id === id) || null;
 }
 
+export function getFrameConfig(frameId) {
+  switch (frameId) {
+    case 'frame-archon-mythic':
+    case 'frame-golden-halo':
+      return {
+        id: 'frame-archon-mythic',
+        name: 'Archon Raid Sovereign Frame',
+        gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)',
+        glow: '0 0 22px rgba(245, 158, 11, 0.45)',
+        color: '#f59e0b',
+        border: '#fbbf24',
+      };
+    case 'frame-sql-champion':
+      return {
+        id: 'frame-sql-champion',
+        name: 'Database Speedrun Frame',
+        gradient: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 50%, #0891b2 100%)',
+        glow: '0 0 22px rgba(6, 182, 212, 0.45)',
+        color: '#06b6d4',
+        border: '#22d3ee',
+      };
+    case 'frame-crimson-eng':
+      return {
+        id: 'frame-crimson-eng',
+        name: 'Engineering Department Frame',
+        gradient: 'linear-gradient(135deg, #ff2a44 0%, #dc2626 50%, #991b1b 100%)',
+        glow: '0 0 22px rgba(255, 42, 68, 0.45)',
+        color: '#ff2a44',
+        border: '#ef4444',
+      };
+    case 'frame-default':
+    default:
+      return {
+        id: 'frame-default',
+        name: 'AURA Standard Ring',
+        gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%)',
+        glow: '0 0 22px rgba(99, 102, 241, 0.45)',
+        color: '#6366f1',
+        border: '#818cf8',
+      };
+  }
+}
+
 // ============================================================================
 // 3. MODULAR SVG LAYER COMPONENTS (Shared Coordinate System: 0 0 400 520)
 // ============================================================================
@@ -1477,29 +1520,28 @@ const CharacterFrontAccessoriesLayer = ({ specialId }) => {
 
 /**
  * LAYER 14: Character Frame & Level Indicators (CharacterFrame)
+ * All frames render as circular profile rings with distinct department / event styling
  */
-const CharacterFrameLayer = ({ frameId, level = 24, cropMode = 'full' }) => {
-  const isCircle = cropMode === 'circle';
+const CharacterFrameLayer = ({ frameId, level = 24, cropMode = 'circle' }) => {
+  const isCircle = true; // Frames are always circular profile frames
 
   if (frameId === 'frame-crimson-eng') {
     return (
       <g id="layer-14-frame-crimson">
-        {isCircle ? (
-          <circle cx="200" cy="155" r="142" fill="none" stroke="#DC2626" strokeWidth="8" />
-        ) : (
-          <rect x="16" y="14" width="368" height="492" rx="28" fill="none" stroke="#DC2626" strokeWidth="6" />
-        )}
-        {/* Corner Rivets */}
-        {!isCircle && (
-          <>
-            <circle cx="32" cy="30" r="5" fill="#FBBF24" stroke="#181824" strokeWidth="2" />
-            <circle cx="368" cy="30" r="5" fill="#FBBF24" stroke="#181824" strokeWidth="2" />
-            <circle cx="32" cy="490" r="5" fill="#FBBF24" stroke="#181824" strokeWidth="2" />
-            <circle cx="368" cy="490" r="5" fill="#FBBF24" stroke="#181824" strokeWidth="2" />
-          </>
-        )}
+        {/* Outer concentric tech border & crimson ring */}
+        <circle cx="200" cy="155" r="149" fill="none" stroke="#FBBF24" strokeWidth="1.5" opacity="0.65" strokeDasharray="6 14" />
+        <circle cx="200" cy="155" r="142" fill="none" stroke="#DC2626" strokeWidth="8" />
+        <circle cx="200" cy="155" r="134" fill="none" stroke="#991B1B" strokeWidth="2.5" strokeDasharray="16 8" />
+        {/* Precision Rivets around the circle */}
+        <circle cx="342" cy="155" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
+        <circle cx="58" cy="155" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
+        <circle cx="200" cy="13" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
+        <circle cx="300" cy="55" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
+        <circle cx="100" cy="55" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
+        <circle cx="100" cy="255" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
+        <circle cx="300" cy="255" r="4.5" fill="#FBBF24" stroke="#181824" strokeWidth="1.5" />
         {/* Level Pill */}
-        <g transform={`translate(200, ${isCircle ? 295 : 500})`}>
+        <g transform="translate(200, 295)">
           <rect x="-46" y="-14" width="92" height="24" rx="12" fill="#991B1B" stroke="#FBBF24" strokeWidth="2.5" />
           <text x="0" y="2" textAnchor="middle" fill="#FEF2F2" fontSize="11" fontWeight="800" fontFamily="sans-serif">
             ENG LVL {level}
@@ -1512,12 +1554,15 @@ const CharacterFrameLayer = ({ frameId, level = 24, cropMode = 'full' }) => {
   if (frameId === 'frame-sql-champion') {
     return (
       <g id="layer-14-frame-sql">
-        {isCircle ? (
-          <circle cx="200" cy="155" r="142" fill="none" stroke="#06B6D4" strokeWidth="8" strokeDasharray="24 6" />
-        ) : (
-          <rect x="16" y="14" width="368" height="492" rx="28" fill="none" stroke="#06B6D4" strokeWidth="6" />
-        )}
-        <g transform={`translate(200, ${isCircle ? 295 : 500})`}>
+        <circle cx="200" cy="155" r="150" fill="none" stroke="#22D3EE" strokeWidth="1.5" opacity="0.8" strokeDasharray="4 8" />
+        <circle cx="200" cy="155" r="142" fill="none" stroke="#06B6D4" strokeWidth="8" strokeDasharray="24 6" />
+        <circle cx="200" cy="155" r="134" fill="none" stroke="#083344" strokeWidth="3" />
+        {/* Telemetry Nodes */}
+        <circle cx="300" cy="55" r="4.5" fill="#22D3EE" />
+        <circle cx="100" cy="55" r="4.5" fill="#22D3EE" />
+        <circle cx="100" cy="255" r="4.5" fill="#22D3EE" />
+        <circle cx="300" cy="255" r="4.5" fill="#22D3EE" />
+        <g transform="translate(200, 295)">
           <rect x="-52" y="-14" width="104" height="24" rx="6" fill="#083344" stroke="#22D3EE" strokeWidth="2.5" />
           <text x="0" y="2" textAnchor="middle" fill="#67E8F9" fontSize="11" fontWeight="800" fontFamily="monospace">
             SQL::LVL_{level}
@@ -1530,12 +1575,14 @@ const CharacterFrameLayer = ({ frameId, level = 24, cropMode = 'full' }) => {
   if (frameId === 'frame-archon-mythic') {
     return (
       <g id="layer-14-frame-archon">
-        {isCircle ? (
-          <circle cx="200" cy="155" r="142" fill="none" stroke="#F59E0B" strokeWidth="9" />
-        ) : (
-          <rect x="16" y="14" width="368" height="492" rx="28" fill="none" stroke="#F59E0B" strokeWidth="7" />
-        )}
-        <g transform={`translate(200, ${isCircle ? 295 : 500})`}>
+        <circle cx="200" cy="155" r="150" fill="none" stroke="#FDE68A" strokeWidth="2" strokeDasharray="16 10" />
+        <circle cx="200" cy="155" r="142" fill="none" stroke="#F59E0B" strokeWidth="9" />
+        <circle cx="200" cy="155" r="133" fill="none" stroke="#78350F" strokeWidth="3" />
+        {/* Sovereign star on top */}
+        <polygon points="200,3 203,11 211,13 203,15 200,23 197,15 189,13 197,11" fill="#FDE68A" stroke="#78350F" strokeWidth="1" />
+        <circle cx="300" cy="55" r="4.5" fill="#FDE68A" />
+        <circle cx="100" cy="55" r="4.5" fill="#FDE68A" />
+        <g transform="translate(200, 295)">
           <rect x="-56" y="-14" width="112" height="24" rx="12" fill="#451A03" stroke="#FBBF24" strokeWidth="2.5" />
           <text x="0" y="2" textAnchor="middle" fill="#FDE68A" fontSize="11" fontWeight="800" fontFamily="sans-serif">
             ★ ARCHON {level} ★
@@ -1548,12 +1595,10 @@ const CharacterFrameLayer = ({ frameId, level = 24, cropMode = 'full' }) => {
   // Default AURA Frame
   return (
     <g id="layer-14-frame-default">
-      {isCircle ? (
-        <circle cx="200" cy="155" r="142" fill="none" stroke="#4F46E5" strokeWidth="6" opacity="0.7" />
-      ) : (
-        <rect x="16" y="14" width="368" height="492" rx="28" fill="none" stroke="#334155" strokeWidth="4" />
-      )}
-      <g transform={`translate(200, ${isCircle ? 295 : 500})`}>
+      <circle cx="200" cy="155" r="148" fill="none" stroke="#A5B4FC" strokeWidth="1.5" opacity="0.65" strokeDasharray="8 6" />
+      <circle cx="200" cy="155" r="142" fill="none" stroke="#6366F1" strokeWidth="7" opacity="0.9" />
+      <circle cx="200" cy="155" r="135" fill="none" stroke="#312E81" strokeWidth="2.5" />
+      <g transform="translate(200, 295)">
         <rect x="-38" y="-14" width="76" height="24" rx="12" fill="#1E293B" stroke="#6366F1" strokeWidth="2" />
         <text x="0" y="2" textAnchor="middle" fill="#E2E8F0" fontSize="11" fontWeight="800" fontFamily="sans-serif">
           LVL {level}
@@ -1693,6 +1738,7 @@ const ItemThumbnailPreview = ({ item, hairColor, skinTone }) => {
       case 'specialEffect':
         return '45 20 310 320';
       case 'frame':
+        return '45 5 310 310';
       default:
         return '0 0 400 520';
     }
@@ -1730,7 +1776,21 @@ const ItemThumbnailPreview = ({ item, hairColor, skinTone }) => {
           <CharacterFrontAccessoriesLayer specialId={item.id} />
         </>
       )}
-      {item.category === 'frame' && <CharacterFrameLayer frameId={item.id} level={24} />}
+      {item.category === 'frame' && (
+        <g id={`thumb-frame-${item.id}`}>
+          {/* Circular dark backdrop */}
+          <circle cx="200" cy="155" r="142" fill="#0A0E1A" />
+          <CharacterEnvironmentLayer frameId={item.id} />
+          {/* Avatar bust preview inside circular frame */}
+          <CharacterRearHairLayer hairstyleId="hair-side-part" hairPalette={hairPalette} />
+          <CharacterHeadBaseLayer skinPalette={skinPalette} />
+          <CharacterFaceLayer eyePalette={EYE_COLORS[0]} hairPalette={hairPalette} />
+          <CharacterFrontHairLayer hairstyleId="hair-side-part" hairPalette={hairPalette} />
+          <CharacterOutfitLayer outfitId="outfit-eng-jacket" />
+          {/* Circular Frame */}
+          <CharacterFrameLayer frameId={item.id} level={12} cropMode="circle" />
+        </g>
+      )}
     </svg>
   );
 };
@@ -1750,6 +1810,45 @@ const CATEGORIES = [
 ];
 
 export const STORAGE_KEY = 'aura_student_character_equipment_v2';
+
+// Camera Angles & Coordinates for Character Customizer
+export const CAMERA_TRANSFORMS = {
+  full: 'translate3d(0, 0%, 0) scale(1)',
+  frame: 'translate3d(0, 33.3%, 0) scale(1.65)',
+  head: 'translate3d(0, 51.5%, 0) scale(1.85)',
+  torso: 'translate3d(0, 4.5%, 0) scale(1.55)',
+  legs: 'translate3d(0, -41%, 0) scale(1.65)',
+  feet: 'translate3d(0, -70%, 0) scale(1.8)',
+};
+
+export const CAMERA_LABELS = {
+  full: 'Full Body',
+  frame: 'Frame Focus',
+  head: 'Head & Face',
+  torso: 'Upper Body',
+  legs: 'Lower Body',
+  feet: 'Footwear',
+};
+
+export const getCameraAngleForCategory = (categoryId) => {
+  switch (categoryId) {
+    case 'frame':
+      return 'frame';
+    case 'lowerOutfit':
+      return 'legs';
+    case 'shoes':
+      return 'feet';
+    case 'upperOutfit':
+    case 'lanyard':
+    case 'specialEffect':
+      return 'torso';
+    case 'hairstyle':
+    case 'faceAccessory':
+      return 'head';
+    default:
+      return 'full';
+  }
+};
 
 export function getSavedEquipment() {
   try {
@@ -1801,8 +1900,12 @@ export default function App({
   const [previewEquipment, setPreviewEquipment] = useState(savedEquipment);
   const [activeCategory, setActiveCategory] = useState('upperOutfit');
   const [filterMode, setFilterMode] = useState('all'); // 'all' | 'unlocked' | 'locked'
-  const [cropMode, setCropMode] = useState('full'); // 'full' | 'circle'
+  const [cameraAngle, setCameraAngle] = useState('full'); // 'full' | 'frame' | 'head' | 'torso' | 'legs' | 'feet'
+  const [showFrame, setShowFrame] = useState(true); // Toggle to show/hide frame on character stage
   const [inspectLayerOrder, setInspectLayerOrder] = useState(false);
+
+  // Frame is always visible when activeCategory is 'frame'
+  const isFrameVisible = activeCategory === 'frame' || showFrame;
 
   const [syncStatus, setSyncStatus] = useState(null);
   const [selectedLockedItem, setSelectedLockedItem] = useState(null);
@@ -1829,10 +1932,36 @@ export default function App({
   // Select an item in the grid
   const handleSelectItem = (item) => {
     setSelectedLockedItem(null);
-    setPreviewEquipment(prev => ({
-      ...prev,
+    const updated = {
+      ...previewEquipment,
       [item.category]: item.id
-    }));
+    };
+    setPreviewEquipment(updated);
+
+    // Keep camera angle aligned with chosen item's category
+    const targetCamera = getCameraAngleForCategory(item.category);
+    setCameraAngle(targetCamera);
+
+    // When changing a frame, automatically equip and persist it immediately
+    // so that all profile frame icons in Profile, Navbar, and Home update in real time!
+    if (item.category === 'frame') {
+      const verified = resolveSafeEquipment(updated);
+      setSavedEquipment(verified);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(verified));
+        window.dispatchEvent(new CustomEvent('aura-equipment-updated', { detail: verified }));
+      } catch {
+        // fallback
+      }
+      if (onEquipmentSaved) {
+        onEquipmentSaved(verified);
+      }
+      setSyncStatus({
+        type: 'success',
+        message: `Equipped ${item.name}! Profile frame icons updated. Click "Save" to zoom out to full body.`
+      });
+      setTimeout(() => setSyncStatus(null), 3000);
+    }
   };
 
   // Persist Equipped Configuration to LocalStorage & Simulated Supabase `user_equipment`
@@ -1851,9 +1980,12 @@ export default function App({
       onEquipmentSaved(verified);
     }
 
+    // Zoom camera out to view the full body character
+    setCameraAngle('full');
+
     setSyncStatus({
       type: 'success',
-      message: 'Loadout saved & synced across your AURA profile!'
+      message: 'Loadout saved & camera zoomed out to full body!'
     });
     setTimeout(() => setSyncStatus(null), 4000);
   };
@@ -1861,6 +1993,7 @@ export default function App({
   const handleResetToSaved = () => {
     setPreviewEquipment(savedEquipment);
     setSelectedLockedItem(null);
+    setCameraAngle('full');
     setSyncStatus({
       type: 'info',
       message: 'Reverted preview to your last saved loadout.'
@@ -1918,22 +2051,64 @@ export default function App({
             </div>
 
             <div className="flex items-center gap-1.5">
+              {/* Frame Visibility Toggle (Icon Only) */}
               <button
-                onClick={() => setCropMode(c => (c === 'full' ? 'circle' : 'full'))}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition"
-                title="Toggle Full Body vs BigCircleAvatar Crop"
+                onClick={() => {
+                  if (activeCategory === 'frame') {
+                    setSyncStatus({
+                      type: 'info',
+                      message: 'Frame is always visible while in the Frames section.'
+                    });
+                    setTimeout(() => setSyncStatus(null), 2500);
+                    return;
+                  }
+                  setShowFrame(v => !v);
+                }}
+                className={`p-2 rounded-lg border text-xs transition shadow-sm ${
+                  isFrameVisible
+                    ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200'
+                    : 'bg-slate-800/90 border-slate-700 text-slate-400 hover:text-white'
+                }`}
+                title={
+                  activeCategory === 'frame'
+                    ? 'Frame is locked visible in Frames section'
+                    : isFrameVisible
+                    ? 'Hide avatar frame'
+                    : 'Show avatar frame'
+                }
+                aria-label={isFrameVisible ? 'Hide avatar frame' : 'Show avatar frame'}
               >
-                {cropMode === 'full' ? <ZoomIn className="w-3.5 h-3.5 text-indigo-400" /> : <ZoomOut className="w-3.5 h-3.5 text-indigo-400" />}
-                {cropMode === 'full' ? 'Circle Crop' : 'Full Body'}
+                <Frame className={`w-4 h-4 ${isFrameVisible ? 'text-indigo-400' : 'text-slate-400'}`} />
               </button>
+
+              {/* Camera Focus Toggle (Icon Only) */}
+              <button
+                onClick={() => setCameraAngle(c => (c === 'full' ? getCameraAngleForCategory(activeCategory) : 'full'))}
+                className={`p-2 rounded-lg border text-xs transition shadow-sm ${
+                  cameraAngle !== 'full'
+                    ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200'
+                    : 'bg-slate-800/90 border-slate-700 text-slate-400 hover:text-white'
+                }`}
+                title={cameraAngle === 'full' ? 'Zoom focus camera' : 'Reset camera to full body'}
+                aria-label={cameraAngle === 'full' ? 'Zoom focus camera' : 'Reset camera to full body'}
+              >
+                {cameraAngle === 'full' ? (
+                  <ZoomIn className="w-4 h-4 text-indigo-400" />
+                ) : (
+                  <ZoomOut className="w-4 h-4 text-amber-400" />
+                )}
+              </button>
+
+              {/* Layer Inspector (Icon Only) */}
               <button
                 onClick={() => setInspectLayerOrder(v => !v)}
-                className={`p-1.5 rounded-lg border text-xs transition ${
+                className={`p-2 rounded-lg border text-xs transition ${
                   inspectLayerOrder
                     ? 'bg-indigo-600/30 border-indigo-400 text-indigo-200'
                     : 'bg-slate-800/90 border-slate-700 text-slate-400 hover:text-white'
                 }`}
                 title="Inspect 14 SVG Layers"
+                aria-label="Inspect 14 SVG Layers"
               >
                 <Layers className="w-4 h-4" />
               </button>
@@ -1950,13 +2125,23 @@ export default function App({
 
           {/* Main SVG Character Canvas Container */}
           <div className="relative w-full h-[390px] sm:h-[430px] rounded-2xl bg-gradient-to-b from-[#131B31] via-[#0E1424] to-[#090D18] border border-slate-800/80 flex items-center justify-center overflow-hidden p-3">
-            <CharacterRenderer
-              equipment={previewEquipment}
-              cropMode={cropMode}
-              showFrame={true}
-              level={level}
-              className="w-full h-full max-h-[405px]"
-            />
+            {/* Smooth Animated Camera Viewport */}
+            <div
+              className="camera-stage-viewport w-full h-full flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                transform: CAMERA_TRANSFORMS[cameraAngle] || CAMERA_TRANSFORMS.full,
+                transformOrigin: '50% 50%',
+                willChange: 'transform',
+              }}
+            >
+              <CharacterRenderer
+                equipment={previewEquipment}
+                cropMode="full"
+                showFrame={isFrameVisible}
+                level={level}
+                className="w-full h-full max-h-[405px]"
+              />
+            </div>
 
             {/* Optional 14-Layer Order Overlay Inspector */}
             {inspectLayerOrder && (
@@ -2003,7 +2188,10 @@ export default function App({
                 {HAIR_COLORS.map(color => (
                   <button
                     key={color.id}
-                    onClick={() => setPreviewEquipment(p => ({ ...p, hairColor: color.id }))}
+                    onClick={() => {
+                      setPreviewEquipment(p => ({ ...p, hairColor: color.id }));
+                      setCameraAngle('head');
+                    }}
                     style={{ backgroundColor: color.primary }}
                     className={`w-6 h-6 rounded-full border-2 transition-transform ${
                       previewEquipment.hairColor === color.id
@@ -2023,7 +2211,10 @@ export default function App({
                 {SKIN_TONES.map(tone => (
                   <button
                     key={tone.id}
-                    onClick={() => setPreviewEquipment(p => ({ ...p, skinTone: tone.id }))}
+                    onClick={() => {
+                      setPreviewEquipment(p => ({ ...p, skinTone: tone.id }));
+                      setCameraAngle('head');
+                    }}
                     style={{ backgroundColor: tone.base }}
                     className={`w-5 h-5 rounded-full border-2 transition-transform ${
                       previewEquipment.skinTone === tone.id
@@ -2040,7 +2231,10 @@ export default function App({
                 {EYE_COLORS.map(eye => (
                   <button
                     key={eye.id}
-                    onClick={() => setPreviewEquipment(p => ({ ...p, eyeColor: eye.id }))}
+                    onClick={() => {
+                      setPreviewEquipment(p => ({ ...p, eyeColor: eye.id }));
+                      setCameraAngle('head');
+                    }}
                     style={{ backgroundColor: eye.main }}
                     className={`w-5 h-5 rounded-full border-2 transition-transform ${
                       previewEquipment.eyeColor === eye.id
@@ -2058,15 +2252,19 @@ export default function App({
           <div className="mt-4 flex items-center gap-3">
             <button
               onClick={handleSaveAndEquip}
-              disabled={!hasUnsavedChanges}
+              disabled={!hasUnsavedChanges && cameraAngle === 'full'}
               className={`flex-1 py-2.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg ${
-                hasUnsavedChanges
+                hasUnsavedChanges || cameraAngle !== 'full'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-600/25 cursor-pointer'
                   : 'bg-slate-800/80 text-slate-500 border border-slate-700/60 cursor-not-allowed'
               }`}
             >
               <Save className="w-4 h-4" />
-              {hasUnsavedChanges ? 'Equip & Save Loadout' : 'Loadout Equipped'}
+              {hasUnsavedChanges
+                ? 'Equip & Save Loadout'
+                : cameraAngle !== 'full'
+                ? 'Save & View Full Body'
+                : 'Loadout Equipped'}
             </button>
 
             <button
@@ -2098,6 +2296,8 @@ export default function App({
                     onClick={() => {
                       setActiveCategory(cat.id);
                       setSelectedLockedItem(null);
+                      const targetCamera = getCameraAngleForCategory(cat.id);
+                      setCameraAngle(targetCamera);
                     }}
                     className={`flex flex-col items-start p-2.5 rounded-xl border text-left transition-all ${
                       isActive
@@ -2217,14 +2417,16 @@ export default function App({
                   </div>
 
                   {/* SVG Layer Mini Thumbnail Box */}
-                  <div className="relative w-full h-32 rounded-xl bg-slate-900/90 border border-slate-800/80 flex items-center justify-center overflow-hidden p-2 my-1 group-hover:border-slate-700 transition">
-                    <ItemThumbnailPreview
-                      item={item}
-                      hairColor={previewEquipment.hairColor}
-                      skinTone={previewEquipment.skinTone}
-                    />
+                  <div className={`relative w-full ${item.category === 'frame' ? 'h-36 flex items-center justify-center p-1.5' : 'h-32 p-2'} rounded-xl bg-slate-900/90 border border-slate-800/80 flex items-center justify-center overflow-hidden my-1 group-hover:border-slate-700 transition`}>
+                    <div className={item.category === 'frame' ? 'w-28 h-28 rounded-full overflow-hidden shadow-md flex items-center justify-center' : 'w-full h-full'}>
+                      <ItemThumbnailPreview
+                        item={item}
+                        hairColor={previewEquipment.hairColor}
+                        skinTone={previewEquipment.skinTone}
+                      />
+                    </div>
                     {!unlocked && (
-                      <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[1px] flex flex-col items-center justify-center p-2 text-center">
+                      <div className={`absolute inset-0 bg-slate-950/60 backdrop-blur-[1px] flex flex-col items-center justify-center p-2 text-center ${item.category === 'frame' ? 'rounded-full' : ''}`}>
                         <Lock className="w-5 h-5 text-rose-400 mb-1" />
                         <span className="text-[10px] font-semibold text-amber-300 leading-tight">
                           {item.unlockRequirement}

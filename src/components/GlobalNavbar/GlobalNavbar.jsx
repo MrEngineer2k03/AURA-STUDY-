@@ -1,6 +1,6 @@
 import './GlobalNavbar.css';
 import auraLogo from '../../assets/logoname.png';
-import { CharacterRenderer, useSavedEquipment } from 'ui/character';
+import { CharacterRenderer, useSavedEquipment, getFrameConfig } from 'ui/character';
 
 export default function GlobalNavbar({
   activeTab = 'HOME',
@@ -18,12 +18,8 @@ export default function GlobalNavbar({
       ? userName.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
       : userName;
 
-  const frameRingGradient =
-    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
-      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
-      : savedEquipment?.frame === 'frame-sql-champion'
-      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
-      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
+  const frameConfig = getFrameConfig(savedEquipment?.frame);
+  const frameRingGradient = frameConfig.gradient;
 
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
 
@@ -101,12 +97,12 @@ export default function GlobalNavbar({
           style={{ cursor: 'pointer' }}
           title="View Profile"
         >
-          <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+          <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
             <div className="user-avatar-inner">
               <CharacterRenderer
                 equipment={savedEquipment}
                 cropMode="circle"
-                showFrame={false}
+                showFrame={true}
                 level={level}
                 className="user-avatar-bust"
               />
@@ -127,12 +123,12 @@ export default function GlobalNavbar({
           aria-label="View Profile"
           title="View Profile"
         >
-          <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+          <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
             <div className="user-avatar-inner">
               <CharacterRenderer
                 equipment={savedEquipment}
                 cropMode="circle"
-                showFrame={false}
+                showFrame={true}
                 level={level}
                 className="user-avatar-bust"
               />

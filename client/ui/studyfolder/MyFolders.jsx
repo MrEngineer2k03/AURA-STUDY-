@@ -13,7 +13,7 @@ import FolderFilesModal from './FolderFilesModal';
 import './MyFolders.css';
 
 import auraLogo from '../dashboard/logoname.png';
-import { CharacterRenderer, useSavedEquipment } from '../character';
+import { CharacterRenderer, useSavedEquipment, getFrameConfig } from '../character';
 
 /**
  * MyFolders - Dedicated "MY FOLDERS" Page for AURA with Study Creation & Archive System
@@ -31,6 +31,93 @@ import { CharacterRenderer, useSavedEquipment } from '../character';
  * @param {boolean} [props.showNavbar=true] - Whether to render top navigation
  * @param {boolean} [props.scrollToCreate=false] - Auto-scroll to Create Folder card
  */
+function StudyFoldersAmbientBg() {
+  return (
+    <div className="my-folders-ambient-bg" aria-hidden="true">
+      <div className="my-folders-bg-decorations">
+        <svg
+          className="my-folders-circuit-svg"
+          viewBox="0 0 900 850"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <filter id="folderVioletGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id="folderAquaGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* 1. Floating Isometric 3D Deck Cube (Knowledge Vault) at (660, 150) */}
+          <polygon points="660,110 710,135 660,160 610,135" stroke="#a855f7" strokeWidth="1.5" fill="rgba(168, 85, 247, 0.08)" />
+          <polygon points="610,135 660,160 660,220 610,195" stroke="#a855f7" strokeWidth="1.5" fill="rgba(168, 85, 247, 0.04)" />
+          <polygon points="660,160 710,135 710,195 660,220" stroke="#a855f7" strokeWidth="1.5" fill="rgba(168, 85, 247, 0.12)" />
+          <circle cx="660" cy="160" r="4.5" fill="#a855f7" filter="url(#folderVioletGlow)" />
+
+          {/* Secondary Floating Isometric Deck Cube at (780, 240) */}
+          <polygon points="780,215 815,232 780,250 745,232" stroke="#06b6d4" strokeWidth="1.2" fill="rgba(6, 182, 212, 0.06)" />
+          <polygon points="745,232 780,250 780,290 745,272" stroke="#06b6d4" strokeWidth="1.2" fill="rgba(6, 182, 212, 0.03)" />
+          <polygon points="780,250 815,232 815,272 780,290" stroke="#06b6d4" strokeWidth="1.2" fill="rgba(6, 182, 212, 0.09)" />
+          <circle cx="780" cy="250" r="3.5" fill="#06b6d4" filter="url(#folderAquaGlow)" />
+
+          {/* 2. Stepped Circuit Bus Pathways (Motherboard / Matrix Traces) */}
+          <path d="M 450 70 L 600 70 L 630 100 L 750 100" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1.5" fill="none" />
+          <circle cx="600" cy="70" r="3.5" fill="rgba(255, 255, 255, 0.3)" />
+          <circle cx="750" cy="100" r="4" stroke="#06b6d4" strokeWidth="1.5" fill="none" />
+
+          <path d="M 610 195 L 530 195 L 490 235 L 490 320 L 530 360 L 620 360" stroke="rgba(168, 85, 247, 0.35)" strokeWidth="1.5" fill="none" strokeDasharray="6 4" />
+          <circle cx="530" cy="195" r="3" fill="#a855f7" />
+          <circle cx="490" cy="235" r="4.5" stroke="#a855f7" strokeWidth="1.5" fill="rgba(168, 85, 247, 0.2)" />
+          <circle cx="620" cy="360" r="4" fill="#a855f7" filter="url(#folderVioletGlow)" />
+
+          <path d="M 710 195 L 745 232 L 745 310 L 790 355 L 860 355" stroke="rgba(6, 182, 212, 0.3)" strokeWidth="1.5" fill="none" />
+          <circle cx="745" cy="310" r="3" fill="#06b6d4" />
+          <circle cx="860" cy="355" r="4" stroke="#06b6d4" strokeWidth="1.5" fill="none" />
+
+          {/* 3. Vertical Memory Address Scale (Ladder on the right) */}
+          <g opacity="0.35">
+            <line x1="840" y1="60" x2="840" y2="280" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="1" />
+            <line x1="835" y1="70" x2="845" y2="70" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1" />
+            <line x1="838" y1="100" x2="842" y2="100" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+            <line x1="835" y1="130" x2="845" y2="130" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1" />
+            <line x1="838" y1="160" x2="842" y2="160" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+            <line x1="835" y1="190" x2="845" y2="190" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1" />
+            <line x1="838" y1="220" x2="842" y2="220" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+            <line x1="835" y1="250" x2="845" y2="250" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1" />
+          </g>
+
+          {/* 4. Digital Matrix Memory / Library Labels */}
+          <text x="615" y="98" fill="#a855f7" fontSize="9" fontFamily="monospace" fontWeight="700" letterSpacing="1.5">DECK_VAULT // 0x01</text>
+          <text x="500" y="228" fill="rgba(255,255,255,0.25)" fontSize="8.5" fontFamily="monospace" letterSpacing="1">BUS_SYNC: 64-BIT</text>
+          <text x="745" y="208" fill="#06b6d4" fontSize="8.5" fontFamily="monospace" letterSpacing="1">FLASHCARD_CACHE</text>
+          <text x="852" y="75" fill="rgba(255,255,255,0.25)" fontSize="7.5" fontFamily="monospace">0x00FF</text>
+          <text x="852" y="135" fill="rgba(255,255,255,0.25)" fontSize="7.5" fontFamily="monospace">0x01A4</text>
+          <text x="852" y="195" fill="rgba(255,255,255,0.25)" fontSize="7.5" fontFamily="monospace">0x028C</text>
+          <text x="852" y="255" fill="rgba(255,255,255,0.25)" fontSize="7.5" fontFamily="monospace">0x03FF</text>
+
+
+
+
+
+
+
+
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 export default function MyFolders({
   onNavigateHome,
   onTabChange,
@@ -44,12 +131,8 @@ export default function MyFolders({
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'MY FOLDERS';
   const savedEquipment = useSavedEquipment();
-  const frameRingGradient =
-    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
-      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
-      : savedEquipment?.frame === 'frame-sql-champion'
-      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
-      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
+  const frameConfig = getFrameConfig(savedEquipment?.frame);
+  const frameRingGradient = frameConfig.gradient;
 
   // Realistic Example Study Folders matching exact reference design (media_1793596234655_f4b8a921.jpg)
   const initialFolders = [
@@ -827,12 +910,12 @@ export default function MyFolders({
             style={{ cursor: 'pointer' }}
             title="View Profile"
           >
-            <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+            <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
               <div className="user-avatar-inner">
                 <CharacterRenderer
                   equipment={savedEquipment}
                   cropMode="circle"
-                  showFrame={false}
+                  showFrame={true}
                   level={12}
                   className="user-avatar-bust"
                 />
@@ -853,12 +936,12 @@ export default function MyFolders({
           aria-label="View Profile"
           title="View Profile"
         >
-          <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+          <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
             <div className="user-avatar-inner">
               <CharacterRenderer
                 equipment={savedEquipment}
                 cropMode="circle"
-                showFrame={false}
+                showFrame={true}
                 level={12}
                 className="user-avatar-bust"
               />
@@ -873,7 +956,7 @@ export default function MyFolders({
   if (currentView === 'flashcards' && activeFolderForStudy) {
     return (
       <div className="my-folders-page-root in-flashcard-view">
-        <div className="my-folders-ambient-bg" aria-hidden="true" />
+        <StudyFoldersAmbientBg />
         {showNavbar && renderNavbar(true)}
         <FlashcardsPage
           folder={activeFolderForStudy}
@@ -893,7 +976,7 @@ export default function MyFolders({
   if (currentView === 'flashcard-editor' && activeFolderForStudy) {
     return (
       <div className="my-folders-page-root">
-        <div className="my-folders-ambient-bg" aria-hidden="true" />
+        <StudyFoldersAmbientBg />
         {showNavbar && renderNavbar()}
         <FlashcardEditor
           folder={activeFolderForStudy}
@@ -908,8 +991,8 @@ export default function MyFolders({
   // VIEW 2: DEDICATED MY FOLDERS (ACTIVE GRID OR ARCHIVE SECTION)
   return (
     <div className={`my-folders-page-root ${isArchiveView ? 'in-archive-view' : ''}`}>
-      {/* Ambient Cyber Atmosphere */}
-      <div className="my-folders-ambient-bg" aria-hidden="true" />
+      {/* Ambient Cyber Atmosphere & Decorative Elements */}
+      <StudyFoldersAmbientBg />
 
       {/* 1. TOP NAVBAR */}
       {showNavbar && renderNavbar()}

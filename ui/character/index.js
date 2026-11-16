@@ -13,6 +13,14 @@ export {
   resolveSafeEquipment,
   getEquipmentItemById,
   getSavedEquipment,
-  useSavedEquipment
+  useSavedEquipment,
+  getFrameConfig,
+  CAMERA_TRANSFORMS,
+  CAMERA_LABELS,
+  getCameraAngleForCategory
 } from './character';
+export {
+  default as BetaCharacterCustomizer,
+  BetaCharacterStageRenderer
+} from './BetaCharacterCustomizer';
 

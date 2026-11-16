@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './EventsPage.css';
 import auraLogo from '../dashboard/logoname.png';
-import { CharacterRenderer, useSavedEquipment } from '../character';
+import { CharacterRenderer, useSavedEquipment, getFrameConfig } from '../character';
 
 function renderCategoryIcon(icon) {
   switch (icon) {
@@ -97,12 +97,8 @@ export default function EventsPage({ onNavigateHome, onTabChange, showNavbar = t
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
   const activeTab = 'EVENTS';
   const savedEquipment = useSavedEquipment();
-  const frameRingGradient =
-    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
-      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
-      : savedEquipment?.frame === 'frame-sql-champion'
-      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
-      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
+  const frameConfig = getFrameConfig(savedEquipment?.frame);
+  const frameRingGradient = frameConfig.gradient;
 
   // Live countdown timer state for Hero Event
   const [timeLeft, setTimeLeft] = useState({
@@ -451,8 +447,101 @@ export default function EventsPage({ onNavigateHome, onTabChange, showNavbar = t
 
   return (
     <div className="aura-events-page-root">
-      {/* Dynamic Cyber Speedlines & Ambient Glow */}
-      <div className="events-ambient-bg" aria-hidden="true" />
+      {/* Tactical Combat HUD, Raid Telemetry & Angular Cyber Background */}
+      <div className="events-ambient-bg" aria-hidden="true">
+        <div className="events-bg-decorations">
+          <svg
+            className="events-tactical-svg"
+            viewBox="0 0 900 850"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <filter id="raidRedGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="raidOrangeGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <linearGradient id="raidWedgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ff2a44" stopOpacity="0.16" />
+                <stop offset="100%" stopColor="#ff2a44" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+
+            {/* 1. Angular Cyber Speedline Wedges */}
+            <polygon points="520,0 850,0 730,160 440,160" fill="url(#raidWedgeGrad)" />
+            <polygon points="680,0 900,0 840,90 640,90" fill="rgba(255, 42, 68, 0.08)" />
+
+            {/* 2. Tactical Target Lock-On Reticle at (650, 200) */}
+            <path d="M 570 150 L 550 150 L 550 170" stroke="#ff2a44" strokeWidth="2.5" fill="none" opacity="0.85" />
+            <path d="M 730 150 L 750 150 L 750 170" stroke="#ff2a44" strokeWidth="2.5" fill="none" opacity="0.85" />
+            <path d="M 550 230 L 550 250 L 570 250" stroke="#ff2a44" strokeWidth="2.5" fill="none" opacity="0.85" />
+            <path d="M 750 230 L 750 250 L 730 250" stroke="#ff2a44" strokeWidth="2.5" fill="none" opacity="0.85" />
+
+            <circle cx="650" cy="200" r="70" stroke="rgba(255, 42, 68, 0.25)" strokeWidth="1.5" strokeDasharray="6 6" />
+            <circle cx="650" cy="200" r="45" stroke="rgba(255, 42, 68, 0.4)" strokeWidth="1" />
+            <circle cx="650" cy="200" r="16" stroke="#ff2a44" strokeWidth="1.5" fill="rgba(255, 42, 68, 0.15)" filter="url(#raidRedGlow)" />
+            <circle cx="650" cy="200" r="3.5" fill="#ffffff" />
+
+            {/* Precision Crosshair Lines */}
+            <line x1="530" y1="200" x2="620" y2="200" stroke="rgba(255, 42, 68, 0.5)" strokeWidth="1" />
+            <line x1="680" y1="200" x2="770" y2="200" stroke="rgba(255, 42, 68, 0.5)" strokeWidth="1" />
+            <line x1="650" y1="80" x2="650" y2="170" stroke="rgba(255, 42, 68, 0.5)" strokeWidth="1" />
+            <line x1="650" y1="230" x2="650" y2="320" stroke="rgba(255, 42, 68, 0.5)" strokeWidth="1" />
+
+            {/* 3. Hexagonal Tactical Combat Grid (Honeycomb Battle Cells) */}
+            <polygon points="760,110 785,95 810,110 810,140 785,155 760,140" stroke="rgba(255, 255, 255, 0.08)" strokeWidth="1" fill="none" />
+            <polygon points="815,110 840,95 865,110 865,140 840,155 815,140" stroke="rgba(255, 255, 255, 0.08)" strokeWidth="1" fill="none" />
+            <polygon points="732,157 757,142 782,157 782,187 757,202 732,187" stroke="rgba(255, 255, 255, 0.07)" strokeWidth="1" fill="none" />
+            <polygon points="787,157 812,142 837,157 837,187 812,202 787,187" stroke="rgba(249, 115, 22, 0.3)" strokeWidth="1.2" fill="rgba(249, 115, 22, 0.05)" />
+            <polygon points="842,157 867,142 892,157 892,187 867,202 842,187" stroke="rgba(255, 255, 255, 0.06)" strokeWidth="1" fill="none" />
+            <polygon points="760,205 785,190 810,205 810,235 785,250 760,235" stroke="rgba(255, 255, 255, 0.07)" strokeWidth="1" fill="none" />
+            <polygon points="815,205 840,190 865,205 865,235 840,250 815,235" stroke="rgba(255, 42, 68, 0.35)" strokeWidth="1.2" fill="rgba(255, 42, 68, 0.06)" />
+
+            {/* 4. Tactical Combat Frequency Power Bars */}
+            <g opacity="0.65">
+              <rect x="700" y="30" width="3" height="14" fill="#ff2a44" />
+              <rect x="707" y="26" width="3" height="18" fill="#ff2a44" />
+              <rect x="714" y="22" width="3" height="22" fill="#ff2a44" />
+              <rect x="721" y="28" width="3" height="16" fill="#f97316" />
+              <rect x="728" y="20" width="3" height="24" fill="#f97316" />
+              <rect x="735" y="16" width="3" height="28" fill="#f97316" />
+              <rect x="742" y="24" width="3" height="20" fill="#f59e0b" />
+              <rect x="749" y="18" width="3" height="26" fill="#f59e0b" />
+              <rect x="756" y="26" width="3" height="18" fill="rgba(255,255,255,0.4)" />
+              <rect x="763" y="32" width="3" height="12" fill="rgba(255,255,255,0.25)" />
+            </g>
+
+            {/* 5. Glowing Boss Threat Node */}
+            <circle cx="500" cy="95" r="9" stroke="#ff2a44" strokeWidth="2" fill="none" opacity="0.9" filter="url(#raidRedGlow)" />
+            <circle cx="500" cy="95" r="4" fill="#ff2a44" />
+            <line x1="500" y1="95" x2="650" y2="200" stroke="rgba(255, 42, 68, 0.25)" strokeWidth="1" strokeDasharray="3 4" />
+
+            {/* Raid Perimeter Node */}
+            <circle cx="812" cy="330" r="7" stroke="#f97316" strokeWidth="2" fill="none" opacity="0.85" filter="url(#raidOrangeGlow)" />
+            <circle cx="812" cy="330" r="3" fill="#f97316" />
+            <line x1="650" y1="200" x2="812" y2="330" stroke="rgba(249, 115, 22, 0.25)" strokeWidth="1" />
+
+            <circle cx="480" cy="270" r="3.5" fill="rgba(255, 255, 255, 0.4)" />
+            <line x1="480" y1="270" x2="550" y2="250" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1" strokeDasharray="2 3" />
+
+            {/* 6. Combat Telemetry & Labels */}
+            <text x="548" y="142" fill="#ff2a44" fontSize="9" fontFamily="monospace" fontWeight="700" letterSpacing="1.5">TARGET // RAID_BOSS</text>
+            <text x="640" y="275" fill="rgba(255,255,255,0.3)" fontSize="8.5" fontFamily="monospace" letterSpacing="1">LOCK: ACQUIRED [98.4%]</text>
+            <text x="700" y="58" fill="rgba(249,115,22,0.7)" fontSize="8" fontFamily="monospace" letterSpacing="1">COMBAT_PWR: LVL_MAX</text>
+            <text x="785" y="270" fill="rgba(255,255,255,0.2)" fontSize="8" fontFamily="monospace" letterSpacing="1">SECTOR // HEX_07</text>
+          </svg>
+        </div>
+      </div>
 
       {/* TOP NAVBAR */}
       {showNavbar && (
@@ -511,12 +600,12 @@ export default function EventsPage({ onNavigateHome, onTabChange, showNavbar = t
               style={{ cursor: 'pointer' }}
               title="View Profile"
             >
-              <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+              <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
                 <div className="user-avatar-inner">
                   <CharacterRenderer
                     equipment={savedEquipment}
                     cropMode="circle"
-                    showFrame={false}
+                    showFrame={true}
                     level={12}
                     className="user-avatar-bust"
                   />
@@ -536,12 +625,12 @@ export default function EventsPage({ onNavigateHome, onTabChange, showNavbar = t
               aria-label="View Profile"
               title="View Profile"
             >
-              <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+              <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
                 <div className="user-avatar-inner">
                   <CharacterRenderer
                     equipment={savedEquipment}
                     cropMode="circle"
-                    showFrame={false}
+                    showFrame={true}
                     level={12}
                     className="user-avatar-bust"
                   />

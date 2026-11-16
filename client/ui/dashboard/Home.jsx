@@ -4,7 +4,7 @@ import '../../../src/components/HomeBottom/HomeBottom.css';
 import StudyCard from './components/StudyCard';
 import StudyFolders from '../studyfolder/StudyFolders';
 import MyFolders from '../studyfolder/MyFolders';
-import { CharacterRenderer, useSavedEquipment } from '../character';
+import { CharacterRenderer, useSavedEquipment, getFrameConfig } from '../character';
 import auraLogo from './logoname.png';
 import homeBg from './homebackground.png';
 import eventBanner from './event_banner.png';
@@ -20,12 +20,8 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
   const [activeTab, setActiveTab] = useState('HOME');
   const [animated, setAnimated] = useState(false);
   const savedEquipment = useSavedEquipment();
-  const frameRingGradient =
-    savedEquipment?.frame === 'frame-archon-mythic' || savedEquipment?.frame === 'frame-golden-halo'
-      ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
-      : savedEquipment?.frame === 'frame-sql-champion'
-      ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)'
-      : 'linear-gradient(135deg, #ff2a44 0%, #ff6b81 100%)';
+  const frameConfig = getFrameConfig(savedEquipment?.frame);
+  const frameRingGradient = frameConfig.gradient;
 
   useEffect(() => {
     const timer = requestAnimationFrame(() => {
@@ -242,12 +238,12 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
             style={{ cursor: 'pointer' }}
             title="View Profile"
           >
-            <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+            <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
               <div className="user-avatar-inner">
                 <CharacterRenderer
                   equipment={savedEquipment}
                   cropMode="circle"
-                  showFrame={false}
+                  showFrame={true}
                   level={12}
                   className="user-avatar-bust"
                 />
@@ -270,12 +266,12 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
             aria-label="View Profile"
             title="View Profile"
           >
-            <div className="user-avatar-circle" style={{ background: frameRingGradient }}>
+            <div className="user-avatar-circle" style={{ background: frameRingGradient, boxShadow: `0 0 8px ${frameConfig.color}66` }}>
               <div className="user-avatar-inner">
                 <CharacterRenderer
                   equipment={savedEquipment}
                   cropMode="circle"
-                  showFrame={false}
+                  showFrame={true}
                   level={12}
                   className="user-avatar-bust"
                 />
