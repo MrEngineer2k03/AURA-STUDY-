@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './ProfilePage.css';
 import auraLogo from '../dashboard/logoname.png';
 import CharacterCustomizer, {
@@ -32,6 +32,9 @@ export default function ProfilePage({
   const [previewEmptyFolders, setPreviewEmptyFolders] = useState(false);
   const [showCustomizeModal, setShowCustomizeModal] = useState(false);
   const [showAllAchievementsModal, setShowAllAchievementsModal] = useState(false);
+  const [showAllFoldersModal, setShowAllFoldersModal] = useState(false);
+  const [foldersSearchQuery, setFoldersSearchQuery] = useState('');
+  const [selectedFolderForInfo, setSelectedFolderForInfo] = useState(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showCoverPopover, setShowCoverPopover] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
@@ -237,6 +240,177 @@ export default function ProfilePage({
       equipped: false,
     },
   ]);
+
+  const defaultStudyFolders = [
+    {
+      id: 'folder-test',
+      dept: 'Engineering',
+      status: 'In Progress',
+      statusClass: 'status-progress-blue',
+      themeClass: 'folder-theme-crimson',
+      title: 'Test',
+      subtitle: 'Engineering Fundamentals',
+      description: 'Core engineering problem sets, unit conversions, and foundational mechanics flashcards for quick exam drills.',
+      lessonsCount: 0,
+      cardsCount: 5,
+      lastStudied: 'Just now',
+      createdAt: 'Oct 25, 2026',
+      meta: '0 lessons · 5 flashcards',
+      completion: 20,
+      pctClass: 'pct-red',
+      fillClass: 'fill-red',
+      actionLabel: 'Continue Studying',
+    },
+    {
+      id: 'folder-biz',
+      dept: 'Business',
+      status: 'In Progress',
+      statusClass: 'status-progress-amber',
+      themeClass: 'folder-theme-amber',
+      title: 'Business Strategy',
+      subtitle: 'Entrepreneurship & Markets',
+      description: 'Market analysis frameworks, business model canvas breakdowns, competitive positioning, and venture scalability.',
+      lessonsCount: 4,
+      cardsCount: 28,
+      lastStudied: '5h ago',
+      createdAt: 'Oct 1, 2026',
+      meta: '4 lessons · 28 flashcards',
+      completion: 25,
+      pctClass: 'pct-amber',
+      fillClass: 'fill-amber',
+      actionLabel: 'Continue Studying',
+    },
+    {
+      id: 'folder-db',
+      dept: 'IT & Data',
+      status: 'Completed',
+      statusClass: 'status-completed-green',
+      themeClass: 'folder-theme-emerald',
+      title: 'Database Systems',
+      subtitle: 'SQL & Relational Algebra',
+      description: 'Complete mastery deck covering SQL joins, B-tree indexing, normalization forms (1NF–BCNF), and ACID transactions.',
+      lessonsCount: 7,
+      cardsCount: 64,
+      lastStudied: '20h ago',
+      createdAt: 'Oct 18, 2026',
+      meta: '7 lessons · 64 flashcards',
+      completion: 100,
+      pctClass: 'pct-green',
+      fillClass: 'fill-green',
+      actionLabel: 'Review Folder',
+    },
+    {
+      id: 'folder-bio',
+      dept: 'Life Sciences',
+      status: 'In Progress',
+      statusClass: 'status-progress-blue',
+      themeClass: 'folder-theme-sky',
+      title: 'Biology 101',
+      subtitle: 'Cell Structure & Function',
+      description: 'Eukaryotic vs. prokaryotic cell biology, organelle functions, DNA replication, and ATP cellular respiration pathways.',
+      lessonsCount: 8,
+      cardsCount: 42,
+      lastStudied: 'Yesterday',
+      createdAt: 'Sep 25, 2026',
+      meta: '8 lessons · 42 flashcards',
+      completion: 63,
+      pctClass: 'pct-amber',
+      fillClass: 'fill-amber',
+      actionLabel: 'Continue Studying',
+    },
+    {
+      id: 'folder-calc',
+      dept: 'Mathematics',
+      status: 'In Progress',
+      statusClass: 'status-progress-amber',
+      themeClass: 'folder-theme-amber',
+      title: 'Calculus Basics',
+      subtitle: 'Limits & Derivatives',
+      description: 'Differential calculus essentials including epsilon-delta limit laws, continuity, L’Hôpital’s rule, and chain rule derivatives.',
+      lessonsCount: 5,
+      cardsCount: 30,
+      lastStudied: 'Yesterday',
+      createdAt: 'Sep 20, 2026',
+      meta: '5 lessons · 30 flashcards',
+      completion: 40,
+      pctClass: 'pct-amber',
+      fillClass: 'fill-amber',
+      actionLabel: 'Continue Studying',
+    },
+    {
+      id: 'folder-prog',
+      dept: 'Computer Science',
+      status: 'In Progress',
+      statusClass: 'status-progress-blue',
+      themeClass: 'folder-theme-violet',
+      title: 'Programming Exam',
+      subtitle: 'JavaScript Fundamentals',
+      description: 'Lexical closures, async/await event loop execution, prototypal inheritance, and modern ES6+ data structures.',
+      lessonsCount: 6,
+      cardsCount: 48,
+      lastStudied: '3d ago',
+      createdAt: 'Sep 22, 2026',
+      meta: '6 lessons · 48 flashcards',
+      completion: 67,
+      pctClass: 'pct-red',
+      fillClass: 'fill-red',
+      actionLabel: 'Continue Studying',
+    },
+  ];
+
+  const [studyFolders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('aura_study_folders_v6');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const defaultIds = new Set(defaultStudyFolders.map((f) => f.id));
+          const customFolders = parsed
+            .filter((f) => !f.isArchived && !defaultIds.has(f.id))
+            .map((f) => {
+              const pct = Number(f.progress) || 0;
+              const isCompleted = pct >= 100 || String(f.status).toLowerCase() === 'completed';
+              const lessonsCount = Number(f.lessons) || 0;
+              const cardsCount = Array.isArray(f.flashcards) ? f.flashcards.length : Number(f.cards) || 0;
+              return {
+                id: f.id,
+                dept: f.department || 'General',
+                status: isCompleted ? 'Completed' : 'In Progress',
+                statusClass: isCompleted ? 'status-completed-green' : 'status-progress-blue',
+                themeClass: isCompleted ? 'folder-theme-emerald' : 'folder-theme-sky',
+                title: f.title || 'Untitled Folder',
+                subtitle: f.subtitle || f.description || 'Study Materials',
+                description: f.description || f.subtitle || 'Custom study folder with flashcards and lesson materials.',
+                lessonsCount,
+                cardsCount,
+                lastStudied: f.lastStudied || 'Recently',
+                createdAt: f.createdAt || 'Oct 2026',
+                meta: `${lessonsCount} lessons · ${cardsCount} flashcards`,
+                completion: pct,
+                pctClass: isCompleted ? 'pct-green' : pct >= 50 ? 'pct-amber' : 'pct-red',
+                fillClass: isCompleted ? 'fill-green' : pct >= 50 ? 'fill-amber' : 'fill-red',
+                actionLabel: isCompleted ? 'Review Folder' : 'Continue Studying',
+              };
+            });
+          return [...defaultStudyFolders, ...customFolders];
+        }
+      }
+    } catch {
+      // ignore storage errors
+    }
+    return defaultStudyFolders;
+  });
+
+  const filteredStudyFolders = useMemo(() => {
+    if (!foldersSearchQuery.trim()) return studyFolders;
+    const q = foldersSearchQuery.toLowerCase().trim();
+    return studyFolders.filter((f) =>
+      (f.title && f.title.toLowerCase().includes(q)) ||
+      (f.dept && f.dept.toLowerCase().includes(q)) ||
+      (f.subtitle && f.subtitle.toLowerCase().includes(q)) ||
+      (f.description && f.description.toLowerCase().includes(q))
+    );
+  }, [studyFolders, foldersSearchQuery]);
 
   const navTabs = ['HOME', 'MY FOLDERS', 'FRIENDS', 'BATTLES', 'EVENTS'];
 
@@ -1020,119 +1194,125 @@ export default function ProfilePage({
                   </button>
                 </div>
               ) : (
-                /* 3 Populated Folder Cards Grid */
-                <div className="prof-folders-grid">
-                  {/* Folder 1: Test (Engineering) */}
-                  <div className="prof-folder-card">
-                    <div className="folder-card-top-row">
-                      <span className="folder-card-dept">Engineering</span>
-                      <span className="folder-card-status-text status-progress-blue">
-                        In Progress
-                      </span>
-                    </div>
+                /* 3 Limited Folder Cards Grid + View More Folders at the end */
+                <>
+                  <div className="prof-folders-grid">
+                    {studyFolders.slice(0, 3).map((folder) => (
+                      <div
+                        key={folder.id}
+                        className={`prof-folder-card ${folder.themeClass || 'folder-theme-crimson'}`}
+                        onClick={() => setSelectedFolderForInfo(folder)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setSelectedFolderForInfo(folder);
+                          }
+                        }}
+                      >
+                        {/* Cool Mobile Folder Decorative Tab Lip & Watermark */}
+                        <div className="folder-mobile-tab-notch" aria-hidden="true" />
+                        <svg
+                          className="folder-mobile-bg-watermark"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
+                        </svg>
 
-                    <div className="folder-card-main-info">
-                      <h3 className="folder-card-title">Test</h3>
-                      <p className="folder-card-sub">Engineering Fundamentals</p>
-                      <div className="folder-card-meta-counts">
-                        0 lessons · 5 flashcards
-                      </div>
-                    </div>
+                        <div className="folder-card-top-row">
+                          <span className="folder-card-dept">{folder.dept}</span>
+                          <span className={`folder-card-status-text ${folder.statusClass}`}>
+                            {folder.status}
+                          </span>
+                        </div>
 
-                    <div className="folder-card-completion-block">
-                      <div className="folder-completion-meta">
-                        <span className="comp-label">Completion</span>
-                        <span className="comp-pct pct-red">20%</span>
-                      </div>
-                      <div className="folder-progress-bar-track">
-                        <div className="folder-progress-bar-fill fill-red" style={{ width: '20%' }} />
-                      </div>
-                    </div>
+                        <div className="folder-card-mobile-body-row">
+                          {/* Glowing 3D Folder Emblem (Visible in Mobile View) */}
+                          <div className="folder-mobile-icon-badge" aria-hidden="true">
+                            <svg
+                              viewBox="0 0 24 24"
+                              width="22"
+                              height="22"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                              <line x1="9" y1="14" x2="15" y2="14" />
+                            </svg>
+                          </div>
 
-                    <button
-                      type="button"
-                      className="btn-folder-action"
-                      onClick={() => handleNavClick('MY FOLDERS')}
-                    >
-                      <span>Continue Studying</span>
-                      <span>→</span>
-                    </button>
+                          <div className="folder-card-main-info">
+                            <h3 className="folder-card-title">{folder.title}</h3>
+                            <p className="folder-card-sub">{folder.subtitle}</p>
+                            <div className="folder-card-meta-counts">
+                              {folder.meta}
+                            </div>
+                          </div>
+
+                          {/* Right Chevron Indicator (Visible in Mobile View) */}
+                          <div className="folder-mobile-chevron-pill" aria-hidden="true">
+                            <svg
+                              viewBox="0 0 24 24"
+                              width="16"
+                              height="16"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        <div className="folder-card-completion-block">
+                          <div className="folder-completion-meta">
+                            <span className="comp-label">Completion</span>
+                            <span className={`comp-pct ${folder.pctClass}`}>{folder.completion}%</span>
+                          </div>
+                          <div className="folder-progress-bar-track">
+                            <div
+                              className={`folder-progress-bar-fill ${folder.fillClass}`}
+                              style={{ width: `${folder.completion}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="btn-folder-action"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedFolderForInfo(folder);
+                          }}
+                        >
+                          <span>{folder.actionLabel}</span>
+                          <span>→</span>
+                        </button>
+                      </div>
+                    ))}
                   </div>
 
-                  {/* Folder 2: Business Strategy */}
-                  <div className="prof-folder-card">
-                    <div className="folder-card-top-row">
-                      <span className="folder-card-dept">Business</span>
-                      <span className="folder-card-status-text status-progress-amber">
-                        In Progress
-                      </span>
-                    </div>
-
-                    <div className="folder-card-main-info">
-                      <h3 className="folder-card-title">Business Strategy</h3>
-                      <p className="folder-card-sub">Entrepreneurship & Markets</p>
-                      <div className="folder-card-meta-counts">
-                        4 lessons · 28 flashcards
-                      </div>
-                    </div>
-
-                    <div className="folder-card-completion-block">
-                      <div className="folder-completion-meta">
-                        <span className="comp-label">Completion</span>
-                        <span className="comp-pct pct-amber">25%</span>
-                      </div>
-                      <div className="folder-progress-bar-track">
-                        <div className="folder-progress-bar-fill fill-amber" style={{ width: '25%' }} />
-                      </div>
-                    </div>
-
+                  {/* View More Folders Button at the end of the list */}
+                  <div className="prof-folders-view-more-row">
                     <button
                       type="button"
-                      className="btn-folder-action"
-                      onClick={() => handleNavClick('MY FOLDERS')}
+                      className="btn-view-more-folders"
+                      onClick={() => setShowAllFoldersModal(true)}
                     >
-                      <span>Continue Studying</span>
-                      <span>→</span>
+                      <span>View more folders</span>
+                      <span className="view-more-folders-count">({studyFolders.length})</span>
+                      <span className="view-more-folders-arrow" aria-hidden="true">→</span>
                     </button>
                   </div>
-
-                  {/* Folder 3: Database Systems */}
-                  <div className="prof-folder-card">
-                    <div className="folder-card-top-row">
-                      <span className="folder-card-dept">IT & Data</span>
-                      <span className="folder-card-status-text status-completed-green">
-                        Completed
-                      </span>
-                    </div>
-
-                    <div className="folder-card-main-info">
-                      <h3 className="folder-card-title">Database Systems</h3>
-                      <p className="folder-card-sub">SQL & Relational Algebra</p>
-                      <div className="folder-card-meta-counts">
-                        7 lessons · 64 flashcards
-                      </div>
-                    </div>
-
-                    <div className="folder-card-completion-block">
-                      <div className="folder-completion-meta">
-                        <span className="comp-label">Completion</span>
-                        <span className="comp-pct pct-green">100%</span>
-                      </div>
-                      <div className="folder-progress-bar-track">
-                        <div className="folder-progress-bar-fill fill-green" style={{ width: '100%' }} />
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      className="btn-folder-action"
-                      onClick={() => handleNavClick('MY FOLDERS')}
-                    >
-                      <span>Review Folder</span>
-                      <span>→</span>
-                    </button>
-                  </div>
-                </div>
+                </>
               )}
             </section>
 
@@ -1281,6 +1461,348 @@ export default function ProfilePage({
                   Save Title
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================
+          FLOATING BIG CARD SECTION: ALL STUDY FOLDERS
+         ========================================= */}
+      {showAllFoldersModal && (
+        <div className="prof-modal-backdrop" onClick={() => setShowAllFoldersModal(false)}>
+          <div
+            className="prof-modal-dialog prof-all-folders-floating-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="prof-modal-header prof-all-folders-modal-header">
+              <div className="prof-all-folders-header-top">
+                <div>
+                  <h3 className="prof-modal-title">My Study Folders ({filteredStudyFolders.length})</h3>
+                  <p className="prof-all-folders-modal-sub">
+                    All active study folders and flashcard decks across your subjects.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="prof-modal-close-btn"
+                  onClick={() => {
+                    setShowAllFoldersModal(false);
+                    setFoldersSearchQuery('');
+                  }}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Integrated Search Bar */}
+              <div className="prof-all-folders-search-wrap">
+                <svg
+                  className="prof-search-input-icon"
+                  viewBox="0 0 24 24"
+                  width="15"
+                  height="15"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  className="prof-folders-search-input"
+                  placeholder="Search folders by subject, title, or topic..."
+                  value={foldersSearchQuery}
+                  onChange={(e) => setFoldersSearchQuery(e.target.value)}
+                  aria-label="Search study folders"
+                />
+                {foldersSearchQuery && (
+                  <button
+                    type="button"
+                    className="prof-search-clear-btn"
+                    onClick={() => setFoldersSearchQuery('')}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="prof-modal-body prof-all-folders-modal-body">
+              {filteredStudyFolders.length === 0 ? (
+                <div className="prof-folders-empty-search">
+                  <span className="empty-search-icon" aria-hidden="true">🔍</span>
+                  <p className="empty-search-text">No folders found matching &ldquo;{foldersSearchQuery}&rdquo;</p>
+                  <button
+                    type="button"
+                    className="btn-clear-search"
+                    onClick={() => setFoldersSearchQuery('')}
+                  >
+                    Clear Search
+                  </button>
+                </div>
+              ) : (
+                <div className="prof-all-folders-modal-grid">
+                  {filteredStudyFolders.map((folder) => (
+                    <div
+                      key={folder.id}
+                      className={`prof-folder-card prof-modal-folder-card ${folder.themeClass || 'folder-theme-crimson'}`}
+                      onClick={() => setSelectedFolderForInfo(folder)}
+                    >
+                      <div className="folder-mobile-tab-notch" aria-hidden="true" />
+                      <svg
+                        className="folder-mobile-bg-watermark"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
+                      </svg>
+
+                      <div className="folder-card-top-row">
+                        <span className="folder-card-dept">{folder.dept}</span>
+                        <span className={`folder-card-status-text ${folder.statusClass}`}>
+                          {folder.status}
+                        </span>
+                      </div>
+
+                      <div className="folder-card-mobile-body-row">
+                        <div className="folder-mobile-icon-badge" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="22"
+                            height="22"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                            <line x1="9" y1="14" x2="15" y2="14" />
+                          </svg>
+                        </div>
+
+                        <div className="folder-card-main-info">
+                          <h3 className="folder-card-title">{folder.title}</h3>
+                          <p className="folder-card-sub">{folder.subtitle}</p>
+                          <div className="folder-card-meta-counts">
+                            {folder.meta}
+                          </div>
+                        </div>
+
+                        <div className="folder-mobile-chevron-pill" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div className="folder-card-completion-block">
+                        <div className="folder-completion-meta">
+                          <span className="comp-label">Completion</span>
+                          <span className={`comp-pct ${folder.pctClass}`}>{folder.completion}%</span>
+                        </div>
+                        <div className="folder-progress-bar-track">
+                          <div
+                            className={`folder-progress-bar-fill ${folder.fillClass}`}
+                            style={{ width: `${folder.completion}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn-folder-action"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedFolderForInfo(folder);
+                        }}
+                      >
+                        <span>{folder.actionLabel}</span>
+                        <span>→</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="prof-all-folders-modal-footer">
+              <button
+                type="button"
+                className="btn-all-folders-close"
+                onClick={() => {
+                  setShowAllFoldersModal(false);
+                  setFoldersSearchQuery('');
+                }}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn-all-folders-open-page"
+                onClick={() => {
+                  setShowAllFoldersModal(false);
+                  setFoldersSearchQuery('');
+                  handleNavClick('MY FOLDERS');
+                }}
+              >
+                <span>Open My Folders</span>
+                <span className="btn-open-folders-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================
+          FLOATING STUDY FOLDER INFO CARD MODAL
+         ========================================= */}
+      {selectedFolderForInfo && (
+        <div
+          className="prof-modal-backdrop prof-folder-info-backdrop"
+          onClick={() => setSelectedFolderForInfo(null)}
+        >
+          <div
+            className={`prof-modal-dialog prof-folder-info-floating-card ${
+              selectedFolderForInfo.themeClass || 'folder-theme-crimson'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Banner Header with Folder Icon & Status */}
+            <div className="prof-folder-info-header">
+              <div className="prof-folder-info-header-left">
+                <div className="prof-folder-info-emblem">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="26"
+                    height="26"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                    <line x1="9" y1="14" x2="15" y2="14" />
+                  </svg>
+                </div>
+                <div className="prof-folder-info-title-wrap">
+                  <div className="prof-folder-info-badges-row">
+                    <span className="prof-folder-info-dept-pill">
+                      {selectedFolderForInfo.dept}
+                    </span>
+                    <span className={`folder-card-status-text ${selectedFolderForInfo.statusClass}`}>
+                      {selectedFolderForInfo.status}
+                    </span>
+                  </div>
+                  <h3 className="prof-folder-info-title">{selectedFolderForInfo.title}</h3>
+                  <p className="prof-folder-info-subtitle">{selectedFolderForInfo.subtitle}</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="prof-modal-close-btn"
+                onClick={() => setSelectedFolderForInfo(null)}
+                aria-label="Close folder info"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Folder Details Body */}
+            <div className="prof-folder-info-body">
+              <div className="prof-folder-info-desc-box">
+                <span className="prof-folder-info-sec-label">Folder Overview</span>
+                <p className="prof-folder-info-desc-text">
+                  {selectedFolderForInfo.description ||
+                    `${selectedFolderForInfo.subtitle} study deck with flashcards and structured lessons.`}
+                </p>
+              </div>
+
+              {/* 4-Item Stats Grid */}
+              <div className="prof-folder-info-stats-grid">
+                <div className="prof-folder-info-stat-tile">
+                  <span className="info-stat-label">Lessons</span>
+                  <strong className="info-stat-val">
+                    {selectedFolderForInfo.lessonsCount ?? 0} Lessons
+                  </strong>
+                </div>
+                <div className="prof-folder-info-stat-tile">
+                  <span className="info-stat-label">Flashcards</span>
+                  <strong className="info-stat-val">
+                    {selectedFolderForInfo.cardsCount ?? 0} Cards
+                  </strong>
+                </div>
+                <div className="prof-folder-info-stat-tile">
+                  <span className="info-stat-label">Last Studied</span>
+                  <strong className="info-stat-val">
+                    {selectedFolderForInfo.lastStudied || 'Recently'}
+                  </strong>
+                </div>
+                <div className="prof-folder-info-stat-tile">
+                  <span className="info-stat-label">Created</span>
+                  <strong className="info-stat-val">
+                    {selectedFolderForInfo.createdAt || 'Oct 2026'}
+                  </strong>
+                </div>
+              </div>
+
+              {/* Completion Progress Block inside Info Card */}
+              <div className="prof-folder-info-progress-box">
+                <div className="folder-completion-meta">
+                  <span className="comp-label">Mastery Progress</span>
+                  <span className={`comp-pct ${selectedFolderForInfo.pctClass}`}>
+                    {selectedFolderForInfo.completion}%
+                  </span>
+                </div>
+                <div className="folder-progress-bar-track">
+                  <div
+                    className={`folder-progress-bar-fill ${selectedFolderForInfo.fillClass}`}
+                    style={{ width: `${selectedFolderForInfo.completion}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Choice: Cancel or Open Folder */}
+            <div className="prof-folder-info-footer">
+              <button
+                type="button"
+                className="btn-folder-info-cancel"
+                onClick={() => setSelectedFolderForInfo(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn-folder-info-open"
+                onClick={() => {
+                  setSelectedFolderForInfo(null);
+                  setShowAllFoldersModal(false);
+                  handleNavClick('MY FOLDERS');
+                }}
+              >
+                <span>Open Folder</span>
+                <span>→</span>
+              </button>
             </div>
           </div>
         </div>

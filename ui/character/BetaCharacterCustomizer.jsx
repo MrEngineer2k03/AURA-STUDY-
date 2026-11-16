@@ -4,8 +4,9 @@ import baseCharacterImg from './Character Outfits/Base/Base Character 1.png';
 import epicCharacterOutfitImg from './Character Outfits/Uniform Outfits/Epic Character Outfit.png';
 import homeBg from '../dashboard/homebackground.png';
 
-const BETA_STORAGE_KEY = 'aura_beta_character_outfit_v2';
-const BETA_CAMERA_STORAGE_KEY = 'aura_beta_default_camera_angle_v1';
+export const BETA_STORAGE_KEY = 'aura_beta_character_outfit_v2';
+export const BETA_ACTIVE_STORAGE_KEY = 'aura_beta_character_active_across_app_v1';
+export const BETA_CAMERA_STORAGE_KEY = 'aura_beta_default_camera_angle_v1';
 
 const BETA_CHARACTER_ITEMS = [
   {
@@ -65,6 +66,14 @@ function loadSavedDefaultCameraAngle() {
   }
   // Head & Chest camera angle is the default
   return 'headChest';
+}
+
+function loadSavedBetaActiveState() {
+  try {
+    return localStorage.getItem(BETA_ACTIVE_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -129,6 +138,7 @@ export default function BetaCharacterCustomizer({
   // Default camera view is Head & Chest ('headChest'), or user's saved default camera angle
   const [defaultCameraAngle, setDefaultCameraAngle] = useState(loadSavedDefaultCameraAngle);
   const [cameraAngle, setCameraAngle] = useState(loadSavedDefaultCameraAngle); // 'headChest' | 'upperBody' | 'full'
+  const [isBetaActive, setIsBetaActive] = useState(loadSavedBetaActiveState);
   const [syncStatus, setSyncStatus] = useState(null);
 
   const hasUnsavedChanges = savedOutfitId !== previewOutfitId;
@@ -138,6 +148,29 @@ export default function BetaCharacterCustomizer({
     () => BETA_CHARACTER_ITEMS.find((i) => i.id === previewOutfitId) || BETA_CHARACTER_ITEMS[0],
     [previewOutfitId]
   );
+
+  const handleToggleBetaActive = (newVal) => {
+    const nextVal = typeof newVal === 'boolean' ? newVal : !isBetaActive;
+    setIsBetaActive(nextVal);
+    try {
+      localStorage.setItem(BETA_ACTIVE_STORAGE_KEY, nextVal ? 'true' : 'false');
+    } catch {
+      // ignore
+    }
+    window.dispatchEvent(
+      new CustomEvent('aura-beta-character-updated', {
+        detail: { active: nextVal, outfitId: savedOutfitId },
+      })
+    );
+    setSyncStatus({
+      type: nextVal ? 'success' : 'info',
+      title: nextVal ? 'Beta Character Display: Active!' : 'Beta Character Display: Disabled',
+      message: nextVal
+        ? 'Your Beta character outfit is now active on the Home Page and profile icons!'
+        : 'Reverted Home Page and profile icons back to your standard character.',
+    });
+    setTimeout(() => setSyncStatus(null), 3500);
+  };
 
   // Camera helper functions
   const zoomToHeadChest = () => {
@@ -178,10 +211,18 @@ export default function BetaCharacterCustomizer({
     } catch {
       // ignore storage errors
     }
+    window.dispatchEvent(
+      new CustomEvent('aura-beta-character-updated', {
+        detail: { active: isBetaActive, outfitId: previewOutfitId },
+      })
+    );
+    window.dispatchEvent(new Event('storage'));
     setSyncStatus({
       type: 'success',
       title: 'Character Saved!',
-      message: `${equippedItem.name} is now equipped as your active character.`,
+      message: `${equippedItem.name} is now equipped as your active character${
+        isBetaActive ? ' and displayed on the Home Page & profile icons' : ''
+      }.`,
     });
     setTimeout(() => setSyncStatus(null), 4000);
   };
@@ -502,12 +543,126 @@ export default function BetaCharacterCustomizer({
             style={{
               marginTop: '12px',
               paddingTop: '12px',
-              marginBottom: '14px',
+              marginBottom: '10px',
               gap: '12px',
             }}
           >
             <span className="shrink-0">Selected Outfit:</span>
             <span className="font-semibold text-slate-200 truncate">{equippedItem.name}</span>
+          </div>
+
+          {/* Display in Home Page & Profile Icons Toggle Feature Card */}
+          <div
+            className="rounded-xl border transition-all"
+            style={{
+              marginBottom: '16px',
+              padding: '12px 14px',
+              background: isBetaActive
+                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.16) 0%, rgba(168, 85, 247, 0.1) 100%)'
+                : 'rgba(15, 21, 37, 0.75)',
+              borderColor: isBetaActive ? 'rgba(129, 140, 248, 0.45)' : 'rgba(51, 65, 85, 0.65)',
+              boxShadow: isBetaActive
+                ? '0 6px 20px rgba(99, 102, 241, 0.18)'
+                : 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '10px',
+                  background: isBetaActive
+                    ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(168, 85, 247, 0.25) 100%)'
+                    : 'rgba(51, 65, 85, 0.3)',
+                  border: isBetaActive
+                    ? '1px solid rgba(129, 140, 248, 0.55)'
+                    : '1px solid rgba(51, 65, 85, 0.5)',
+                  color: isBetaActive ? '#a5b4fc' : '#64748b',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  flexShrink: 0,
+                }}
+              >
+                🏠
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '12.5px', fontWeight: '700', color: '#ffffff' }}>
+                    Display on Home &amp; Profile Icons
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '9.5px',
+                      fontWeight: '800',
+                      textTransform: 'uppercase',
+                      padding: '1px 6px',
+                      borderRadius: '4px',
+                      background: isBetaActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(100, 116, 139, 0.2)',
+                      color: isBetaActive ? '#34d399' : '#94a3b8',
+                      border: isBetaActive
+                        ? '1px solid rgba(16, 185, 129, 0.4)'
+                        : '1px solid rgba(100, 116, 139, 0.3)',
+                      letterSpacing: '0.04em',
+                    }}
+                  >
+                    {isBetaActive ? 'Active' : 'Off'}
+                  </span>
+                </div>
+                <span style={{ fontSize: '11px', color: '#94a3b8', lineHeight: 1.25 }}>
+                  Use this character in the Home Page stage and circular avatar chips
+                </span>
+              </div>
+            </div>
+
+            {/* Glowing Cyber Switch Toggle */}
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isBetaActive}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleBetaActive();
+              }}
+              style={{
+                width: '46px',
+                height: '26px',
+                borderRadius: '999px',
+                background: isBetaActive
+                  ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)'
+                  : '#1e293b',
+                border: isBetaActive ? '1px solid #818cf8' : '1px solid #334155',
+                position: 'relative',
+                cursor: 'pointer',
+                transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                padding: '2px',
+                flexShrink: 0,
+                boxShadow: isBetaActive ? '0 0 14px rgba(99, 102, 241, 0.5)' : 'none',
+              }}
+              title={
+                isBetaActive
+                  ? 'Beta character display is active across Home & Profile icons. Click to disable.'
+                  : 'Click to display Beta character on Home & Profile icons.'
+              }
+            >
+              <div
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: '#ffffff',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
+                  transform: isBetaActive ? 'translateX(20px)' : 'translateX(0px)',
+                  transition: 'transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                }}
+              />
+            </button>
           </div>
 
           {/* Primary Equip & Reset Action Buttons */}
@@ -607,7 +762,7 @@ export default function BetaCharacterCustomizer({
 
                     {isSaved ? (
                       <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                        ✓ Equipped
+                        {isBetaActive ? '✓ Active in App' : '✓ Equipped'}
                       </span>
                     ) : isSelected ? (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/25 text-indigo-300 border border-indigo-400/50">

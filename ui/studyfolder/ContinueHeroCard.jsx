@@ -100,7 +100,7 @@ export default function ContinueHeroCard({
 
           {/* Mobile Ring positioned beside title */}
           <div className="continue-hero-mobile-ring" aria-hidden="true">
-            <CircularProgress progress={progress} size={48} strokeWidth={3.8} color="#ff4766" />
+            <CircularProgress progress={progress} size={48} strokeWidth={3.8} color="#f59e0b" />
           </div>
 
           <div className="continue-hero-text">

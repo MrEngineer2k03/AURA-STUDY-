@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&family=Teko:wght@600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&family=Teko:wght@600;700&display=swap');
 
 :root {
   --bg-deep: #0a0d14;
@@ -357,7 +357,7 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* UPPER HERO (GREETING + FLOATING CARDS + CENTER CHARACTER) */
@@ -370,6 +370,7 @@
   align-items: flex-start;
   padding-top: 28px;
   margin-bottom: 12px;
+  overflow: visible;
 }
 
 /* LEFT COLUMN (GREETING + ENGINEERING STATUS) */
@@ -659,10 +660,11 @@
 .hero-center-character-stage {
   position: absolute;
   left: 50%;
-  bottom: -4px;
-  transform: translateX(-50%);
-  height: calc(100% + 12px);
-  max-height: 500px;
+  bottom: -135px;
+  transform: translateX(-50%) scale(1.02);
+  transform-origin: bottom center;
+  height: calc(100% + 95px);
+  max-height: 760px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -676,15 +678,15 @@
   width: auto;
   object-fit: contain;
   object-position: bottom center;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.5));
 }
 
 .hero-character-ground-shadow {
-  width: 260px;
-  height: 16px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 50%, transparent 75%);
+  width: 320px;
+  height: 20px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 75%);
   border-radius: 50%;
-  margin-top: -8px;
+  margin-top: -10px;
 }
 
 /* ========================================================
@@ -1639,8 +1641,11 @@
 
   /* 4. CENTER CHARACTER STAGE */
   .hero-center-character-stage {
-    height: 420px;
-    bottom: -10px;
+    height: calc(100% + 85px) !important;
+    max-height: 660px !important;
+    bottom: -120px !important;
+    transform: translateX(-50%) scale(0.98) !important;
+    transform-origin: bottom center !important;
   }
 
   .hero-character-ground-shadow {
@@ -1954,8 +1959,11 @@
 /* For very short laptop screens (height <= 760px) */
 @media (max-height: 760px) {
   .hero-center-character-stage {
-    height: 350px;
-    bottom: -6px;
+    height: calc(100% + 75px) !important;
+    max-height: 560px !important;
+    bottom: -105px !important;
+    transform: translateX(-50%) scale(0.96) !important;
+    transform-origin: bottom center !important;
   }
 
   .hero-brand-big-logo {
@@ -2007,6 +2015,12 @@
 
   .hero-stage-layout {
     overflow: visible;
+  }
+
+  .hero-center-character-stage {
+    bottom: -95px !important;
+    transform: translateX(-50%) scale(0.94) !important;
+    transform-origin: bottom center !important;
   }
 }
 
@@ -2259,8 +2273,8 @@
 
   .hero-upper-viewport {
     display: grid !important;
-    grid-template-columns: 1fr 135px !important;
-    column-gap: 8px !important;
+    grid-template-columns: 1fr 190px !important;
+    column-gap: 6px !important;
     row-gap: 14px !important;
     align-items: end !important;
     min-height: unset !important;
@@ -2358,10 +2372,11 @@
     position: relative !important;
     left: unset !important;
     bottom: unset !important;
-    transform: none !important;
-    width: 135px !important;
-    height: 240px !important;
-    max-height: 250px !important;
+    transform: translateY(58px) scale(1.18) !important;
+    transform-origin: bottom center !important;
+    width: 200px !important;
+    height: 360px !important;
+    max-height: 380px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: flex-end !important;
@@ -2772,4 +2787,3 @@
     margin: 8px auto 2px !important;
   }
 }
-

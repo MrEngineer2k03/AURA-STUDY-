@@ -1286,10 +1286,10 @@
 .prof-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 7, 13, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 100;
+  background: rgba(4, 7, 13, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10000 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2063,5 +2063,804 @@
     gap: 16px 14px;
   }
 }
+
+/* ===================================================
+   MY STUDY FOLDERS – VIEW MORE & FLOATING BIG CARD
+   =================================================== */
+.prof-folders-view-more-row {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-view-more-folders {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #131826;
+  border: 1px solid #232e44;
+  color: #e2e8f0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view-more-folders:hover {
+  background: #1a2236;
+  border-color: #ff4d6d;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255, 77, 109, 0.18);
+}
+
+.view-more-folders-count {
+  color: #ff4d6d;
+  font-weight: 800;
+}
+
+.view-more-folders-arrow {
+  color: #94a3b8;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-view-more-folders:hover .view-more-folders-arrow {
+  transform: translateX(3px);
+  color: #ff4d6d;
+}
+
+/* Floating Big Card Modal for All Study Folders */
+.prof-all-folders-floating-card {
+  max-width: 780px;
+  width: 94vw;
+  max-height: 86vh;
+  background: #0d111c;
+  border: 1px solid #222c42;
+  border-radius: 22px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85), 0 0 36px rgba(255, 77, 109, 0.1);
+}
+
+.prof-all-folders-modal-header {
+  align-items: flex-start;
+  padding: 20px 24px 16px;
+}
+
+.prof-all-folders-modal-header {
+  padding: 20px 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.prof-all-folders-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+}
+
+.prof-all-folders-modal-sub {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 4px 0 0;
+}
+
+/* Modal Search Bar */
+.prof-all-folders-search-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.prof-search-input-icon {
+  position: absolute;
+  left: 12px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.prof-folders-search-input {
+  width: 100%;
+  height: 40px;
+  background: #121827;
+  border: 1px solid #1f2a3f;
+  border-radius: 11px;
+  color: #ffffff;
+  padding: 0 34px 0 38px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.prof-folders-search-input::placeholder {
+  color: #64748b;
+}
+
+.prof-folders-search-input:focus {
+  border-color: #ff4d6d;
+  background: #141b2c;
+  box-shadow: 0 0 0 2.5px rgba(255, 77, 109, 0.18);
+}
+
+.prof-search-clear-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.prof-search-clear-btn:hover {
+  color: #ffffff;
+}
+
+/* Empty Search Results State */
+.prof-folders-empty-search {
+  padding: 38px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.empty-search-icon {
+  font-size: 28px;
+  margin-bottom: 2px;
+}
+
+.empty-search-text {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.btn-clear-search {
+  margin-top: 6px;
+  background: #161e2f;
+  border: 1px solid #27344c;
+  color: #cbd5e1;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-clear-search:hover {
+  background: #202b42;
+  color: #ffffff;
+  border-color: #ff4d6d;
+}
+
+.prof-all-folders-modal-body {
+  padding: 18px 24px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.prof-all-folders-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.prof-modal-folder-card {
+  cursor: pointer;
+}
+
+.prof-all-folders-modal-footer {
+  padding: 14px 24px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #0b0f1a;
+}
+
+.btn-all-folders-close {
+  flex: 0 0 auto;
+  min-width: 96px;
+  height: 42px;
+  background: #141a27;
+  border: 1px solid #232e42;
+  color: #cbd5e1;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-all-folders-close:hover {
+  background: #1d2639;
+  color: #ffffff;
+  border-color: #34425b;
+}
+
+.btn-all-folders-open-page {
+  flex: 0 0 auto;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff4d6d 0%, #f43f5e 100%);
+  border: 1px solid rgba(255, 77, 109, 0.6);
+  color: #ffffff;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 0 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap !important;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(255, 77, 109, 0.35);
+}
+
+.btn-all-folders-open-page:hover {
+  background: linear-gradient(135deg, #ff3357 0%, #e11d48 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255, 77, 109, 0.45);
+}
+
+.btn-open-folders-arrow {
+  font-size: 15px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.btn-all-folders-open-page:hover .btn-open-folders-arrow {
+  transform: translateX(3px);
+}
+
+.prof-folder-card {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Desktop default: hide mobile-only decorative folder elements */
+.folder-mobile-tab-notch,
+.folder-mobile-bg-watermark,
+.folder-mobile-icon-badge,
+.folder-mobile-chevron-pill {
+  display: none;
+}
+
+.folder-card-mobile-body-row {
+  display: contents;
+}
+
+/* ===================================================
+   FLOATING STUDY FOLDER INFO CARD MODAL
+   =================================================== */
+.prof-folder-info-backdrop {
+  z-index: 10050 !important;
+}
+
+.prof-folder-info-floating-card {
+  max-width: 480px;
+  width: 92vw;
+  background: #0d121f;
+  border: 1px solid #232f46;
+  border-radius: 22px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.88), 0 0 36px rgba(255, 77, 109, 0.14);
+  overflow: hidden;
+}
+
+.prof-folder-info-floating-card.folder-theme-crimson {
+  border-top: 3px solid #ff4d6d;
+}
+
+.prof-folder-info-floating-card.folder-theme-amber {
+  border-top: 3px solid #f59e0b;
+}
+
+.prof-folder-info-floating-card.folder-theme-emerald {
+  border-top: 3px solid #10b981;
+}
+
+.prof-folder-info-floating-card.folder-theme-sky {
+  border-top: 3px solid #38bdf8;
+}
+
+.prof-folder-info-floating-card.folder-theme-violet {
+  border-top: 3px solid #a855f7;
+}
+
+.prof-folder-info-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: radial-gradient(120% 120% at 0% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+}
+
+.prof-folder-info-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.prof-folder-info-emblem {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 77, 109, 0.14);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  color: #ff4d6d;
+  box-shadow: 0 6px 18px rgba(255, 77, 109, 0.18);
+}
+
+.folder-theme-amber .prof-folder-info-emblem {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.18);
+}
+
+.folder-theme-emerald .prof-folder-info-emblem {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.18);
+}
+
+.folder-theme-sky .prof-folder-info-emblem {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.18);
+}
+
+.folder-theme-violet .prof-folder-info-emblem {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.18);
+}
+
+.prof-folder-info-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.prof-folder-info-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.prof-folder-info-dept-pill {
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+
+.prof-folder-info-title {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 19px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 2px 0 0;
+  line-height: 1.2;
+}
+
+.prof-folder-info-subtitle {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.prof-folder-info-body {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prof-folder-info-desc-box {
+  background: #131929;
+  border: 1px solid #1e283e;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.prof-folder-info-sec-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #64748b;
+}
+
+.prof-folder-info-desc-text {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.prof-folder-info-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.prof-folder-info-stat-tile {
+  background: #121726;
+  border: 1px solid #1d263b;
+  border-radius: 11px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info-stat-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.info-stat-val {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.prof-folder-info-progress-box {
+  background: #121726;
+  border: 1px solid #1d263b;
+  border-radius: 11px;
+  padding: 11px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.prof-folder-info-footer {
+  padding: 14px 22px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  background: rgba(11, 15, 25, 0.95);
+}
+
+.btn-folder-info-cancel {
+  flex: 1;
+  background: #161e2f;
+  border: 1px solid #26324a;
+  color: #cbd5e1;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-folder-info-cancel:hover {
+  background: #1f2a42;
+  color: #ffffff;
+}
+
+.btn-folder-info-open {
+  flex: 1.3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff4d6d 0%, #f43f5e 100%);
+  border: 1px solid #ff4d6d;
+  color: #ffffff;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 18px rgba(255, 77, 109, 0.32);
+}
+
+.btn-folder-info-open:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Mobile View overrides for My Study Folders in Profile */
+@media (max-width: 768px) {
+  .prof-folder-card {
+    position: relative;
+    padding: 15px 15px 14px;
+    gap: 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-left: 3.5px solid #ff4d6d;
+    background: linear-gradient(135deg, rgba(255, 77, 109, 0.09) 0%, rgba(19, 24, 38, 0.96) 52%, #111624 100%);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.38);
+    overflow: hidden;
+  }
+
+  .prof-folder-card:active {
+    transform: scale(0.988);
+  }
+
+  /* Theme Color Variations for Mobile Study Folder Cards */
+  .prof-folder-card.folder-theme-crimson {
+    border-left-color: #ff4d6d;
+    background: linear-gradient(135deg, rgba(255, 77, 109, 0.1) 0%, rgba(19, 24, 38, 0.96) 52%, #111624 100%);
+  }
+
+  .prof-folder-card.folder-theme-amber {
+    border-left-color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(19, 24, 38, 0.96) 52%, #111624 100%);
+  }
+
+  .prof-folder-card.folder-theme-emerald {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(19, 24, 38, 0.96) 52%, #111624 100%);
+  }
+
+  .prof-folder-card.folder-theme-sky {
+    border-left-color: #38bdf8;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(19, 24, 38, 0.96) 52%, #111624 100%);
+  }
+
+  .prof-folder-card.folder-theme-violet {
+    border-left-color: #a855f7;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(19, 24, 38, 0.96) 52%, #111624 100%);
+  }
+
+  /* Top-left cyber folder tab lip */
+  .folder-mobile-tab-notch {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 16px;
+    width: 48px;
+    height: 3px;
+    border-radius: 0 0 6px 6px;
+    background: #ff4d6d;
+    opacity: 0.85;
+  }
+
+  .folder-theme-amber .folder-mobile-tab-notch {
+    background: #f59e0b;
+  }
+
+  .folder-theme-emerald .folder-mobile-tab-notch {
+    background: #10b981;
+  }
+
+  .folder-theme-sky .folder-mobile-tab-notch {
+    background: #38bdf8;
+  }
+
+  .folder-theme-violet .folder-mobile-tab-notch {
+    background: #a855f7;
+  }
+
+  /* Subtle Folder Silhouette Watermark in Bottom-Right Corner */
+  .folder-mobile-bg-watermark {
+    display: block;
+    position: absolute;
+    right: -10px;
+    bottom: -14px;
+    width: 84px;
+    height: 84px;
+    color: rgba(255, 255, 255, 0.03);
+    transform: rotate(-10deg);
+    pointer-events: none;
+  }
+
+  .folder-card-mobile-body-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Glowing 3D Folder Icon Badge on Left */
+  .folder-mobile-icon-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    background: rgba(255, 77, 109, 0.14);
+    border: 1px solid rgba(255, 77, 109, 0.32);
+    color: #ff4d6d;
+    box-shadow: 0 4px 14px rgba(255, 77, 109, 0.16);
+  }
+
+  .folder-theme-amber .folder-mobile-icon-badge {
+    background: rgba(245, 158, 11, 0.14);
+    border-color: rgba(245, 158, 11, 0.32);
+    color: #fbbf24;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.16);
+  }
+
+  .folder-theme-emerald .folder-mobile-icon-badge {
+    background: rgba(16, 185, 129, 0.14);
+    border-color: rgba(16, 185, 129, 0.32);
+    color: #34d399;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.16);
+  }
+
+  .folder-theme-sky .folder-mobile-icon-badge {
+    background: rgba(56, 189, 248, 0.14);
+    border-color: rgba(56, 189, 248, 0.32);
+    color: #38bdf8;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.16);
+  }
+
+  .folder-theme-violet .folder-mobile-icon-badge {
+    background: rgba(168, 85, 247, 0.14);
+    border-color: rgba(168, 85, 247, 0.32);
+    color: #c084fc;
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.16);
+  }
+
+  .folder-card-main-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .folder-card-meta-counts {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  /* Right Interactive Chevron Pill */
+  .folder-mobile-chevron-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  /* Remove percentage bar and Continue Studying / Review Folder button in mobile view */
+  .prof-folder-card .folder-card-completion-block,
+  .prof-folder-card .btn-folder-action {
+    display: none !important;
+  }
+
+  .prof-folders-view-more-row {
+    margin-top: 12px;
+    justify-content: stretch;
+  }
+
+  .btn-view-more-folders {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .prof-modal-backdrop {
+    z-index: 10000 !important;
+    padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .prof-all-folders-floating-card {
+    width: 95vw;
+    max-height: calc(100dvh - 32px);
+    border-radius: 20px;
+    z-index: 10001 !important;
+  }
+
+  .prof-folder-info-floating-card {
+    max-height: calc(100dvh - 32px);
+    z-index: 10051 !important;
+  }
+
+  .prof-all-folders-modal-header {
+    padding: 16px 16px 12px;
+    gap: 10px;
+  }
+
+  .prof-folders-search-input {
+    height: 38px;
+    font-size: 12.5px;
+    padding: 0 32px 0 36px;
+  }
+
+  .prof-all-folders-modal-body {
+    padding: 14px 16px;
+    max-height: 58vh;
+  }
+
+  .prof-all-folders-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .prof-all-folders-modal-footer {
+    padding: 12px 16px 16px;
+    gap: 10px;
+  }
+
+  .btn-all-folders-close {
+    flex: 0 0 88px;
+    height: 44px;
+    font-size: 13px;
+    padding: 0 14px;
+    border-radius: 12px;
+  }
+
+  .btn-all-folders-open-page {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    font-size: 13px;
+    padding: 0 16px;
+    border-radius: 12px;
+    white-space: nowrap !important;
+  }
+}
+
 
 

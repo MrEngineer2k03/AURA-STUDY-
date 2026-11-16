@@ -1,8 +1,48 @@
-// @ts-nocheck
-// @ts-nocheck
+﻿// @ts-nocheck
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, useMemo } from 'react';
 import './character.css';
+import baseCharacterImg from './Character Outfits/Base/Base Character 1.png';
+import epicCharacterOutfitImg from './Character Outfits/Uniform Outfits/Epic Character Outfit.png';
+import epicCharacterOutfitHomeImg from './Character Outfits/Character Home Display Outfits/epic character outfit home.png';
+
+export const BETA_STORAGE_KEY = 'aura_beta_character_outfit_v2';
+export const BETA_ACTIVE_STORAGE_KEY = 'aura_beta_character_active_across_app_v1';
+
+export function getSavedBetaCharacterState() {
+  try {
+    const isActive = localStorage.getItem(BETA_ACTIVE_STORAGE_KEY) === 'true';
+    const outfitId = localStorage.getItem(BETA_STORAGE_KEY) || 'epic-character-outfit';
+    return { isActive, outfitId };
+  } catch {
+    return { isActive: false, outfitId: 'epic-character-outfit' };
+  }
+}
+
+export function useBetaCharacterState() {
+  const [betaState, setBetaState] = useState(getSavedBetaCharacterState);
+
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      if (e?.detail && typeof e.detail.active === 'boolean') {
+        setBetaState({
+          isActive: e.detail.active,
+          outfitId: e.detail.outfitId || localStorage.getItem(BETA_STORAGE_KEY) || 'epic-character-outfit',
+        });
+      } else {
+        setBetaState(getSavedBetaCharacterState());
+      }
+    };
+    window.addEventListener('aura-beta-character-updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('aura-beta-character-updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
+
+  return betaState;
+}
 
 // ============================================================================
 // 0. SELF-CONTAINED SVG ICON COMPONENTS (Zero External Icon Dependency)
@@ -327,7 +367,7 @@ export const EQUIPMENT_REGISTRY = [
   },
   {
     id: 'top-formal-blazer',
-    name: 'Dean’s List Blazer & Tie',
+    name: 'Deanâ€™s List Blazer & Tie',
     category: 'upperOutfit',
     rarity: 'Rare',
     defaultUnlocked: true,
@@ -1585,7 +1625,7 @@ const CharacterFrameLayer = ({ frameId, level = 24, cropMode = 'circle' }) => {
         <g transform="translate(200, 295)">
           <rect x="-56" y="-14" width="112" height="24" rx="12" fill="#451A03" stroke="#FBBF24" strokeWidth="2.5" />
           <text x="0" y="2" textAnchor="middle" fill="#FDE68A" fontSize="11" fontWeight="800" fontFamily="sans-serif">
-            ★ ARCHON {level} ★
+            â˜… ARCHON {level} â˜…
           </text>
         </g>
       </g>
@@ -1618,10 +1658,11 @@ export const CharacterRenderer = ({
   showFrame = true,
   showEnvironment = true,
   level = 12,
-  className = 'w-full h-full'
+  className = 'w-full h-full',
+  forceStandard = false,
 }) => {
   const safeEq = useMemo(() => resolveSafeEquipment(equipment), [equipment]);
-
+  const betaState = useBetaCharacterState();
   const hairPalette = useMemo(
     () => HAIR_COLORS.find(c => c.id === safeEq.hairColor) || HAIR_COLORS[0],
     [safeEq.hairColor]
@@ -1634,6 +1675,82 @@ export const CharacterRenderer = ({
     () => EYE_COLORS.find(e => e.id === safeEq.eyeColor) || EYE_COLORS[0],
     [safeEq.eyeColor]
   );
+
+  const isBetaActive = !forceStandard && betaState.isActive;
+  const betaImage =
+    betaState.outfitId === 'base-character-1' ? baseCharacterImg : epicCharacterOutfitImg;
+
+  // Render standalone Beta Character when toggle is active
+  if (isBetaActive) {
+    if (cropMode === 'circle') {
+      return (
+        <svg
+          viewBox="45 5 310 310"
+          className={`select-none transition-all duration-300 ${className}`}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <clipPath id="betaAvatarCircleClip">
+              <circle cx="200" cy="155" r="138" />
+            </clipPath>
+          </defs>
+          {showEnvironment && <CharacterEnvironmentLayer frameId={safeEq.frame} />}
+          <g clipPath="url(#betaAvatarCircleClip)">
+            <rect x="50" y="5" width="300" height="300" fill="#0d1322" />
+            <image
+              href={betaImage}
+              x="-30"
+              y="26"
+              width="460"
+              height="690"
+              preserveAspectRatio="xMidYMid meet"
+            />
+          </g>
+          {showFrame && <CharacterFrameLayer frameId={safeEq.frame} level={level} cropMode="circle" />}
+        </svg>
+      );
+    }
+
+    // cropMode === 'full' for Home Page stage & full body displays
+    const isEpic = betaState.outfitId !== 'base-character-1';
+    if (isEpic) {
+      return (
+        <svg
+          viewBox="405 30 1014 2370"
+          className={`select-none transition-all duration-300 ${className}`}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {showEnvironment && <CharacterEnvironmentLayer frameId={safeEq.frame} />}
+          <image
+            href={epicCharacterOutfitHomeImg}
+            x="0"
+            y="0"
+            width="1792"
+            height="2400"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      );
+    }
+
+    return (
+      <svg
+        viewBox="0 -30 1024 1580"
+        className={`select-none transition-all duration-300 ${className}`}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {showEnvironment && <CharacterEnvironmentLayer frameId={safeEq.frame} />}
+        <image
+          href={baseCharacterImg}
+          x="0"
+          y="0"
+          width="1024"
+          height="1536"
+          preserveAspectRatio="xMidYMid meet"
+        />
+      </svg>
+    );
+  }
 
   // Adjust viewBox for Full Body vs Avatar Portrait Circle
   const viewBox = cropMode === 'circle' ? '45 5 310 310' : '0 0 400 520';
@@ -2045,8 +2162,8 @@ export default function App({
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
                 <Eye className="w-3.5 h-3.5" /> Live SVG Character Stage
               </span>
-              <h2 className="text-lg font-bold text-white truncate max-w-[260px] sm:max-w-xs" title={`${userName} • Lvl ${level}`}>
-                {userName ? `${userName} • Lvl ${level}` : 'Student Loadout Preview'}
+              <h2 className="text-lg font-bold text-white truncate max-w-[260px] sm:max-w-xs" title={`${userName} â€¢ Lvl ${level}`}>
+                {userName ? `${userName} â€¢ Lvl ${level}` : 'Student Loadout Preview'}
               </h2>
             </div>
 
@@ -2140,6 +2257,7 @@ export default function App({
                 showFrame={isFrameVisible}
                 level={level}
                 className="w-full h-full max-h-[405px]"
+                forceStandard={true}
               />
             </div>
 
@@ -2448,7 +2566,7 @@ export default function App({
 
                     <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
                       <span className={unlocked ? 'text-emerald-400 font-medium' : 'text-amber-400 font-medium'}>
-                        {unlocked ? '✓ Unlocked' : item.unlockRequirement}
+                        {unlocked ? 'âœ“ Unlocked' : item.unlockRequirement}
                       </span>
                       <span className="text-slate-500 font-mono">{item.id}</span>
                     </div>

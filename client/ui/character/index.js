@@ -17,7 +17,11 @@ export {
   getFrameConfig,
   CAMERA_TRANSFORMS,
   CAMERA_LABELS,
-  getCameraAngleForCategory
+  getCameraAngleForCategory,
+  BETA_STORAGE_KEY,
+  BETA_ACTIVE_STORAGE_KEY,
+  getSavedBetaCharacterState,
+  useBetaCharacterState
 } from './character';
 export {
   default as BetaCharacterCustomizer,
