@@ -1,0 +1,1209 @@
+/* ==========================================================================
+   AURA HOME UI 2.0 (TACTICAL DASHBOARD)
+   Faithful reproduction of UI 2.0 reference design with modular cards,
+   watermark branding, hero character HUD, and floating action rail.
+   ========================================================================== */
+
+.homev2-dashboard-root {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 54px);
+  background-color: #0a0d14;
+  color: #ffffff;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding-bottom: 60px;
+}
+
+/* ==========================================================================
+   1. WATERMARK BACKGROUND TYPOGRAPHY (BEHIND CHARACTER'S HEAD)
+   ========================================================================== */
+.homev2-character-watermark-bg {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-40%);
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.homev2-character-watermark-text {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: clamp(60px, 7vw, 115px);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.065);
+  text-transform: uppercase;
+  line-height: 1;
+  display: inline-block;
+  text-shadow: 0 0 35px rgba(147, 51, 234, 0.2);
+}
+
+/* ==========================================================================
+   2. MAIN CONTAINER
+   ========================================================================== */
+.homev2-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 38px 80px 40px 48px;
+  display: grid;
+  grid-template-columns: minmax(700px, 820px) 1fr;
+  gap: 36px;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1360px) {
+  .homev2-container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 24px 24px 60px;
+  }
+}
+
+/* ==========================================================================
+   3. LEFT PANE: BRANDING & CARDS
+   ========================================================================== */
+.homev2-left-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.homev2-header-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.homev2-brand-row {
+  position: relative;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.homev2-brand-logo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.65));
+  pointer-events: none;
+}
+
+.homev2-event-ticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  user-select: none;
+  width: fit-content;
+  margin-top: 12px;
+  margin-bottom: -4px;
+}
+
+.homev2-event-ticker:hover {
+  opacity: 0.9;
+  transform: translateX(2px);
+}
+
+.homev2-ticker-indicator {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f43f5e;
+  box-shadow: 0 0 10px #f43f5e, 0 0 4px #ff6482;
+  animation: homev2Pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes homev2Pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.7;
+  }
+}
+
+.homev2-ticker-text {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #f43f5e;
+  text-transform: uppercase;
+}
+
+/* Cards Grid */
+.homev2-cards-grid {
+  display: grid;
+  grid-template-columns: 1.32fr 1fr;
+  grid-template-rows: auto auto auto auto;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+@media (max-width: 640px) {
+  .homev2-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Base Card Styling */
+.homev2-card {
+  position: relative;
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.homev2-card:hover {
+  transform: translateY(-3px);
+}
+
+.homev2-card:focus-visible {
+  outline: 2px solid #f43f5e;
+  outline-offset: 2px;
+}
+
+/* Card Background Illustrations & Ambient Overlays */
+.homev2-card-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.homev2-card:hover .homev2-card-bg-img {
+  transform: scale(1.05);
+}
+
+.homev2-card-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.homev2-card:hover .homev2-card-bg-overlay {
+  opacity: 0.88;
+}
+
+/* Card 1: STUDY FOLDERS (Emerald anime classroom aesthetic) */
+.homev2-card-bg-overlay-folders {
+  background: linear-gradient(135deg, rgba(6, 32, 22, 0.88) 0%, rgba(6, 30, 20, 0.62) 55%, rgba(4, 18, 12, 0.82) 100%);
+}
+
+/* Card 2: EVENTS (Tall Engineering Week festival crimson red aesthetic) */
+.homev2-card-bg-overlay-events {
+  background: linear-gradient(180deg, rgba(64, 10, 22, 0.52) 0%, rgba(38, 6, 14, 0.75) 60%, rgba(18, 2, 6, 0.94) 100%);
+}
+
+/* Card 3: BATTLES (Electric anime duel purple aesthetic) */
+.homev2-card-bg-overlay-battles {
+  background: linear-gradient(135deg, rgba(28, 8, 52, 0.88) 0%, rgba(22, 6, 42, 0.60) 50%, rgba(10, 2, 20, 0.86) 100%);
+}
+
+/* Subcard 1: COSMETICS (Cyberpunk streetwear boutique showroom) */
+.homev2-card-bg-overlay-cosmetics {
+  background: linear-gradient(135deg, rgba(8, 16, 32, 0.88) 0%, rgba(8, 16, 32, 0.65) 60%, rgba(4, 7, 14, 0.88) 100%);
+}
+
+/* Subcard 2: STORE (Luxury boutique modern monochrome & platinum white) */
+.homev2-card-bg-overlay-store {
+  background: linear-gradient(135deg, rgba(16, 20, 26, 0.88) 0%, rgba(16, 20, 26, 0.60) 60%, rgba(8, 10, 14, 0.88) 100%);
+}
+
+/* Subcard 3: ACHIEVEMENTS (Championship trophy sanctuary pure gold) */
+.homev2-card-bg-overlay-achievements {
+  background: linear-gradient(135deg, rgba(38, 22, 6, 0.88) 0%, rgba(32, 18, 4, 0.60) 60%, rgba(12, 7, 1, 0.88) 100%);
+}
+
+/* Card 1: STUDY FOLDERS (Top Left) */
+.homev2-card-folders {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  min-height: 190px;
+  background: linear-gradient(135deg, #0e3d2b 0%, #09281c 50%, #051a12 100%);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  /* Tactical chamfered top-right corner */
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%);
+}
+
+.homev2-card-folders:hover {
+  border-color: rgba(52, 211, 153, 0.65);
+  box-shadow: 0 10px 28px rgba(16, 185, 129, 0.25);
+}
+
+/* Card 2: EVENTS (Tall Middle/Right Column - Engineering Red Theme) */
+.homev2-card-flashcards,
+.homev2-card-events-tall {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+  min-height: 396px;
+  padding: 26px;
+  background: linear-gradient(180deg, #3d0d18 0%, #22060d 50%, #120206 100%);
+  border: 1px solid rgba(244, 63, 94, 0.38);
+}
+
+@media (max-width: 640px) {
+  .homev2-card-flashcards,
+  .homev2-card-events-tall {
+    grid-column: 1 / 2;
+    grid-row: auto;
+    min-height: 180px;
+  }
+}
+
+.homev2-card-flashcards:hover,
+.homev2-card-events-tall:hover {
+  border-color: rgba(251, 113, 133, 0.85);
+  box-shadow: 0 10px 30px rgba(244, 63, 94, 0.35), inset 0 0 20px rgba(244, 63, 94, 0.12);
+}
+
+/* Card 3: BATTLES (Middle Left - Electric Neon Violet Theme matching Rivalry Art) */
+.homev2-card-battles {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  min-height: 190px;
+  background: linear-gradient(135deg, #2b0e4f 0%, #1a0833 50%, #0d031c 100%);
+  border: 1px solid rgba(168, 85, 247, 0.38);
+}
+
+.homev2-card-battles:hover {
+  border-color: rgba(192, 132, 252, 0.7);
+  box-shadow: 0 10px 30px rgba(147, 51, 234, 0.35);
+}
+
+/* Badges */
+.homev2-card-badge-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 3;
+}
+
+.homev2-card-badge-row.right-align {
+  justify-content: flex-end;
+}
+
+.homev2-badge-dark {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #e2e8f0;
+  background: rgba(15, 17, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px 12px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.homev2-badge-gold {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  color: #111827;
+  background: #ffc83b;
+  padding: 4px 11px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 8px rgba(255, 200, 59, 0.4);
+}
+
+.homev2-badge-red {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  background: #f43f5e;
+  padding: 4px 11px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.35);
+}
+
+.homev2-badge-purple {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  background: linear-gradient(90deg, #7c3aed 0%, #9333ea 100%);
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  padding: 4px 11px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.45);
+}
+
+/* Card Content */
+.homev2-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.homev2-card-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+}
+
+.homev2-card-subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: #e2e8f0;
+  font-weight: 500;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
+}
+
+/* Row 3: Subcards (REWARDS, STORE, EVENTS) */
+.homev2-subcards-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .homev2-subcards-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.homev2-card-sub {
+  min-height: 112px;
+  padding: 20px 22px;
+  border-radius: 16px;
+}
+
+.homev2-card-rewards {
+  background: linear-gradient(135deg, #442614 0%, #24140b 100%);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+}
+
+.homev2-card-rewards:hover {
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.homev2-card-cosmetics {
+  background: linear-gradient(135deg, #0c1527 0%, #080f1d 50%, #04070e 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.homev2-card-cosmetics:hover {
+  border-color: rgba(56, 189, 248, 0.75);
+  box-shadow: 0 10px 28px rgba(14, 165, 233, 0.3), inset 0 0 20px rgba(56, 189, 248, 0.12);
+}
+
+.homev2-card-store {
+  background: linear-gradient(135deg, #181d24 0%, #10141a 50%, #080a0e 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.homev2-card-store:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 28px rgba(255, 255, 255, 0.22), inset 0 0 20px rgba(255, 255, 255, 0.12);
+}
+
+.homev2-card-events {
+  background: linear-gradient(135deg, #3d0d18 0%, #120206 100%);
+  border: 1px solid rgba(244, 63, 94, 0.38);
+}
+
+.homev2-card-events:hover {
+  border-color: rgba(251, 113, 133, 0.85);
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.28);
+}
+
+.homev2-card-achievements {
+  background: linear-gradient(135deg, #322006 0%, #1e1303 50%, #0d0801 100%);
+  border: 1px solid rgba(250, 204, 21, 0.48);
+}
+
+.homev2-card-achievements:hover {
+  border-color: rgba(253, 224, 71, 0.9);
+  box-shadow: 0 10px 28px rgba(234, 179, 8, 0.35), inset 0 0 20px rgba(250, 204, 21, 0.16);
+}
+
+.homev2-subcard-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  z-index: 3;
+  padding-right: 56px;
+}
+
+/* Tactical Card Vector Artwork Styling */
+.homev2-card-icon-art {
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.homev2-card:hover .homev2-card-icon-art {
+  transform: scale(1.06);
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
+}
+
+/* Card 1 (Folders) and Card 3 (Battles) Content & Icon */
+.homev2-card-folders .homev2-card-content,
+.homev2-card-battles .homev2-card-content {
+  position: relative;
+  z-index: 3;
+  max-width: 66%;
+}
+
+.homev2-card-icon-folders,
+.homev2-card-icon-battles {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 116px;
+  height: 116px;
+  z-index: 2;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
+}
+
+.homev2-card-folders:hover .homev2-card-icon-folders,
+.homev2-card-battles:hover .homev2-card-icon-battles {
+  transform: scale(1.08) translateY(-2px);
+}
+
+/* Card 2: Events Tall Centerpiece Card */
+.homev2-card-events-tall .homev2-card-content {
+  position: relative;
+  z-index: 3;
+  margin-top: auto;
+  max-width: 58%;
+}
+
+.homev2-card-icon-events {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 126px;
+  height: 126px;
+  z-index: 2;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.65));
+}
+
+.homev2-card-events-tall:hover .homev2-card-icon-events {
+  transform: scale(1.08) translateY(-2px);
+  filter: drop-shadow(0 14px 34px rgba(244, 63, 94, 0.5));
+}
+
+/* Row 3 Compact Subcards Icons */
+.homev2-subcard-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 58px;
+  height: 58px;
+  z-index: 2;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+}
+
+.homev2-card-sub:hover .homev2-subcard-icon {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.homev2-subcard-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.homev2-subcard-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: #e2e8f0;
+  font-weight: 500;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
+}
+
+/* Row 4: Daily Mission Inline Bar (Flat on background, no shape card) */
+.homev2-daily-mission-bar {
+  grid-column: 1 / -1;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 12px 6px 4px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .homev2-daily-mission-bar {
+    gap: 12px;
+  }
+}
+
+.homev2-mission-tag {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #f43f5e;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.homev2-mission-name {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.homev2-mission-track {
+  flex: 1;
+  min-width: 100px;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.homev2-mission-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f43f5e 0%, #ff6482 100%);
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.6);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.homev2-mission-counter {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #cbd5e1;
+  flex-shrink: 0;
+}
+
+.homev2-mission-rewards {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.homev2-reward-xp {
+  color: #fbbf24;
+}
+
+.homev2-reward-sep {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.homev2-reward-coins {
+  color: #34d399;
+}
+
+/* ==========================================================================
+   4. RIGHT PANE: HERO CHARACTER HUD & STAGE
+   ========================================================================== */
+.homev2-right-pane {
+  position: relative;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Ethereal Purple Halo Aura Behind Character */
+.homev2-character-halo-aura {
+  position: absolute;
+  top: 22%;
+  left: 16%;
+  width: 580px;
+  height: 580px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.5) 0%, rgba(109, 40, 217, 0.25) 45%, transparent 72%);
+  filter: blur(44px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* User Stats HUD Overlay (Top Right - Close to Right Corner & Larger) */
+.homev2-user-stats-hud {
+  position: relative;
+  z-index: 4;
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 4px;
+  margin-top: 260px;
+}
+
+@media (max-width: 1280px) {
+  .homev2-user-stats-hud {
+    margin-top: 20px;
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.homev2-hud-name-block {
+  margin-bottom: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (max-width: 1280px) {
+  .homev2-hud-name-block {
+    align-items: center;
+  }
+}
+
+.homev2-hud-name-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 1280px) {
+  .homev2-hud-name-line {
+    justify-content: center;
+  }
+}
+
+.homev2-hud-dept-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 18px rgba(255, 42, 68, 0.55));
+  flex-shrink: 0;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s ease;
+  user-select: none;
+}
+
+.homev2-hud-dept-logo:hover {
+  transform: scale(1.08) rotate(4deg);
+  filter: drop-shadow(0 6px 24px rgba(255, 42, 68, 0.8));
+}
+
+.homev2-hud-username {
+  margin: 0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.05;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+}
+
+.homev2-hud-department {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.homev2-hud-level-block {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.homev2-hud-level-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.homev2-hud-level-number {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 84px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.75);
+}
+
+.homev2-hud-xp-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+  width: 250px;
+}
+
+.homev2-hud-xp-track {
+  width: 100%;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.homev2-hud-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f43f5e 0%, #ff2a44 100%);
+  border-radius: 6px;
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.65);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.homev2-hud-xp-text {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  color: #cbd5e1;
+  letter-spacing: 0.06em;
+}
+
+/* Character Art Stage (Significantly Larger Character Display) */
+.homev2-character-stage {
+  position: absolute;
+  top: 0px;
+  left: 60px;
+  right: 80px;
+  bottom: -60px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@media (max-width: 1280px) {
+  .homev2-character-stage {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    min-height: 520px;
+    margin: 20px 0;
+  }
+}
+
+.homev2-character-sprite {
+  height: 100%;
+  max-height: 900px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.85));
+  transform: translate(60px, 45px);
+}
+
+/* Floating CONTINUE JOURNEY Card (Pinned Bottom Right) */
+.homev2-continue-journey-card {
+  position: relative;
+  z-index: 5;
+  align-self: flex-end;
+  width: 100%;
+  max-width: 320px;
+  background: rgba(13, 15, 27, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  box-sizing: border-box;
+  margin-top: 20px;
+  /* Tactical chamfered top-right corner */
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+.homev2-cj-tag {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fb7185;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.homev2-cj-title {
+  margin: 0 0 4px;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 19px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.homev2-cj-meta {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.homev2-cj-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.homev2-cj-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f43f5e 0%, #fb7185 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.5);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.homev2-cj-btn {
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+}
+
+.homev2-cj-btn:hover {
+  background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(244, 63, 94, 0.5);
+}
+
+/* ==========================================================================
+   5. FLOATING RIGHT-EDGE ACTIONS RAIL
+   ========================================================================== */
+.homev2-floating-rail {
+  position: fixed;
+  right: 18px;
+  top: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 40;
+}
+
+@media (max-width: 900px) {
+  .homev2-floating-rail {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 24px;
+  }
+}
+
+.homev2-diamond-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.homev2-diamond-btn:hover {
+  transform: scale(1.08);
+}
+
+.homev2-diamond-shape {
+  width: 44px;
+  height: 44px;
+  background: rgba(14, 16, 28, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  transition: all 0.2s ease;
+}
+
+.homev2-diamond-shape svg {
+  transform: rotate(-45deg);
+}
+
+.homev2-diamond-btn:hover .homev2-diamond-shape {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
+}
+
+.homev2-settings-trigger-btn:hover .homev2-diamond-shape {
+  background: rgba(244, 63, 94, 0.25);
+  border-color: #f43f5e;
+}
+
+.homev2-diamond-label {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease;
+}
+
+.homev2-diamond-btn:hover .homev2-diamond-label {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   5.5 BOTTOM-RIGHT ANGULAR RED SHAPE ELEMENT
+   Exact crimson angular wedge from user reference image
+   ========================================================================== */
+.homev2-bottom-right-wedge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: clamp(380px, 46vw, 840px);
+  height: clamp(56px, 7.5vh, 78px);
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.homev2-bottom-right-wedge-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #991032 0%, #b1123a 35%, #be123c 100%);
+  clip-path: polygon(56px 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow: 0 -4px 24px rgba(177, 18, 58, 0.45);
+}
+
+.homev2-bottom-right-wedge-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #ff4b72 56px, #ff4b72 100%);
+  clip-path: polygon(56px 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   6. QUICK FLOATING UI VERSION PILL AT CORNER
+   ========================================================================== */
+.homev2-version-pill-badge {
+  position: fixed;
+  bottom: 22px;
+  right: 24px;
+  z-index: 45;
+  background: rgba(12, 14, 26, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: 30px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(244, 63, 94, 0.25);
+  transition: all 0.2s ease;
+}
+
+.homev2-version-pill-badge:hover {
+  transform: translateY(-2px);
+  border-color: #f43f5e;
+  box-shadow: 0 10px 30px rgba(244, 63, 94, 0.45);
+}
+
+.homev2-pill-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f43f5e;
+  box-shadow: 0 0 8px #f43f5e;
+  animation: homev2Pulse 1.6s infinite ease-in-out;
+}
+
+.homev2-pill-text {
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+}
+
+.homev2-pill-action {
+  font-size: 10px;
+  font-weight: 800;
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.15);
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+/* ==========================================================================
+   7. QUICK MODAL FOR SEASON & NEWS
+   ========================================================================== */
+.homev2-quick-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 14, 0.75);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.homev2-quick-modal-card {
+  width: 100%;
+  max-width: 480px;
+  background: #111322;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.homev2-quick-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.homev2-quick-modal-header h3 {
+  margin: 0;
+  font-family: var(--font-heading, 'Sora', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.homev2-quick-modal-header button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.homev2-quick-modal-desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.homev2-quick-modal-btn {
+  background: #f43f5e;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.homev2-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.homev2-news-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 2px solid #f43f5e;
+  padding-left: 12px;
+}
+
+.homev2-news-date {
+  font-size: 11px;
+  font-weight: 800;
+  color: #f43f5e;
+}
+
+.homev2-news-item h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.homev2-news-item p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #94a3b8;
+  line-height: 1.4;
+}

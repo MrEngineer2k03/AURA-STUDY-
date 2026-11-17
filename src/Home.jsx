@@ -25,6 +25,11 @@ import homeBg from './assets/homebackground.png';
 import eventBanner from './assets/event_banner.png';
 import upcomingEventPoster from './assets/engineering_week_bg.png';
 import engineeringLogo from './assets/engineeringlogo.png';
+import SettingsModal from './components/SettingsModal/SettingsModal';
+import HomeV2 from './components/HomeV2/HomeV2';
+import BattlesPage from 'ui/battles/BattlesPage';
+import AuraLoadingOverlay from './components/LoadingAnimation/AuraLoadingOverlay';
+import { useAuraTransition } from './components/LoadingAnimation/useAuraTransition';
 
 export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
   const cleanUserName = (!userName || userName === 'CARL_MONDIGO')
@@ -57,25 +62,78 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
 
   const [activeTab, setActiveTab] = useState(getInitialTab);
   const [animated, setAnimated] = useState(false);
+  const [uiVersion, setUiVersion] = useState(() => {
+    try {
+      return localStorage.getItem('aura_home_ui_version') || '2.0';
+    } catch {
+      return '2.0';
+    }
+  });
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const {
+    isTransitioning,
+    transitionTarget,
+    progress,
+    triggerTransition,
+  } = useAuraTransition();
+
+  const handleToggleUiVersion = (version) => {
+    setUiVersion(version);
+    try {
+      localStorage.setItem('aura_home_ui_version', version);
+      window.dispatchEvent(new CustomEvent('aura-home-ui-version-changed', { detail: { version } }));
+    } catch (err) {
+      console.warn('[AURA] Could not persist ui version:', err);
+    }
+  };
+
+  useEffect(() => {
+    const handleVersionChange = (e) => {
+      if (e?.detail?.version) {
+        setUiVersion(e.detail.version);
+      }
+    };
+    window.addEventListener('aura-home-ui-version-changed', handleVersionChange);
+    return () => window.removeEventListener('aura-home-ui-version-changed', handleVersionChange);
+  }, []);
 
   useEffect(() => {
     const handleHash = () => {
       const h = window.location.hash.toLowerCase();
+      let target = null;
+      let sub = null;
       if (h === '#study' || h === '#folders' || h === '#my-folders') {
-        setActiveTab('MY FOLDERS');
+        target = 'MY FOLDERS';
       } else if (h === '#events') {
-        setActiveTab('EVENTS');
+        target = 'EVENTS';
       } else if (h === '#friends' || h === '#friend') {
-        setActiveTab('FRIENDS');
-      } else if (h === '#profile' || h === '#customize' || h === '#character' || h === '#rewards') {
-        setActiveTab('PROFILE');
+        target = 'FRIENDS';
+      } else if (h === '#battles' || h === '#battle') {
+        target = 'BATTLES';
+      } else if (h === '#achievements') {
+        target = 'PROFILE';
+        sub = 'ACHIEVEMENTS';
+      } else if (h === '#store') {
+        target = 'PROFILE';
+        sub = 'STORE';
+      } else if (h === '#customize') {
+        target = 'PROFILE';
+        sub = 'COSMETICS';
+      } else if (h === '#profile' || h === '#character' || h === '#rewards') {
+        target = 'PROFILE';
       } else if (h === '#home' || h === '') {
-        setActiveTab('HOME');
+        target = 'HOME';
+      }
+      if (target && target !== activeTab) {
+        triggerTransition(target, sub, () => {
+          setActiveTab(target);
+        });
       }
     };
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+  }, [activeTab, triggerTransition]);
 
   useEffect(() => {
     const timer = requestAnimationFrame(() => {
@@ -224,8 +282,11 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
       ...folder,
       id: folder.id === 1 ? 'folder-1' : folder.id === 2 ? 'folder-2' : folder.id === 3 ? 'folder-3' : folder.id,
     };
-    setSelectedFolderForStudy(targetFolder);
-    setActiveTab('MY FOLDERS');
+    triggerTransition('MY FOLDERS', null, () => {
+      setSelectedFolderForStudy(targetFolder);
+      setActiveTab('MY FOLDERS');
+      window.location.hash = 'my-folders';
+    });
   };
 
   // Opens the most recently studied folder's study session.
@@ -236,37 +297,56 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
 
   const handleOpenEvent = (event) => {
     console.info(`[AURA] Opening event: ${event?.title || 'events'}`);
-    window.location.hash = 'events';
-    setActiveTab('EVENTS');
+    triggerTransition('EVENTS', null, () => {
+      window.location.hash = 'events';
+      setActiveTab('EVENTS');
+    });
   };
 
   const handleViewAllEvents = () => {
-    window.location.hash = 'events';
-    setActiveTab('EVENTS');
+    triggerTransition('EVENTS', null, () => {
+      window.location.hash = 'events';
+      setActiveTab('EVENTS');
+    });
   };
 
   const handleCreateFolder = () => {
     console.log('[AURA] Create new study folder requested -> redirecting to My Folders Create Folder card');
-    setSelectedFolderForStudy(null);
-    setScrollToCreateFolder(true);
-    setActiveTab('MY FOLDERS');
+    triggerTransition('MY FOLDERS', null, () => {
+      setSelectedFolderForStudy(null);
+      setScrollToCreateFolder(true);
+      setActiveTab('MY FOLDERS');
+      window.location.hash = 'my-folders';
+    });
   };
 
-  const handleTabChange = (tab) => {
-    setSelectedFolderForStudy(null);
-    setScrollToCreateFolder(false);
-    if (tab === 'EVENTS') {
-      window.location.hash = 'events';
-    } else if (tab === 'PROFILE') {
-      window.location.hash = 'profile';
-    } else if (tab === 'MY FOLDERS') {
-      window.location.hash = 'my-folders';
-    } else if (tab === 'FRIENDS') {
-      window.location.hash = 'friends';
-    } else if (tab === 'HOME') {
-      window.location.hash = 'home';
-    }
-    setActiveTab(tab);
+  const handleTabChange = (tab, subRoute = null) => {
+    if (activeTab === tab && !subRoute) return;
+
+    triggerTransition(tab, subRoute, () => {
+      setSelectedFolderForStudy(null);
+      setScrollToCreateFolder(false);
+      if (subRoute === 'ACHIEVEMENTS') {
+        window.location.hash = 'achievements';
+      } else if (subRoute === 'STORE') {
+        window.location.hash = 'store';
+      } else if (subRoute === 'COSMETICS') {
+        window.location.hash = 'customize';
+      } else if (tab === 'EVENTS') {
+        window.location.hash = 'events';
+      } else if (tab === 'PROFILE') {
+        window.location.hash = 'profile';
+      } else if (tab === 'MY FOLDERS') {
+        window.location.hash = 'my-folders';
+      } else if (tab === 'FRIENDS') {
+        window.location.hash = 'friends';
+      } else if (tab === 'BATTLES') {
+        window.location.hash = 'battles';
+      } else if (tab === 'HOME') {
+        window.location.hash = 'home';
+      }
+      setActiveTab(tab);
+    });
   };
 
   const handleViewAllFolders = () => {
@@ -336,6 +416,9 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
         activeTab={activeTab}
         onTabChange={handleTabChange}
         userName={cleanUserName}
+        uiVersion={uiVersion}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+        onToggleUiVersion={handleToggleUiVersion}
       />
 
       {/* 2. PERSISTENT ROUTE CONTENT VIEWPORT */}
@@ -375,10 +458,32 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
           />
         )}
 
+        {activeTab === 'BATTLES' && (
+          <BattlesPage
+            onNavigateHome={() => handleTabChange('HOME')}
+            onTabChange={handleTabChange}
+          />
+        )}
+
         {activeTab === 'HOME' && (
-          <div className="aura-dashboard-root">
-            {/* 1. CINEMATIC BACKGROUND LAYERS */}
-            <div className="campus-bg-container">
+          uiVersion === '2.0' ? (
+            <HomeV2
+              cleanUserName={cleanUserName}
+              savedEquipment={savedEquipment}
+              studyFolders={studyFolders}
+              continueFolder={continueFolder}
+              onSelectFolder={handleSelectFolder}
+              onContinueStudying={handleContinueStudying}
+              onCreateFolder={handleCreateFolder}
+              onOpenEvent={handleOpenEvent}
+              onTabChange={handleTabChange}
+              uiVersion={uiVersion}
+              onOpenSettings={() => setIsSettingsOpen(true)}
+            />
+          ) : (
+            <div className="aura-dashboard-root">
+              {/* 1. CINEMATIC BACKGROUND LAYERS */}
+              <div className="campus-bg-container">
               <img
                 src={homeBg}
                 alt="Academy Courtyard"
@@ -540,6 +645,7 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
         </section>
       </div>
     </div>
+    )
   )}
 </div>
 
@@ -672,6 +778,21 @@ export default function Home({ userName = 'Carl Patrick Mondigo' } = {}) {
         {/* iOS Home Indicator Bar */}
         <div className="ios-home-indicator-bar" />
       </nav>
+
+      {/* 4. SETTINGS & UI TOGGLE MODAL */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        uiVersion={uiVersion}
+        onSelectUiVersion={handleToggleUiVersion}
+      />
+
+      {/* 5. AURA CYBERPUNK HUD LOADING TRANSITION OVERLAY (DESKTOP & MOBILE) */}
+      <AuraLoadingOverlay
+        isVisible={isTransitioning}
+        targetRoute={transitionTarget}
+        progress={progress}
+      />
     </div>
   );
 }

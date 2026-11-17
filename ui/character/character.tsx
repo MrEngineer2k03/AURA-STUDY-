@@ -1,10 +1,11 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, useMemo } from 'react';
 import './character.css';
 import baseCharacterImg from './Character Outfits/Base/Base Character 1.png';
 import epicCharacterOutfitImg from './Character Outfits/Uniform Outfits/Epic Character Outfit.png';
 import epicCharacterOutfitHomeImg from './Character Outfits/Character Home Display Outfits/epic character outfit home.png';
+import baseCharacterOutfitHomeImg from './Character Outfits/Character Home Display Outfits/base character outfit home.png';
 
 export const BETA_STORAGE_KEY = 'aura_beta_character_outfit_v2';
 export const BETA_ACTIVE_STORAGE_KEY = 'aura_beta_character_active_across_app_v1';
@@ -1741,7 +1742,7 @@ export const CharacterRenderer = ({
       >
         {showEnvironment && <CharacterEnvironmentLayer frameId={safeEq.frame} />}
         <image
-          href={baseCharacterImg}
+          href={baseCharacterOutfitHomeImg}
           x="0"
           y="0"
           width="1024"

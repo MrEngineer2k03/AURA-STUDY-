@@ -1,0 +1,820 @@
+/* ==========================================================================
+   AURA PAGE NAVIGATION LOADING EXPERIENCE
+   Tactical Cyberpunk HUD Loading Overlay & Centerpieces
+   Zero external dependencies — GPU-accelerated CSS transitions
+   ========================================================================== */
+
+.aura-loading-overlay-root {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: auto;
+  background-color: #06060b;
+  background-image: 
+    radial-gradient(circle at 50% 45%, rgba(225, 29, 72, 0.20) 0%, rgba(15, 10, 24, 0.88) 45%, #050509 100%),
+    linear-gradient(to bottom, rgba(255, 30, 86, 0.04) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 30, 86, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  opacity: 0;
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.aura-loading-overlay-root.is-visible {
+  opacity: 1;
+}
+
+.aura-loading-overlay-root.is-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Background Energy Stream Curves */
+.aura-loading-energy-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.aura-energy-path-top {
+  stroke-dasharray: 600 400;
+  animation: auraEnergyStreamTop 3s linear infinite;
+}
+
+.aura-energy-path-bottom {
+  stroke-dasharray: 550 450;
+  animation: auraEnergyStreamBottom 3.6s linear infinite;
+}
+
+@keyframes auraEnergyStreamTop {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes auraEnergyStreamBottom {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 1000; }
+}
+
+/* Floating Ambient Particles */
+.aura-loading-particles-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aura-loading-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: auraParticleDrift ease-in-out infinite;
+}
+
+@keyframes auraParticleDrift {
+  0%, 100% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-26px) scale(1.3);
+    opacity: 0.9;
+  }
+}
+
+/* ==========================================================================
+   FUTURISTIC HUD CORNER TELEMETRY BRACKETS
+   ========================================================================== */
+.aura-loading-hud-corners {
+  position: absolute;
+  inset: 24px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.aura-hud-corner-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.aura-hud-corner-row.bottom {
+  align-items: flex-end;
+}
+
+.aura-hud-bracket {
+  width: 48px;
+  height: 48px;
+  box-sizing: border-box;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.aura-hud-bracket.top-left {
+  border-left: 2px solid rgba(255, 30, 86, 0.75);
+  border-top: 2px solid rgba(255, 30, 86, 0.75);
+  padding: 6px 0 0 8px;
+  color: rgba(251, 113, 133, 0.9);
+}
+
+.aura-hud-bracket.top-right {
+  border-right: 2px solid rgba(255, 30, 86, 0.75);
+  border-top: 2px solid rgba(255, 30, 86, 0.75);
+  padding: 6px 8px 0 0;
+  text-align: right;
+  color: rgba(251, 113, 133, 0.9);
+}
+
+.aura-hud-bracket.bottom-left {
+  border-left: 2px solid rgba(255, 30, 86, 0.75);
+  border-bottom: 2px solid rgba(255, 30, 86, 0.75);
+  padding: 0 0 6px 8px;
+  display: flex;
+  align-items: flex-end;
+  color: #71717a;
+}
+
+.aura-hud-bracket.bottom-right {
+  border-right: 2px solid rgba(255, 30, 86, 0.75);
+  border-bottom: 2px solid rgba(255, 30, 86, 0.75);
+  padding: 0 8px 6px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  color: rgba(251, 113, 133, 0.9);
+}
+
+/* ==========================================================================
+   CENTRAL TACTICAL HUD RING & STAGE
+   ========================================================================== */
+.aura-loading-central-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  max-width: 420px;
+  width: 90%;
+  animation: auraStageEntrance 0.28s ease-out forwards;
+}
+
+@keyframes auraStageEntrance {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Route Badge Pill */
+.aura-loading-route-pill {
+  margin-bottom: 20px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: rgba(76, 5, 25, 0.65);
+  border: 1px solid rgba(255, 30, 86, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 24px rgba(255, 30, 86, 0.28);
+}
+
+.aura-loading-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff1e56;
+  box-shadow: 0 0 10px #ff1e56;
+  animation: auraDotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes auraDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+  }
+}
+
+.aura-loading-pill-text {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #ffe4e6;
+}
+
+/* Tactical HUD Dual Ring Container */
+.aura-loading-ring-wrap {
+  position: relative;
+  width: 224px;
+  height: 224px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Outer Counter-Rotating Dashed Tactical Ring */
+.aura-ring-outer-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: auraRingCounterRotate 12s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes auraRingCounterRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+/* Inner Rotating Orbit Ring */
+.aura-ring-inner-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: auraRingRotate 4.2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes auraRingRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Primary Progress Circle (SVG) */
+.aura-ring-progress-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.aura-progress-circle-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 4;
+}
+
+.aura-progress-circle-fill {
+  fill: none;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 65ms linear;
+}
+
+/* ==========================================================================
+   ROUTE-SPECIFIC CENTERPIECES (7 + 1 CUSTOM THEMES)
+   ========================================================================== */
+.aura-centerpiece-container {
+  position: relative;
+  z-index: 20;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 1. Folders Centerpiece */
+.aura-cp-folders {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-cp-folder-shard {
+  position: absolute;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 30, 86, 0.45);
+  background: linear-gradient(135deg, rgba(255, 30, 86, 0.22) 0%, rgba(10, 5, 15, 0.85) 100%);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 20px rgba(255, 30, 86, 0.3);
+  animation: auraFolderFloat 2.2s ease-in-out infinite;
+}
+
+.aura-cp-folder-shard.shard-0 {
+  width: 58px;
+  height: 44px;
+  z-index: 10;
+  animation-delay: 0s;
+}
+
+.aura-cp-folder-shard.shard-1 {
+  width: 52px;
+  height: 40px;
+  z-index: 9;
+  animation-delay: 0.22s;
+}
+
+.aura-cp-folder-shard.shard-2 {
+  width: 46px;
+  height: 36px;
+  z-index: 8;
+  animation-delay: 0.44s;
+}
+
+@keyframes auraFolderFloat {
+  0%, 100% {
+    transform: translateY(-8px) rotate(-3deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(6px) rotate(4deg);
+    opacity: 1;
+  }
+}
+
+.aura-cp-folder-content {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aura-cp-folder-indexing {
+  margin-top: 4px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: #fda4af;
+  text-transform: uppercase;
+}
+
+/* 2. Friends Constellation Centerpiece */
+.aura-cp-friends {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-cp-friends-net {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.aura-cp-friends-hub {
+  position: relative;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(76, 5, 25, 0.85);
+  border: 1.5px solid #ff1e56;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 24px #ff1e56;
+}
+
+/* 3. Battles Centerpiece */
+.aura-cp-battles {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-cp-battles-badge {
+  position: relative;
+  z-index: 10;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.4) 0%, rgba(147, 51, 234, 0.4) 50%, #080811 100%);
+  border: 1.5px solid rgba(255, 30, 86, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(255, 30, 86, 0.75);
+  animation: auraBattlePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes auraBattlePulse {
+  0%, 100% {
+    transform: scale(0.92) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.08) rotate(6deg);
+  }
+}
+
+/* 4. Events Sacred Geometry Centerpiece */
+.aura-cp-events {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-events-geom-outer {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  border: 1.5px solid rgba(255, 30, 86, 0.65);
+  transform: rotate(45deg);
+  border-radius: 4px;
+  box-shadow: 0 0 16px rgba(255, 30, 86, 0.3);
+  animation: auraEventsGeomSpin 8s linear infinite;
+}
+
+.aura-events-geom-inner {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border: 1.5px solid rgba(251, 113, 133, 0.5);
+  border-radius: 12px;
+  animation: auraEventsGeomSpinReverse 5s linear infinite;
+}
+
+@keyframes auraEventsGeomSpin {
+  0% { transform: rotate(45deg); }
+  100% { transform: rotate(405deg); }
+}
+
+@keyframes auraEventsGeomSpinReverse {
+  0% { transform: rotate(0deg) scale(0.92); }
+  50% { transform: rotate(-180deg) scale(1.08); }
+  100% { transform: rotate(-360deg) scale(0.92); }
+}
+
+/* 5. Achievements Trophy Crest */
+.aura-cp-achievements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-achieve-aura-blur {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, rgba(255, 30, 86, 0.25) 50%, transparent 75%);
+  filter: blur(12px);
+  animation: auraAchievePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes auraAchievePulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.45; }
+  50% { transform: scale(1.18); opacity: 0.9; }
+}
+
+.aura-achieve-crest {
+  position: relative;
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(76, 5, 25, 0.9) 100%);
+  border: 1.5px solid rgba(250, 204, 21, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.55);
+}
+
+.aura-achieve-rank-tag {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  font-weight: 800;
+  color: #fde68a;
+  margin-top: 2px;
+}
+
+/* 6. Store Relics & Spinning Coins */
+.aura-cp-store {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-store-coin {
+  position: absolute;
+  top: 14px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fde047 0%, #ff1e56 100%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 12px #fbbf24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: auraCoinFlip 2.2s ease-in-out infinite;
+}
+
+.aura-store-coin-diamond {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.aura-store-coin.coin-left {
+  left: calc(50% - 36px);
+  animation-delay: 0s;
+}
+
+.aura-store-coin.coin-mid {
+  left: calc(50% - 10px);
+  animation-delay: 0.25s;
+}
+
+.aura-store-coin.coin-right {
+  left: calc(50% + 16px);
+  animation-delay: 0.5s;
+}
+
+@keyframes auraCoinFlip {
+  0%, 100% {
+    transform: translateY(0) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotateY(180deg);
+  }
+}
+
+.aura-store-bag-badge {
+  position: relative;
+  z-index: 10;
+  margin-top: 20px;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 30, 86, 0.3) 0%, rgba(245, 158, 11, 0.2) 100%);
+  border: 1.5px solid rgba(255, 30, 86, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 24px rgba(255, 30, 86, 0.5);
+}
+
+/* 7. Home Core Nexus Centerpiece */
+.aura-cp-home {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-home-pulse-ring-1 {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 30, 86, 0.55);
+  animation: auraHomePulseRing 1.6s ease-out infinite;
+}
+
+.aura-home-pulse-ring-2 {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  animation: auraHomePulseRing 1.6s ease-out infinite 0.45s;
+}
+
+@keyframes auraHomePulseRing {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.42);
+    opacity: 0;
+  }
+}
+
+.aura-home-core-badge {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-home-emblem-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 30, 86, 0.35) 0%, rgba(10, 10, 18, 0.95) 100%);
+  border: 1.5px solid rgba(255, 30, 86, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 32px #ff1e56;
+}
+
+.aura-home-emblem-svg {
+  width: 34px;
+  height: 34px;
+}
+
+.aura-home-core-label {
+  margin-top: 6px;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.38em;
+  color: #ffffff;
+  text-shadow: 0 0 10px #ff1e56;
+}
+
+/* ==========================================================================
+   PROGRESS READOUT & NEON GLOW BAR
+   ========================================================================== */
+.aura-loading-readout-wrap {
+  margin-top: 24px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aura-loading-info-row {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.aura-loading-subtitle {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #d4d4d8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+
+.aura-loading-percentage {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 14px;
+  font-weight: 800;
+  color: #fb7185;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px #ff1e56;
+}
+
+/* Sleek Neon Progress Track */
+.aura-loading-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(24, 24, 27, 0.95);
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 30, 86, 0.35);
+  padding: 1px;
+  box-sizing: border-box;
+}
+
+.aura-loading-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 65ms linear;
+}
+
+/* Sub-telemetry status line */
+.aura-loading-telemetry-row {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  color: #71717a;
+}
+
+.aura-telemetry-engine {
+  color: rgba(251, 113, 133, 0.9);
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   MOBILE & ACCESSIBILITY OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 640px) {
+  .aura-loading-hud-corners {
+    inset: 14px;
+  }
+
+  .aura-hud-bracket {
+    width: 36px;
+    height: 36px;
+    font-size: 8.5px;
+  }
+
+  .aura-loading-central-stage {
+    max-width: 92%;
+    transform: scale(0.9);
+  }
+
+  .aura-loading-ring-wrap {
+    width: 196px;
+    height: 196px;
+  }
+
+  .aura-centerpiece-container {
+    width: 110px;
+    height: 110px;
+  }
+
+  .aura-loading-readout-wrap {
+    max-width: 280px;
+  }
+
+  .aura-loading-subtitle {
+    font-size: 10px;
+  }
+
+  .aura-loading-percentage {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .aura-loading-central-stage {
+    transform: scale(0.82);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-loading-overlay-root,
+  .aura-progress-circle-fill,
+  .aura-loading-bar-fill {
+    transition: none !important;
+  }
+
+  .aura-ring-outer-svg,
+  .aura-ring-inner-svg,
+  .aura-loading-particle,
+  .aura-energy-path-top,
+  .aura-energy-path-bottom,
+  .aura-cp-folder-shard,
+  .aura-events-geom-outer,
+  .aura-events-geom-inner,
+  .aura-store-coin,
+  .aura-home-pulse-ring-1,
+  .aura-home-pulse-ring-2,
+  .aura-cp-battles-badge {
+    animation: none !important;
+  }
+}
